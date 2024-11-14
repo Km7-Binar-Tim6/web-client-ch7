@@ -1,0 +1,4 @@
+runtime: nodejs20
+
+env_variables:
+  VITE_API_URL: "https://fsw-binar.onrender.com"
