@@ -44,7 +44,6 @@ function CreateCarSpecs() {
       return;
     }
     create(request);
-
   };
 
   return (
