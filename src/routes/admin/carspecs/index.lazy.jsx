@@ -1,54 +1,54 @@
-import { createLazyFileRoute, useNavigate, Link } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Button from 'react-bootstrap/Button'
-import Table from 'react-bootstrap/Table'
-import CarSpecsItem from '../../../components/CarSpecs/CarSpecsitem'
-import { getCarSpecs } from '../../../service/carspecs'
-import { FaPlus } from 'react-icons/fa'
+import { createLazyFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Button from "react-bootstrap/Button";
+import Table from "react-bootstrap/Table";
+import CarSpecsItem from "../../../components/CarSpecs/CarSpecsitem";
+import { getCarSpecs } from "../../../service/carspecs";
+import { FaPlus } from "react-icons/fa";
 
-export const Route = createLazyFileRoute('/admin/carspecs/')({
+export const Route = createLazyFileRoute("/admin/carspecs/")({
   component: Index,
-})
+});
 
 function Index() {
-  const navigate = useNavigate()
-  const { token, user } = useSelector((state) => state.auth)
+  const navigate = useNavigate();
+  const { token, user } = useSelector((state) => state.auth);
 
-  const [carSpecs, setCarSpecs] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [carSpecs, setCarSpecs] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getCarSpecsData = async () => {
-    setIsLoading(true)
-    const result = await getCarSpecs()
+    setIsLoading(true);
+    const result = await getCarSpecs();
     if (result.success) {
-      setCarSpecs(result.data)
+      setCarSpecs(result.data);
     }
-    setIsLoading(false)
-  }
+    setIsLoading(false);
+  };
 
   const refetchData = async () => {
-    await getCarSpecsData()
-  }
+    await getCarSpecsData();
+  };
 
   useEffect(() => {
     const getCarSpecsData = async () => {
-      setIsLoading(true)
-      const result = await getCarSpecs()
+      setIsLoading(true);
+      const result = await getCarSpecs();
       if (result.success) {
-        setCarSpecs(result.data)
+        setCarSpecs(result.data);
       }
-      setIsLoading(false)
-    }
+      setIsLoading(false);
+    };
 
     if (token) {
-      getCarSpecsData()
+      getCarSpecsData();
     } else {
-      navigate({ to: '/login' })
+      navigate({ to: "/login" });
     }
-  }, [token, navigate])
+  }, [token, navigate]);
 
   if (!token) {
     return (
@@ -59,14 +59,14 @@ function Index() {
           </h1>
         </Col>
       </Row>
-    )
+    );
   }
   if (isLoading) {
     return (
       <Row className="mt-4">
         <h1>Loading...</h1>
       </Row>
-    )
+    );
   }
 
   return (
@@ -76,7 +76,7 @@ function Index() {
         {user && user.role_id === 1 && (
           <Button
             variant="primary"
-            onClick={() => navigate({ to: '/carspecs/create' })}
+            onClick={() => navigate({ to: "/carspecs/create" })}
             className="d-flex align-items-center"
           >
             <FaPlus className="me-2" />
@@ -108,5 +108,5 @@ function Index() {
         </Table>
       )}
     </>
-  )
+  );
 }

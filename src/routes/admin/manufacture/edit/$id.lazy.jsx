@@ -1,67 +1,67 @@
-import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Card from 'react-bootstrap/Card'
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Card from "react-bootstrap/Card";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 import {
   getDetailManufacture,
   updateManufacture,
-} from '../../../service/manufacture'
-import ProtectedRoute from '../../../redux/slices/ProtectedRoute.js'
+} from "../../../../service/manufacture";
+import ProtectedRoute from "../../../../redux/slices/ProtectedRoute.js";
 
-export const Route = createLazyFileRoute('/admin/manufacture/edit/$id')({
+export const Route = createLazyFileRoute("/admin/manufacture/edit/$id")({
   component: () => (
     <ProtectedRoute allowedRoles={[1]}>
       <EditManufacture />
     </ProtectedRoute>
   ),
-})
+});
 
 function EditManufacture() {
-  const { id } = Route.useParams()
-  const navigate = useNavigate()
+  const { id } = Route.useParams();
+  const navigate = useNavigate();
 
-  const [name, setName] = useState('') // To store the manufacture name
-  const [isLoading, setIsLoading] = useState(true) // For loading state
-  const [error, setError] = useState(null) // For handling errors
+  const [name, setName] = useState(""); // To store the manufacture name
+  const [isLoading, setIsLoading] = useState(true); // For loading state
+  const [error, setError] = useState(null); // For handling errors
 
   useEffect(() => {
     const fetchManufacture = async () => {
       try {
-        const result = await getDetailManufacture(id)
+        const result = await getDetailManufacture(id);
         if (result?.success && result.data) {
-          setName(result.data.manufacture_name) // Set the correct field name (manufacture_name)
-          setError(null) // Reset error if data is fetched successfully
+          setName(result.data.manufacture_name); // Set the correct field name (manufacture_name)
+          setError(null); // Reset error if data is fetched successfully
         } else {
-          setError('Failed to load manufacture details.')
+          setError("Failed to load manufacture details.");
         }
       } catch (error) {
-        console.error('Error fetching manufacture details:', error)
-        setError('An error occurred while fetching data.')
+        console.error("Error fetching manufacture details:", error);
+        setError("An error occurred while fetching data.");
       } finally {
-        setIsLoading(false) // End loading state
+        setIsLoading(false); // End loading state
       }
-    }
+    };
 
     if (id) {
-      fetchManufacture()
+      fetchManufacture();
     }
-  }, [id])
+  }, [id]);
 
   const onSubmit = async (event) => {
-    event.preventDefault()
-    const request = { manufacture_name: name }
+    event.preventDefault();
+    const request = { manufacture_name: name };
 
-    const result = await updateManufacture(id, request)
+    const result = await updateManufacture(id, request);
 
     if (result?.success) {
-      navigate({ to: `/manufacture/${id}` }) // Redirect to the manufacture detail page after update
+      navigate({ to: `/manufacture/${id}` }); // Redirect to the manufacture detail page after update
     } else {
-      alert(result?.message || 'Failed to update manufacture')
+      alert(result?.message || "Failed to update manufacture");
     }
-  }
+  };
 
   if (isLoading) {
     return (
@@ -70,7 +70,7 @@ function EditManufacture() {
           <h1>Loading...</h1>
         </Col>
       </Row>
-    )
+    );
   }
 
   if (error) {
@@ -80,7 +80,7 @@ function EditManufacture() {
           <h1>{error}</h1>
         </Col>
       </Row>
-    )
+    );
   }
 
   return (
@@ -108,7 +108,7 @@ function EditManufacture() {
         </Card>
       </Col>
     </Row>
-  )
+  );
 }
 
-export default EditManufacture
+export default EditManufacture;

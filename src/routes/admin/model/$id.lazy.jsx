@@ -1,45 +1,45 @@
-import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Card from 'react-bootstrap/Card'
-import Button from 'react-bootstrap/Button'
-import { getDetailModel } from '../../../service/model'
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Card from "react-bootstrap/Card";
+import Button from "react-bootstrap/Button";
+import { getDetailModel } from "../../../service/model";
 
-export const Route = createLazyFileRoute('/admin/model/$id')({
+export const Route = createLazyFileRoute("/admin/model/$id")({
   component: ModelDetail,
-})
+});
 
 function ModelDetail() {
-  const { id } = Route.useParams()
-  const navigate = useNavigate()
+  const { id } = Route.useParams();
+  const navigate = useNavigate();
 
-  const [model, setModel] = useState({})
-  const [isLoading, setIsLoading] = useState(false)
-  const [isNotFound, setIsNotFound] = useState(false)
+  const [model, setModel] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [isNotFound, setIsNotFound] = useState(false);
 
   useEffect(() => {
     const getDetailModelData = async () => {
-      if (!id) return
+      if (!id) return;
 
-      setIsLoading(true)
+      setIsLoading(true);
       try {
-        const result = await getDetailModel(id)
+        const result = await getDetailModel(id);
         if (result.success && result.data) {
-          setModel(result.data)
-          setIsNotFound(false)
+          setModel(result.data);
+          setIsNotFound(false);
         } else {
-          setIsNotFound(true)
+          setIsNotFound(true);
         }
       } catch (error) {
-        console.error('Error fetching model details:', error)
-        setIsNotFound(true)
+        console.error("Error fetching model details:", error);
+        setIsNotFound(true);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
-    }
-    getDetailModelData()
-  }, [id])
+    };
+    getDetailModelData();
+  }, [id]);
 
   if (isLoading) {
     return (
@@ -48,7 +48,7 @@ function ModelDetail() {
           <h1 className="text-center">Loading...</h1>
         </Col>
       </Row>
-    )
+    );
   }
 
   if (isNotFound) {
@@ -58,7 +58,7 @@ function ModelDetail() {
           <h1 className="text-center">Model not found!</h1>
         </Col>
       </Row>
-    )
+    );
   }
 
   return (
@@ -71,13 +71,13 @@ function ModelDetail() {
               <strong>ID:</strong> {id}
             </Card.Text>
             <Card.Text>
-              <strong>Name:</strong> {model.model_name || 'No name available'}
+              <strong>Name:</strong> {model.model_name || "No name available"}
             </Card.Text>
             <Button
               variant="secondary"
               size="md"
               className="d-block mt-4 justcfl"
-              onClick={() => navigate({ to: '/model' })}
+              onClick={() => navigate({ to: "/model" })}
             >
               Back to Model List
             </Button>
@@ -85,7 +85,7 @@ function ModelDetail() {
         </Card>
       </Col>
     </Row>
-  )
+  );
 }
 
-export default ModelDetail
+export default ModelDetail;

@@ -1,34 +1,34 @@
-import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
-import { useState } from 'react'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Card from 'react-bootstrap/Card'
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
-import { toast } from 'react-toastify'
-import { createCarSpecs } from '../../service/carspecs'
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Card from "react-bootstrap/Card";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import { toast } from "react-toastify";
+import { createCarSpecs } from "../../../service/carspecs";
 
-export const Route = createLazyFileRoute('/admin/carspecs/create')({
+export const Route = createLazyFileRoute("/admin/carspecs/create")({
   component: CreateCarSpecs,
-})
+});
 
 function CreateCarSpecs() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const [specName, setSpecName] = useState('')
+  const [specName, setSpecName] = useState("");
 
   const onSubmit = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
     const request = {
       spec_name: specName,
-    }
-    const result = await createCarSpecs(request)
+    };
+    const result = await createCarSpecs(request);
     if (result?.success) {
-      navigate({ to: '/carspecs' })
-      return
+      navigate({ to: "/carspecs" });
+      return;
     }
-    toast.error(result?.message)
-  }
+    toast.error(result?.message);
+  };
 
   return (
     <Row className="mt-5">
@@ -50,7 +50,7 @@ function CreateCarSpecs() {
                     required
                     value={specName}
                     onChange={(event) => {
-                      setSpecName(event.target.value)
+                      setSpecName(event.target.value);
                     }}
                   />
                 </Col>
@@ -71,5 +71,5 @@ function CreateCarSpecs() {
       </Col>
       <Col md={3}></Col>
     </Row>
-  )
+  );
 }

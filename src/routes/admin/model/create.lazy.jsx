@@ -1,41 +1,41 @@
-import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
-import { useState } from 'react'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Card from 'react-bootstrap/Card'
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
-import { createModel } from '../../service/model'
-import { toast } from 'react-toastify'
-import ProtectedRoute from '../../redux/slices/ProtectedRoute.js'
-export const Route = createLazyFileRoute('/admin/model/create')({
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Card from "react-bootstrap/Card";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import { createModel } from "../../../service/model";
+import { toast } from "react-toastify";
+import ProtectedRoute from "../../../redux/slices/ProtectedRoute.js";
+export const Route = createLazyFileRoute("/admin/model/create")({
   component: () => (
     <ProtectedRoute allowedRoles={[1]}>
       <CreateModel />
     </ProtectedRoute>
   ),
-})
+});
 
 function CreateModel() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const [name, setName] = useState('')
+  const [name, setName] = useState("");
 
   const onSubmit = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
     const request = {
       model_name: name,
-    }
+    };
 
-    const result = await createModel(request)
+    const result = await createModel(request);
     if (result?.success) {
-      navigate({ to: '/model' })
-      return
+      navigate({ to: "/model" });
+      return;
     }
 
-    toast.error(result?.message || 'Failed to create model')
-  }
+    toast.error(result?.message || "Failed to create model");
+  };
 
   return (
     <Row className="justify-content-center">
@@ -62,5 +62,5 @@ function CreateModel() {
         </Card>
       </Col>
     </Row>
-  )
+  );
 }

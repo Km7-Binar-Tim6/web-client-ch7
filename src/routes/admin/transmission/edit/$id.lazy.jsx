@@ -1,67 +1,67 @@
-import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Card from 'react-bootstrap/Card'
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Card from "react-bootstrap/Card";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 import {
   getDetailTransmission,
   updateTransmission,
-} from '../../../service/transmission'
-import ProtectedRoute from '../../../redux/slices/ProtectedRoute.js'
+} from "../../../../service/transmission";
+import ProtectedRoute from "../../../../redux/slices/ProtectedRoute.js";
 
-export const Route = createLazyFileRoute('/admin/transmission/edit/$id')({
+export const Route = createLazyFileRoute("/admin/transmission/edit/$id")({
   component: () => (
     <ProtectedRoute allowedRoles={[1]}>
       <EditTransmission />
     </ProtectedRoute>
   ),
-})
+});
 
 function EditTransmission() {
-  const { id } = Route.useParams()
-  const navigate = useNavigate()
+  const { id } = Route.useParams();
+  const navigate = useNavigate();
 
-  const [option, setOption] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [option, setOption] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchTransmission = async () => {
       try {
-        const result = await getDetailTransmission(id)
+        const result = await getDetailTransmission(id);
         if (result?.success && result.data) {
-          setOption(result.data.transmission_option)
-          setError(null)
+          setOption(result.data.transmission_option);
+          setError(null);
         } else {
-          setError('Failed to load transmission details.')
+          setError("Failed to load transmission details.");
         }
       } catch (error) {
-        console.error('Error fetching transmission details:', error)
-        setError('An error occurred while fetching data.')
+        console.error("Error fetching transmission details:", error);
+        setError("An error occurred while fetching data.");
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
-    }
+    };
 
     if (id) {
-      fetchTransmission()
+      fetchTransmission();
     }
-  }, [id])
+  }, [id]);
 
   const onSubmit = async (event) => {
-    event.preventDefault()
-    const request = { transmission_option: option }
+    event.preventDefault();
+    const request = { transmission_option: option };
 
-    const result = await updateTransmission(id, request)
+    const result = await updateTransmission(id, request);
 
     if (result?.success) {
-      navigate({ to: `/transmission/${id}` })
+      navigate({ to: `/transmission/${id}` });
     } else {
-      alert(result?.message || 'Failed to update transmission')
+      alert(result?.message || "Failed to update transmission");
     }
-  }
+  };
 
   if (isLoading) {
     return (
@@ -70,7 +70,7 @@ function EditTransmission() {
           <h1>Loading...</h1>
         </Col>
       </Row>
-    )
+    );
   }
 
   if (error) {
@@ -80,7 +80,7 @@ function EditTransmission() {
           <h1>{error}</h1>
         </Col>
       </Row>
-    )
+    );
   }
 
   return (
@@ -108,7 +108,7 @@ function EditTransmission() {
         </Card>
       </Col>
     </Row>
-  )
+  );
 }
 
-export default EditTransmission
+export default EditTransmission;

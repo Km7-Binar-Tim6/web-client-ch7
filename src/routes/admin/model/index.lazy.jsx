@@ -1,55 +1,55 @@
-import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import Table from 'react-bootstrap/Table'
-import Button from 'react-bootstrap/Button'
-import { FaPlus } from 'react-icons/fa'
-import { getModel } from '../../service/model'
-import ModelItem from '../../components/Model/ModelItem'
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import Table from "react-bootstrap/Table";
+import Button from "react-bootstrap/Button";
+import { FaPlus } from "react-icons/fa";
+import { getModel } from "../../../service/model";
+import ModelItem from "../../../components/Model/ModelItem";
 
-export const Route = createLazyFileRoute('/admin/model/')({
+export const Route = createLazyFileRoute("/admin/model/")({
   component: Model,
-})
+});
 
 function Model() {
-  const navigate = useNavigate()
-  const { token, user } = useSelector((state) => state.auth)
+  const navigate = useNavigate();
+  const { token, user } = useSelector((state) => state.auth);
 
-  const [models, setModel] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [models, setModel] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getModelData = async () => {
-    setIsLoading(true)
-    const result = await getModel()
+    setIsLoading(true);
+    const result = await getModel();
     if (result.success) {
-      setModel(result.data)
+      setModel(result.data);
     }
-    setIsLoading(false)
-  }
+    setIsLoading(false);
+  };
 
   const refetchData = async () => {
-    await getModelData()
-  }
+    await getModelData();
+  };
 
   useEffect(() => {
     const getModelData = async () => {
-      setIsLoading(true)
-      const result = await getModel()
+      setIsLoading(true);
+      const result = await getModel();
       if (result.success) {
-        setModel(result.data)
+        setModel(result.data);
       }
-      setIsLoading(false)
-    }
+      setIsLoading(false);
+    };
 
     if (token) {
-      getModelData()
+      getModelData();
     } else {
-      navigate({ to: '/login' })
+      navigate({ to: "/login" });
     }
-  }, [token, navigate])
+  }, [token, navigate]);
 
   if (!token) {
-    return null
+    return null;
   }
 
   if (isLoading) {
@@ -57,7 +57,7 @@ function Model() {
       <div className="mt-4">
         <h1>Loading...</h1>
       </div>
-    )
+    );
   }
 
   return (
@@ -67,7 +67,7 @@ function Model() {
         {user && user.role_id === 1 && (
           <Button
             variant="primary"
-            onClick={() => navigate({ to: '/model/create' })}
+            onClick={() => navigate({ to: "/model/create" })}
             className="d-flex align-items-center"
           >
             <FaPlus className="me-2" />
@@ -99,7 +99,7 @@ function Model() {
         </Table>
       )}
     </>
-  )
+  );
 }
 
-export default Model
+export default Model;

@@ -1,42 +1,42 @@
-import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
-import { useState } from 'react'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Card from 'react-bootstrap/Card'
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
-import { createCarOption } from '../../service/carOption'
-import { toast } from 'react-toastify'
-import ProtectedRoute from '../../redux/slices/ProtectedRoute.js'
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Card from "react-bootstrap/Card";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import { createCarOption } from "../../../service/carOption";
+import { toast } from "react-toastify";
+import ProtectedRoute from "../../../redux/slices/ProtectedRoute.js";
 
-export const Route = createLazyFileRoute('/admin/caroptions/create')({
+export const Route = createLazyFileRoute("/admin/caroptions/create")({
   component: () => (
     <ProtectedRoute allowedRoles={[1]}>
       <CreateCarOption />
     </ProtectedRoute>
   ),
-})
+});
 
 function CreateCarOption() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const [option, setOption] = useState('')
+  const [option, setOption] = useState("");
 
   const onSubmit = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
     const request = {
       option_name: option,
-    }
+    };
 
-    const result = await createCarOption(request)
+    const result = await createCarOption(request);
     if (result?.success) {
-      navigate({ to: '/caroptions' })
-      return
+      navigate({ to: "/caroptions" });
+      return;
     }
 
-    toast.error(result?.message || 'Failed to create car option')
-  }
+    toast.error(result?.message || "Failed to create car option");
+  };
 
   return (
     <Row className="justify-content-center">
@@ -63,7 +63,7 @@ function CreateCarOption() {
         </Card>
       </Col>
     </Row>
-  )
+  );
 }
 
-export default CreateCarOption
+export default CreateCarOption;

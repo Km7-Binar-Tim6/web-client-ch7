@@ -1,38 +1,38 @@
-import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Card from 'react-bootstrap/Card'
-import Button from 'react-bootstrap/Button'
-import { getDetailCarSpecs } from '../../service/carspecs'
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Card from "react-bootstrap/Card";
+import Button from "react-bootstrap/Button";
+import { getDetailCarSpecs } from "../../../service/carspecs";
 
-export const Route = createLazyFileRoute('/admin/carspecs/$id')({
+export const Route = createLazyFileRoute("/admin/carspecs/$id")({
   component: CarSpecsDetail,
-})
+});
 
 function CarSpecsDetail() {
-  const { id } = Route.useParams()
-  const navigate = useNavigate()
-  const [carSpecs, setCarSpecs] = useState(null)
-  const [isLoading, setIsLoading] = useState(null)
-  const [isNotFound, setIsNotFound] = useState(null)
+  const { id } = Route.useParams();
+  const navigate = useNavigate();
+  const [carSpecs, setCarSpecs] = useState(null);
+  const [isLoading, setIsLoading] = useState(null);
+  const [isNotFound, setIsNotFound] = useState(null);
 
   useEffect(() => {
     const getDetailCarSpecsData = async (id) => {
-      setIsLoading(true)
-      const result = await getDetailCarSpecs(id)
+      setIsLoading(true);
+      const result = await getDetailCarSpecs(id);
       if (result?.success) {
-        setCarSpecs(result.data)
-        setIsNotFound(false)
+        setCarSpecs(result.data);
+        setIsNotFound(false);
       } else {
-        setIsNotFound(true)
+        setIsNotFound(true);
       }
-      setIsLoading(false)
-    }
+      setIsLoading(false);
+    };
     if (id) {
-      getDetailCarSpecsData(id)
+      getDetailCarSpecsData(id);
     }
-  }, [id])
+  }, [id]);
 
   if (isLoading) {
     return (
@@ -41,7 +41,7 @@ function CarSpecsDetail() {
           <h1 className="text-center">Loading...</h1>
         </Col>
       </Row>
-    )
+    );
   }
 
   if (isNotFound) {
@@ -51,7 +51,7 @@ function CarSpecsDetail() {
           <h1 className="text-center">Car specs is not found!</h1>
         </Col>
       </Row>
-    )
+    );
   }
 
   return (
@@ -66,14 +66,14 @@ function CarSpecsDetail() {
               <strong>ID:</strong> {id}
             </Card.Text>
             <Card.Text>
-              <strong>Name:</strong>{' '}
-              {carSpecs?.spec_name || 'No name available'}
+              <strong>Name:</strong>{" "}
+              {carSpecs?.spec_name || "No name available"}
             </Card.Text>
             <Button
               variant="secondary"
               size="md"
               className="d-block mt-4 justcfl"
-              onClick={() => navigate({ to: '/carspecs' })}
+              onClick={() => navigate({ to: "/carspecs" })}
             >
               Back to Car Specs List
             </Button>
@@ -81,5 +81,5 @@ function CarSpecsDetail() {
         </Card>
       </Col>
     </Row>
-  )
+  );
 }

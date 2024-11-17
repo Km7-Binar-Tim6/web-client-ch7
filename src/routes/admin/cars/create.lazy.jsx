@@ -1,125 +1,125 @@
-import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Card from 'react-bootstrap/Card'
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
-import Image from 'react-bootstrap/Image'
-import { getManufacture } from '../../service/manufacture'
-import { getCarOptions } from '../../service/carOption'
-import { getCarSpecs } from '../../service/carspecs'
-import { getTransmission } from '../../service/transmission'
-import { getType } from '../../service/type'
-import { getModel } from '../../service/model'
-import { createCar } from '../../service/car'
-import { toast } from 'react-toastify'
-import ProtectedRoute from '../../redux/slices/ProtectedRoute.js'
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Card from "react-bootstrap/Card";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Image from "react-bootstrap/Image";
+import { getManufacture } from "../../../service/manufacture";
+import { getCarOptions } from "../../../service/carOption";
+import { getCarSpecs } from "../../../service/carspecs";
+import { getTransmission } from "../../../service/transmission";
+import { getType } from "../../../service/type";
+import { getModel } from "../../../service/model";
+import { createCar } from "../../../service/car";
+import { toast } from "react-toastify";
+import ProtectedRoute from "../../../redux/slices/ProtectedRoute.js";
 
-export const Route = createLazyFileRoute('/admin/cars/create')({
+export const Route = createLazyFileRoute("/admin/cars/create")({
   component: () => (
     <ProtectedRoute allowedRoles={[1]}>
       <CreateCar />
     </ProtectedRoute>
   ),
-})
+});
 
 function CreateCar() {
-  const navigate = useNavigate()
-  const [plate, setPlate] = useState('')
-  const [rentPerDay, setRentPerDay] = useState('')
-  const [capacity, setCapacity] = useState('')
-  const [description, setDescription] = useState('')
-  const [availableAt, setAvailableAt] = useState('')
-  const [available, setAvailable] = useState('')
-  const [year, setYear] = useState('')
-  const [image, setImage] = useState(undefined)
-  const [currentImage, setCurrentImage] = useState(undefined)
+  const navigate = useNavigate();
+  const [plate, setPlate] = useState("");
+  const [rentPerDay, setRentPerDay] = useState("");
+  const [capacity, setCapacity] = useState("");
+  const [description, setDescription] = useState("");
+  const [availableAt, setAvailableAt] = useState("");
+  const [available, setAvailable] = useState("");
+  const [year, setYear] = useState("");
+  const [image, setImage] = useState(undefined);
+  const [currentImage, setCurrentImage] = useState(undefined);
 
-  const [manufactureId, setManufactureId] = useState('')
-  const [manufactures, setManufactures] = useState([])
+  const [manufactureId, setManufactureId] = useState("");
+  const [manufactures, setManufactures] = useState([]);
 
-  const [carOptionId, setCarOptionId] = useState('')
-  const [carOptions, setCarOptions] = useState([])
+  const [carOptionId, setCarOptionId] = useState("");
+  const [carOptions, setCarOptions] = useState([]);
 
-  const [carSpecId, setCarSpecId] = useState('')
-  const [carSpecs, setCarSpecs] = useState([])
+  const [carSpecId, setCarSpecId] = useState("");
+  const [carSpecs, setCarSpecs] = useState([]);
 
-  const [transmissionId, setTransmissionId] = useState('')
-  const [transmissions, setTransmissions] = useState([])
+  const [transmissionId, setTransmissionId] = useState("");
+  const [transmissions, setTransmissions] = useState([]);
 
-  const [typeCarId, setTypeCarId] = useState('')
-  const [typeCars, setTypeCars] = useState([])
+  const [typeCarId, setTypeCarId] = useState("");
+  const [typeCars, setTypeCars] = useState([]);
 
-  const [modelId, setModelId] = useState('')
-  const [models, setModels] = useState([])
+  const [modelId, setModelId] = useState("");
+  const [models, setModels] = useState([]);
 
   useEffect(() => {
     const getManufacturesData = async () => {
-      const result = await getManufacture()
+      const result = await getManufacture();
       if (result?.success) {
-        setManufactures(result?.data)
+        setManufactures(result?.data);
       }
-    }
+    };
     const getCarOptionsData = async () => {
-      const result = await getCarOptions()
+      const result = await getCarOptions();
       if (result?.success) {
-        setCarOptions(result?.data)
+        setCarOptions(result?.data);
       }
-    }
+    };
     const getCarSpecsData = async () => {
-      const result = await getCarSpecs()
+      const result = await getCarSpecs();
       if (result?.success) {
-        setCarSpecs(result?.data)
+        setCarSpecs(result?.data);
       }
-    }
+    };
     const getTransmissionsData = async () => {
-      const result = await getTransmission()
+      const result = await getTransmission();
       if (result?.success) {
-        setTransmissions(result?.data)
+        setTransmissions(result?.data);
       }
-    }
+    };
     const getTypeCarsData = async () => {
-      const result = await getType()
+      const result = await getType();
       if (result?.success) {
-        setTypeCars(result?.data)
+        setTypeCars(result?.data);
       }
-    }
+    };
     const getModelsData = async () => {
-      const result = await getModel()
+      const result = await getModel();
       if (result?.success) {
-        setModels(result?.data)
+        setModels(result?.data);
       }
-    }
+    };
 
-    getManufacturesData()
-    getCarOptionsData()
-    getCarSpecsData()
-    getTransmissionsData()
-    getTypeCarsData()
-    getModelsData()
-  }, [])
+    getManufacturesData();
+    getCarOptionsData();
+    getCarSpecsData();
+    getTransmissionsData();
+    getTypeCarsData();
+    getModelsData();
+  }, []);
 
   const handleCarOptionId = (e) => {
-    const optionId = parseInt(e.target.value, 10)
+    const optionId = parseInt(e.target.value, 10);
     setCarOptionId((prev) =>
       prev.includes(optionId)
         ? prev.filter((id) => id !== optionId)
-        : [...prev, optionId],
-    )
-  }
+        : [...prev, optionId]
+    );
+  };
 
   const handleCarSpecId = (e) => {
-    const specId = parseInt(e.target.value, 10)
+    const specId = parseInt(e.target.value, 10);
     setCarSpecId((prev) =>
       prev.includes(specId)
         ? prev.filter((id) => id !== specId)
-        : [...prev, specId],
-    )
-  }
+        : [...prev, specId]
+    );
+  };
 
   const onSubmit = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
     const request = {
       plate,
       rentPerDay,
@@ -135,14 +135,14 @@ function CreateCar() {
       modelId,
       optionIds: carOptionId || [],
       specIds: carSpecId || [],
-    }
-    const result = await createCar(request)
+    };
+    const result = await createCar(request);
     if (result?.success) {
-      navigate({ to: '/cars' })
-      return
+      navigate({ to: "/cars" });
+      return;
     }
-    toast.error(result.message)
-  }
+    toast.error(result.message);
+  };
 
   return (
     <Row className="mt-3 justify-content-center">
@@ -235,8 +235,8 @@ function CreateCar() {
                 <Form.Control
                   type="file"
                   onChange={(e) => {
-                    setImage(e.target.files[0])
-                    setCurrentImage(URL.createObjectURL(e.target.files[0]))
+                    setImage(e.target.files[0]);
+                    setCurrentImage(URL.createObjectURL(e.target.files[0]));
                   }}
                   accept="image/*"
                 />
@@ -357,7 +357,7 @@ function CreateCar() {
         </Card>
       </Col>
     </Row>
-  )
+  );
 }
 
-export default CreateCar
+export default CreateCar;

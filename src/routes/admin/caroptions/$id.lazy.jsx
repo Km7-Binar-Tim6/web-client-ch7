@@ -1,45 +1,45 @@
-import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Card from 'react-bootstrap/Card'
-import Button from 'react-bootstrap/Button'
-import { getDetailCarOption } from '../../service/carOption'
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Card from "react-bootstrap/Card";
+import Button from "react-bootstrap/Button";
+import { getDetailCarOption } from "../../../service/carOption";
 
-export const Route = createLazyFileRoute('/admin/caroptions/$id')({
+export const Route = createLazyFileRoute("/admin/caroptions/$id")({
   component: CarOptionDetail,
-})
+});
 
 function CarOptionDetail() {
-  const { id } = Route.useParams()
-  const navigate = useNavigate()
+  const { id } = Route.useParams();
+  const navigate = useNavigate();
 
-  const [carOption, setCarOption] = useState({})
-  const [isLoading, setIsLoading] = useState(false)
-  const [isNotFound, setIsNotFound] = useState(false)
+  const [carOption, setCarOption] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [isNotFound, setIsNotFound] = useState(false);
 
   useEffect(() => {
     const getDetailCarOptionData = async () => {
-      if (!id) return
+      if (!id) return;
 
-      setIsLoading(true)
+      setIsLoading(true);
       try {
-        const result = await getDetailCarOption(id)
+        const result = await getDetailCarOption(id);
         if (result.success && result.data) {
-          setCarOption(result.data)
-          setIsNotFound(false)
+          setCarOption(result.data);
+          setIsNotFound(false);
         } else {
-          setIsNotFound(true)
+          setIsNotFound(true);
         }
       } catch (error) {
-        console.error('Error fetching car option details:', error)
-        setIsNotFound(true)
+        console.error("Error fetching car option details:", error);
+        setIsNotFound(true);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
-    }
-    getDetailCarOptionData()
-  }, [id])
+    };
+    getDetailCarOptionData();
+  }, [id]);
 
   if (isLoading) {
     return (
@@ -48,7 +48,7 @@ function CarOptionDetail() {
           <h1 className="text-center">Loading...</h1>
         </Col>
       </Row>
-    )
+    );
   }
 
   if (isNotFound) {
@@ -58,7 +58,7 @@ function CarOptionDetail() {
           <h1 className="text-center">Car option not found!</h1>
         </Col>
       </Row>
-    )
+    );
   }
 
   return (
@@ -73,14 +73,14 @@ function CarOptionDetail() {
               <strong>ID:</strong> {id}
             </Card.Text>
             <Card.Text>
-              <strong>Name:</strong>{' '}
-              {carOption.option_name || 'No option available'}
+              <strong>Name:</strong>{" "}
+              {carOption.option_name || "No option available"}
             </Card.Text>
             <Button
               variant="secondary"
               size="md"
               className="d-block mt-4"
-              onClick={() => navigate({ to: '/caroptions' })}
+              onClick={() => navigate({ to: "/caroptions" })}
             >
               Back to Car Option List
             </Button>
@@ -88,7 +88,7 @@ function CarOptionDetail() {
         </Card>
       </Col>
     </Row>
-  )
+  );
 }
 
-export default CarOptionDetail
+export default CarOptionDetail;

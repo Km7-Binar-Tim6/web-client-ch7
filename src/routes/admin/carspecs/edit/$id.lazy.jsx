@@ -1,60 +1,63 @@
-import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Card from 'react-bootstrap/Card'
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
-import { getDetailCarSpecs, updateCarSpecs } from '../../../service/carspecs'
-import { toast } from 'react-toastify'
-import { FaArrowLeft } from 'react-icons/fa'
-export const Route = createLazyFileRoute('/admin/carspecs/edit/$id')({
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Card from "react-bootstrap/Card";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import {
+  getDetailCarSpecs,
+  updateCarSpecs,
+} from "../../../../service/carspecs";
+import { toast } from "react-toastify";
+import { FaArrowLeft } from "react-icons/fa";
+export const Route = createLazyFileRoute("/admin/carspecs/edit/$id")({
   component: CarSpecsEdit,
-})
+});
 
 function CarSpecsEdit() {
-  const { id } = Route.useParams()
-  const navigate = useNavigate()
+  const { id } = Route.useParams();
+  const navigate = useNavigate();
 
-  const [specName, setSpecName] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [isNotFound, setIsNotFound] = useState(false)
+  const [specName, setSpecName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isNotFound, setIsNotFound] = useState(false);
 
   useEffect(() => {
     const getDetailCarSpecsData = async (id) => {
-      setIsLoading(true)
-      const result = await getDetailCarSpecs(id)
+      setIsLoading(true);
+      const result = await getDetailCarSpecs(id);
       if (result?.success) {
-        setSpecName(result.data.spec_name)
-        setIsNotFound(false)
+        setSpecName(result.data.spec_name);
+        setIsNotFound(false);
       } else {
-        setIsNotFound(true)
-        navigate({ to: '/carspecs' })
+        setIsNotFound(true);
+        navigate({ to: "/carspecs" });
       }
-      setIsLoading(false)
-    }
+      setIsLoading(false);
+    };
     if (id) {
-      getDetailCarSpecsData(id)
+      getDetailCarSpecsData(id);
     }
-  }, [id])
+  }, [id]);
 
   if (isNotFound) {
-    navigate({ to: '/carspecs' })
-    return
+    navigate({ to: "/carspecs" });
+    return;
   }
 
   const onSubmit = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
     const request = {
       spec_name: specName,
-    }
-    const result = await updateCarSpecs(id, request)
+    };
+    const result = await updateCarSpecs(id, request);
     if (result?.success) {
-      navigate({ to: '/carspecs' })
-      return
+      navigate({ to: "/carspecs" });
+      return;
     }
-    toast.error(result?.message)
-  }
+    toast.error(result?.message);
+  };
 
   return (
     <>
@@ -62,13 +65,13 @@ function CarSpecsEdit() {
         <Col>
           <Button
             variant="outline-secondary"
-            onClick={() => navigate({ to: '/carspecs/$id' })}
+            onClick={() => navigate({ to: "/carspecs/$id" })}
             style={{
-              display: 'flex',
-              alignItems: 'center',
+              display: "flex",
+              alignItems: "center",
             }}
           >
-            <FaArrowLeft style={{ marginRight: '8px' }} /> Back
+            <FaArrowLeft style={{ marginRight: "8px" }} /> Back
           </Button>
         </Col>
       </Row>
@@ -76,9 +79,9 @@ function CarSpecsEdit() {
         <Col className="offset-md-4">
           <Card
             style={{
-              border: '1px solid #E0E0E0',
-              borderRadius: '8px',
-              padding: '16px',
+              border: "1px solid #E0E0E0",
+              borderRadius: "8px",
+              padding: "16px",
             }}
           >
             <Card.Body>
@@ -89,7 +92,7 @@ function CarSpecsEdit() {
                     type="text"
                     value={specName}
                     onChange={(event) => {
-                      setSpecName(event.target.value)
+                      setSpecName(event.target.value);
                     }}
                   />
                 </Form.Group>
@@ -103,5 +106,5 @@ function CarSpecsEdit() {
         <Col md={3}></Col>
       </Row>
     </>
-  )
+  );
 }

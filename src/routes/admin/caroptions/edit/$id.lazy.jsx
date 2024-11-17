@@ -1,64 +1,67 @@
-import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Card from 'react-bootstrap/Card'
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
-import { getDetailCarOption, updateCarOption } from '../../../service/carOption'
-import ProtectedRoute from '../../../redux/slices/ProtectedRoute.js'
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Card from "react-bootstrap/Card";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import {
+  getDetailCarOption,
+  updateCarOption,
+} from "../../../../service/carOption";
+import ProtectedRoute from "../../../../redux/slices/ProtectedRoute.js";
 
-export const Route = createLazyFileRoute('/admin/caroptions/edit/$id')({
+export const Route = createLazyFileRoute("/admin/caroptions/edit/$id")({
   component: () => (
     <ProtectedRoute allowedRoles={[1]}>
       <EditCarOption />
     </ProtectedRoute>
   ),
-})
+});
 
 function EditCarOption() {
-  const { id } = Route.useParams()
-  const navigate = useNavigate()
+  const { id } = Route.useParams();
+  const navigate = useNavigate();
 
-  const [option, setOption] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [option, setOption] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchCarOption = async () => {
       try {
-        const result = await getDetailCarOption(id)
+        const result = await getDetailCarOption(id);
         if (result?.success && result.data) {
-          setOption(result.data.option_name)
-          setError(null)
+          setOption(result.data.option_name);
+          setError(null);
         } else {
-          setError('Failed to load car option details.')
+          setError("Failed to load car option details.");
         }
       } catch (error) {
-        console.error('Error fetching car option details:', error)
-        setError('An error occurred while fetching data.')
+        console.error("Error fetching car option details:", error);
+        setError("An error occurred while fetching data.");
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
-    }
+    };
 
     if (id) {
-      fetchCarOption()
+      fetchCarOption();
     }
-  }, [id])
+  }, [id]);
 
   const onSubmit = async (event) => {
-    event.preventDefault()
-    const request = { option_name: option }
+    event.preventDefault();
+    const request = { option_name: option };
 
-    const result = await updateCarOption(id, request)
+    const result = await updateCarOption(id, request);
 
     if (result?.success) {
-      navigate({ to: `/caroptions/${id}` })
+      navigate({ to: `/caroptions/${id}` });
     } else {
-      alert(result?.message || 'Failed to update car option')
+      alert(result?.message || "Failed to update car option");
     }
-  }
+  };
 
   if (isLoading) {
     return (
@@ -67,7 +70,7 @@ function EditCarOption() {
           <h1>Loading...</h1>
         </Col>
       </Row>
-    )
+    );
   }
 
   if (error) {
@@ -77,7 +80,7 @@ function EditCarOption() {
           <h1>{error}</h1>
         </Col>
       </Row>
-    )
+    );
   }
 
   return (
@@ -105,7 +108,7 @@ function EditCarOption() {
         </Card>
       </Col>
     </Row>
-  )
+  );
 }
 
-export default EditCarOption
+export default EditCarOption;

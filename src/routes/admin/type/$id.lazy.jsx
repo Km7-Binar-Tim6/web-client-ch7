@@ -1,45 +1,45 @@
-import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Card from 'react-bootstrap/Card'
-import Button from 'react-bootstrap/Button'
-import { getDetailType } from '../../service/type'
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Card from "react-bootstrap/Card";
+import Button from "react-bootstrap/Button";
+import { getDetailType } from "../../../service/type";
 
-export const Route = createLazyFileRoute('/admin/type/$id')({
+export const Route = createLazyFileRoute("/admin/type/$id")({
   component: TypeDetail,
-})
+});
 
 function TypeDetail() {
-  const { id } = Route.useParams()
-  const navigate = useNavigate()
+  const { id } = Route.useParams();
+  const navigate = useNavigate();
 
-  const [type, setType] = useState({})
-  const [isLoading, setIsLoading] = useState(false)
-  const [isNotFound, setIsNotFound] = useState(false)
+  const [type, setType] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [isNotFound, setIsNotFound] = useState(false);
 
   useEffect(() => {
     const getDetailManufacturesData = async () => {
-      if (!id) return
+      if (!id) return;
 
-      setIsLoading(true)
+      setIsLoading(true);
       try {
-        const result = await getDetailType(id)
+        const result = await getDetailType(id);
         if (result.success && result.data) {
-          setType(result.data)
-          setIsNotFound(false)
+          setType(result.data);
+          setIsNotFound(false);
         } else {
-          setIsNotFound(true)
+          setIsNotFound(true);
         }
       } catch (error) {
-        console.error('Error fetching type details:', error)
-        setIsNotFound(true)
+        console.error("Error fetching type details:", error);
+        setIsNotFound(true);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
-    }
-    getDetailManufacturesData()
-  }, [id])
+    };
+    getDetailManufacturesData();
+  }, [id]);
 
   if (isLoading) {
     return (
@@ -48,7 +48,7 @@ function TypeDetail() {
           <h1 className="text-center">Loading...</h1>
         </Col>
       </Row>
-    )
+    );
   }
 
   if (isNotFound) {
@@ -58,7 +58,7 @@ function TypeDetail() {
           <h1 className="text-center">Manufacture not found!</h1>
         </Col>
       </Row>
-    )
+    );
   }
 
   return (
@@ -73,13 +73,13 @@ function TypeDetail() {
               <strong>ID:</strong> {id}
             </Card.Text>
             <Card.Text>
-              <strong>Name:</strong> {type.type_option || 'No name available'}
+              <strong>Name:</strong> {type.type_option || "No name available"}
             </Card.Text>
             <Button
               variant="secondary"
               size="md"
               className="d-block mt-4 justcfl"
-              onClick={() => navigate({ to: '/type' })}
+              onClick={() => navigate({ to: "/type" })}
             >
               Back to Manufacture List
             </Button>
@@ -87,7 +87,7 @@ function TypeDetail() {
         </Card>
       </Col>
     </Row>
-  )
+  );
 }
 
-export default TypeDetail
+export default TypeDetail;

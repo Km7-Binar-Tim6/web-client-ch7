@@ -1,55 +1,55 @@
-import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import Table from 'react-bootstrap/Table'
-import Button from 'react-bootstrap/Button'
-import { FaPlus } from 'react-icons/fa'
-import { getCarOptions } from '../../../service/carOption'
-import CarOptionItem from '../../../components/CarOptions/CarOptionItem'
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import Table from "react-bootstrap/Table";
+import Button from "react-bootstrap/Button";
+import { FaPlus } from "react-icons/fa";
+import { getCarOptions } from "../../../service/carOption";
+import CarOptionItem from "../../../components/CarOptions/CarOptionItem";
 
-export const Route = createLazyFileRoute('/admin/caroptions/')({
+export const Route = createLazyFileRoute("/admin/caroptions/")({
   component: CarOption,
-})
+});
 
 function CarOption() {
-  const navigate = useNavigate()
-  const { token, user } = useSelector((state) => state.auth)
+  const navigate = useNavigate();
+  const { token, user } = useSelector((state) => state.auth);
 
-  const [carOptions, setCarOptions] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [carOptions, setCarOptions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getCarOptionsData = async () => {
-    setIsLoading(true)
-    const result = await getCarOptions()
+    setIsLoading(true);
+    const result = await getCarOptions();
     if (result.success) {
-      setCarOptions(result.data)
+      setCarOptions(result.data);
     }
-    setIsLoading(false)
-  }
+    setIsLoading(false);
+  };
 
   const refetchData = async () => {
-    await getCarOptionsData()
-  }
+    await getCarOptionsData();
+  };
 
   useEffect(() => {
     const getCarOptionsData = async () => {
-      setIsLoading(true)
-      const result = await getCarOptions()
+      setIsLoading(true);
+      const result = await getCarOptions();
       if (result.success) {
-        setCarOptions(result.data)
+        setCarOptions(result.data);
       }
-      setIsLoading(false)
-    }
+      setIsLoading(false);
+    };
 
     if (token) {
-      getCarOptionsData()
+      getCarOptionsData();
     } else {
-      navigate({ to: '/login' })
+      navigate({ to: "/login" });
     }
-  }, [token, navigate])
+  }, [token, navigate]);
 
   if (!token) {
-    return null
+    return null;
   }
 
   if (isLoading) {
@@ -57,7 +57,7 @@ function CarOption() {
       <div className="mt-4">
         <h1>Loading...</h1>
       </div>
-    )
+    );
   }
 
   return (
@@ -67,7 +67,7 @@ function CarOption() {
         {user && user.role_id === 1 && (
           <Button
             variant="primary"
-            onClick={() => navigate({ to: '/caroptions/create' })}
+            onClick={() => navigate({ to: "/caroptions/create" })}
             className="d-flex align-items-center"
           >
             <FaPlus className="me-2" />
@@ -99,7 +99,7 @@ function CarOption() {
         </Table>
       )}
     </>
-  )
+  );
 }
 
-export default CarOption
+export default CarOption;

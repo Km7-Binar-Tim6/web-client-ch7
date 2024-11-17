@@ -1,42 +1,42 @@
-import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
-import { useState } from 'react'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Card from 'react-bootstrap/Card'
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
-import { createTransmission } from '../../service/transmission'
-import { toast } from 'react-toastify'
-import ProtectedRoute from '../../redux/slices/ProtectedRoute.js'
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Card from "react-bootstrap/Card";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import { createTransmission } from "../../../service/transmission";
+import { toast } from "react-toastify";
+import ProtectedRoute from "../../../redux/slices/ProtectedRoute.js";
 
-export const Route = createLazyFileRoute('/admin/transmission/create')({
+export const Route = createLazyFileRoute("/admin/transmission/create")({
   component: () => (
     <ProtectedRoute allowedRoles={[1]}>
       <CreateTransmission />
     </ProtectedRoute>
   ),
-})
+});
 
 function CreateTransmission() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const [option, setOption] = useState('')
+  const [option, setOption] = useState("");
 
   const onSubmit = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
     const request = {
       transmission_option: option,
-    }
+    };
 
-    const result = await createTransmission(request)
+    const result = await createTransmission(request);
     if (result?.success) {
-      navigate({ to: '/transmission' })
-      return
+      navigate({ to: "/transmission" });
+      return;
     }
 
-    toast.error(result?.message || 'Failed to create transmission')
-  }
+    toast.error(result?.message || "Failed to create transmission");
+  };
 
   return (
     <Row className="justify-content-center">
@@ -63,7 +63,7 @@ function CreateTransmission() {
         </Card>
       </Col>
     </Row>
-  )
+  );
 }
 
-export default CreateTransmission
+export default CreateTransmission;

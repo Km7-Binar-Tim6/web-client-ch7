@@ -1,5 +1,3 @@
-//src/components/filtercarsuser/carsindex
-
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -8,28 +6,18 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { FaPlus } from "react-icons/fa";
 import { getCars } from "../../service/car";
-import CarItem from "../../components/Car/CarItem";
+import CarItem from "../../components/FilterCarsUser/CarItem";
+import PropTypes from "prop-types"; // Import PropTypes
 
-function CarsIndex() {
+function CarsIndex({ cars }) {
+  // Add cars as a prop
   const navigate = useNavigate();
   const { token, user } = useSelector((state) => state.auth);
 
-  const [cars, setCars] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const getCarData = async () => {
-      setIsLoading(true);
-      const result = await getCars();
-      if (result.success) {
-        setCars(result.data);
-      }
-      setIsLoading(false);
-    };
-
-    if (token) {
-      getCarData();
-    } else {
+    if (!token) {
       navigate({ to: "/login" });
     }
   }, [token, navigate]);
@@ -38,13 +26,12 @@ function CarsIndex() {
     return (
       <Row className="mt-4">
         <Col>
-          <h1 className="text-center">
-            Please login first to get student data!
-          </h1>
+          <h1 className="text-center">Please login first to get car data!</h1>
         </Col>
       </Row>
     );
   }
+
   if (isLoading) {
     return (
       <Row className="mt-4">
@@ -78,5 +65,10 @@ function CarsIndex() {
     </>
   );
 }
+
+// Prop validation for cars
+CarsIndex.propTypes = {
+  cars: PropTypes.array.isRequired,
+};
 
 export default CarsIndex;

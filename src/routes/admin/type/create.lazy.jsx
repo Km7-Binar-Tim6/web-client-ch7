@@ -1,41 +1,41 @@
-import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
-import { useState } from 'react'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Card from 'react-bootstrap/Card'
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
-import { createType } from '../../service/type'
-import { toast } from 'react-toastify'
-import ProtectedRoute from '../../redux/slices/ProtectedRoute.js'
-export const Route = createLazyFileRoute('/admin/type/create')({
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Card from "react-bootstrap/Card";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import { createType } from "../../../service/type";
+import { toast } from "react-toastify";
+import ProtectedRoute from "../../../redux/slices/ProtectedRoute.js";
+export const Route = createLazyFileRoute("/admin/type/create")({
   component: () => (
     <ProtectedRoute allowedRoles={[1]}>
       <CreateType />
     </ProtectedRoute>
   ),
-})
+});
 
 function CreateType() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const [name, setName] = useState('')
+  const [name, setName] = useState("");
 
   const onSubmit = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
     const request = {
       type_option: name,
-    }
+    };
 
-    const result = await createType(request)
+    const result = await createType(request);
     if (result?.success) {
-      navigate({ to: '/type' })
-      return
+      navigate({ to: "/type" });
+      return;
     }
 
-    toast.error(result?.message || 'Failed to create type')
-  }
+    toast.error(result?.message || "Failed to create type");
+  };
 
   return (
     <Row className="justify-content-center">
@@ -62,5 +62,5 @@ function CreateType() {
         </Card>
       </Col>
     </Row>
-  )
+  );
 }

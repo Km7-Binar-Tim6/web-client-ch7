@@ -1,45 +1,45 @@
-import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Card from 'react-bootstrap/Card'
-import Button from 'react-bootstrap/Button'
-import { getDetailManufacture } from '../../service/manufacture'
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Card from "react-bootstrap/Card";
+import Button from "react-bootstrap/Button";
+import { getDetailManufacture } from "../../../service/manufacture";
 
-export const Route = createLazyFileRoute('/admin/manufacture/$id')({
+export const Route = createLazyFileRoute("/admin/manufacture/$id")({
   component: ManufacturesDetail,
-})
+});
 
 function ManufacturesDetail() {
-  const { id } = Route.useParams()
-  const navigate = useNavigate()
+  const { id } = Route.useParams();
+  const navigate = useNavigate();
 
-  const [manufacture, setManufacture] = useState({})
-  const [isLoading, setIsLoading] = useState(false)
-  const [isNotFound, setIsNotFound] = useState(false)
+  const [manufacture, setManufacture] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [isNotFound, setIsNotFound] = useState(false);
 
   useEffect(() => {
     const getDetailManufacturesData = async () => {
-      if (!id) return
+      if (!id) return;
 
-      setIsLoading(true)
+      setIsLoading(true);
       try {
-        const result = await getDetailManufacture(id)
+        const result = await getDetailManufacture(id);
         if (result.success && result.data) {
-          setManufacture(result.data)
-          setIsNotFound(false)
+          setManufacture(result.data);
+          setIsNotFound(false);
         } else {
-          setIsNotFound(true)
+          setIsNotFound(true);
         }
       } catch (error) {
-        console.error('Error fetching manufacture details:', error)
-        setIsNotFound(true)
+        console.error("Error fetching manufacture details:", error);
+        setIsNotFound(true);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
-    }
-    getDetailManufacturesData()
-  }, [id])
+    };
+    getDetailManufacturesData();
+  }, [id]);
 
   if (isLoading) {
     return (
@@ -48,7 +48,7 @@ function ManufacturesDetail() {
           <h1 className="text-center">Loading...</h1>
         </Col>
       </Row>
-    )
+    );
   }
 
   if (isNotFound) {
@@ -58,7 +58,7 @@ function ManufacturesDetail() {
           <h1 className="text-center">Manufacture not found!</h1>
         </Col>
       </Row>
-    )
+    );
   }
 
   return (
@@ -73,14 +73,14 @@ function ManufacturesDetail() {
               <strong>ID:</strong> {id}
             </Card.Text>
             <Card.Text>
-              <strong>Name:</strong>{' '}
-              {manufacture.manufacture_name || 'No name available'}
+              <strong>Name:</strong>{" "}
+              {manufacture.manufacture_name || "No name available"}
             </Card.Text>
             <Button
               variant="secondary"
               size="md"
               className="d-block mt-4 justcfl"
-              onClick={() => navigate({ to: '/manufacture' })}
+              onClick={() => navigate({ to: "/manufacture" })}
             >
               Back to Manufacture List
             </Button>
@@ -88,7 +88,7 @@ function ManufacturesDetail() {
         </Card>
       </Col>
     </Row>
-  )
+  );
 }
 
-export default ManufacturesDetail
+export default ManufacturesDetail;
