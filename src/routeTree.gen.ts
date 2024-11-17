@@ -20,34 +20,56 @@ const RegisterLazyImport = createFileRoute('/register')()
 const ProfileLazyImport = createFileRoute('/profile')()
 const LoginLazyImport = createFileRoute('/login')()
 const IndexLazyImport = createFileRoute('/')()
-const TypeIndexLazyImport = createFileRoute('/type/')()
-const TransmissionIndexLazyImport = createFileRoute('/transmission/')()
-const ModelIndexLazyImport = createFileRoute('/model/')()
-const ManufactureIndexLazyImport = createFileRoute('/manufacture/')()
-const CarspecsIndexLazyImport = createFileRoute('/carspecs/')()
 const CarsIndexLazyImport = createFileRoute('/cars/')()
-const CaroptionsIndexLazyImport = createFileRoute('/caroptions/')()
-const TypeCreateLazyImport = createFileRoute('/type/create')()
-const TypeIdLazyImport = createFileRoute('/type/$id')()
-const TransmissionCreateLazyImport = createFileRoute('/transmission/create')()
-const TransmissionIdLazyImport = createFileRoute('/transmission/$id')()
-const ModelCreateLazyImport = createFileRoute('/model/create')()
-const ModelIdLazyImport = createFileRoute('/model/$id')()
-const ManufactureCreateLazyImport = createFileRoute('/manufacture/create')()
-const ManufactureIdLazyImport = createFileRoute('/manufacture/$id')()
-const CarspecsCreateLazyImport = createFileRoute('/carspecs/create')()
-const CarspecsIdLazyImport = createFileRoute('/carspecs/$id')()
-const CarsCreateLazyImport = createFileRoute('/cars/create')()
-const CarsIdLazyImport = createFileRoute('/cars/$id')()
-const CaroptionsCreateLazyImport = createFileRoute('/caroptions/create')()
-const CaroptionsIdLazyImport = createFileRoute('/caroptions/$id')()
-const TypeEditIdLazyImport = createFileRoute('/type/edit/$id')()
-const TransmissionEditIdLazyImport = createFileRoute('/transmission/edit/$id')()
-const ModelEditIdLazyImport = createFileRoute('/model/edit/$id')()
-const ManufactureEditIdLazyImport = createFileRoute('/manufacture/edit/$id')()
-const CarspecsEditIdLazyImport = createFileRoute('/carspecs/edit/$id')()
-const CarsEditIdLazyImport = createFileRoute('/cars/edit/$id')()
-const CaroptionsEditIdLazyImport = createFileRoute('/caroptions/edit/$id')()
+const AdminIndexLazyImport = createFileRoute('/admin/')()
+const AdminTypeIndexLazyImport = createFileRoute('/admin/type/')()
+const AdminTransmissionIndexLazyImport = createFileRoute(
+  '/admin/transmission/',
+)()
+const AdminModelIndexLazyImport = createFileRoute('/admin/model/')()
+const AdminManufactureIndexLazyImport = createFileRoute('/admin/manufacture/')()
+const AdminCarspecsIndexLazyImport = createFileRoute('/admin/carspecs/')()
+const AdminCarsIndexLazyImport = createFileRoute('/admin/cars/')()
+const AdminCaroptionsIndexLazyImport = createFileRoute('/admin/caroptions/')()
+const AdminTypeCreateLazyImport = createFileRoute('/admin/type/create')()
+const AdminTypeIdLazyImport = createFileRoute('/admin/type/$id')()
+const AdminTransmissionCreateLazyImport = createFileRoute(
+  '/admin/transmission/create',
+)()
+const AdminTransmissionIdLazyImport = createFileRoute(
+  '/admin/transmission/$id',
+)()
+const AdminModelCreateLazyImport = createFileRoute('/admin/model/create')()
+const AdminModelIdLazyImport = createFileRoute('/admin/model/$id')()
+const AdminManufactureCreateLazyImport = createFileRoute(
+  '/admin/manufacture/create',
+)()
+const AdminManufactureIdLazyImport = createFileRoute('/admin/manufacture/$id')()
+const AdminCarspecsCreateLazyImport = createFileRoute(
+  '/admin/carspecs/create',
+)()
+const AdminCarspecsIdLazyImport = createFileRoute('/admin/carspecs/$id')()
+const AdminCarsCreateLazyImport = createFileRoute('/admin/cars/create')()
+const AdminCarsIdLazyImport = createFileRoute('/admin/cars/$id')()
+const AdminCaroptionsCreateLazyImport = createFileRoute(
+  '/admin/caroptions/create',
+)()
+const AdminCaroptionsIdLazyImport = createFileRoute('/admin/caroptions/$id')()
+const AdminTypeEditIdLazyImport = createFileRoute('/admin/type/edit/$id')()
+const AdminTransmissionEditIdLazyImport = createFileRoute(
+  '/admin/transmission/edit/$id',
+)()
+const AdminModelEditIdLazyImport = createFileRoute('/admin/model/edit/$id')()
+const AdminManufactureEditIdLazyImport = createFileRoute(
+  '/admin/manufacture/edit/$id',
+)()
+const AdminCarspecsEditIdLazyImport = createFileRoute(
+  '/admin/carspecs/edit/$id',
+)()
+const AdminCarsEditIdLazyImport = createFileRoute('/admin/cars/edit/$id')()
+const AdminCaroptionsEditIdLazyImport = createFileRoute(
+  '/admin/caroptions/edit/$id',
+)()
 
 // Create/Update Routes
 
@@ -75,204 +97,248 @@ const IndexLazyRoute = IndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
-const TypeIndexLazyRoute = TypeIndexLazyImport.update({
-  id: '/type/',
-  path: '/type/',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/type/index.lazy').then((d) => d.Route))
-
-const TransmissionIndexLazyRoute = TransmissionIndexLazyImport.update({
-  id: '/transmission/',
-  path: '/transmission/',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/transmission/index.lazy').then((d) => d.Route),
-)
-
-const ModelIndexLazyRoute = ModelIndexLazyImport.update({
-  id: '/model/',
-  path: '/model/',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/model/index.lazy').then((d) => d.Route))
-
-const ManufactureIndexLazyRoute = ManufactureIndexLazyImport.update({
-  id: '/manufacture/',
-  path: '/manufacture/',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/manufacture/index.lazy').then((d) => d.Route),
-)
-
-const CarspecsIndexLazyRoute = CarspecsIndexLazyImport.update({
-  id: '/carspecs/',
-  path: '/carspecs/',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/carspecs/index.lazy').then((d) => d.Route),
-)
-
 const CarsIndexLazyRoute = CarsIndexLazyImport.update({
   id: '/cars/',
   path: '/cars/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/cars/index.lazy').then((d) => d.Route))
 
-const CaroptionsIndexLazyRoute = CaroptionsIndexLazyImport.update({
-  id: '/caroptions/',
-  path: '/caroptions/',
+const AdminIndexLazyRoute = AdminIndexLazyImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/admin/index.lazy').then((d) => d.Route))
+
+const AdminTypeIndexLazyRoute = AdminTypeIndexLazyImport.update({
+  id: '/admin/type/',
+  path: '/admin/type/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
-  import('./routes/caroptions/index.lazy').then((d) => d.Route),
+  import('./routes/admin/type/index.lazy').then((d) => d.Route),
 )
 
-const TypeCreateLazyRoute = TypeCreateLazyImport.update({
-  id: '/type/create',
-  path: '/type/create',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/type/create.lazy').then((d) => d.Route))
-
-const TypeIdLazyRoute = TypeIdLazyImport.update({
-  id: '/type/$id',
-  path: '/type/$id',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/type/$id.lazy').then((d) => d.Route))
-
-const TransmissionCreateLazyRoute = TransmissionCreateLazyImport.update({
-  id: '/transmission/create',
-  path: '/transmission/create',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/transmission/create.lazy').then((d) => d.Route),
+const AdminTransmissionIndexLazyRoute = AdminTransmissionIndexLazyImport.update(
+  {
+    id: '/admin/transmission/',
+    path: '/admin/transmission/',
+    getParentRoute: () => rootRoute,
+  } as any,
+).lazy(() =>
+  import('./routes/admin/transmission/index.lazy').then((d) => d.Route),
 )
 
-const TransmissionIdLazyRoute = TransmissionIdLazyImport.update({
-  id: '/transmission/$id',
-  path: '/transmission/$id',
+const AdminModelIndexLazyRoute = AdminModelIndexLazyImport.update({
+  id: '/admin/model/',
+  path: '/admin/model/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
-  import('./routes/transmission/$id.lazy').then((d) => d.Route),
+  import('./routes/admin/model/index.lazy').then((d) => d.Route),
 )
 
-const ModelCreateLazyRoute = ModelCreateLazyImport.update({
-  id: '/model/create',
-  path: '/model/create',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/model/create.lazy').then((d) => d.Route))
-
-const ModelIdLazyRoute = ModelIdLazyImport.update({
-  id: '/model/$id',
-  path: '/model/$id',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/model/$id.lazy').then((d) => d.Route))
-
-const ManufactureCreateLazyRoute = ManufactureCreateLazyImport.update({
-  id: '/manufacture/create',
-  path: '/manufacture/create',
+const AdminManufactureIndexLazyRoute = AdminManufactureIndexLazyImport.update({
+  id: '/admin/manufacture/',
+  path: '/admin/manufacture/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
-  import('./routes/manufacture/create.lazy').then((d) => d.Route),
+  import('./routes/admin/manufacture/index.lazy').then((d) => d.Route),
 )
 
-const ManufactureIdLazyRoute = ManufactureIdLazyImport.update({
-  id: '/manufacture/$id',
-  path: '/manufacture/$id',
+const AdminCarspecsIndexLazyRoute = AdminCarspecsIndexLazyImport.update({
+  id: '/admin/carspecs/',
+  path: '/admin/carspecs/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
-  import('./routes/manufacture/$id.lazy').then((d) => d.Route),
+  import('./routes/admin/carspecs/index.lazy').then((d) => d.Route),
 )
 
-const CarspecsCreateLazyRoute = CarspecsCreateLazyImport.update({
-  id: '/carspecs/create',
-  path: '/carspecs/create',
+const AdminCarsIndexLazyRoute = AdminCarsIndexLazyImport.update({
+  id: '/admin/cars/',
+  path: '/admin/cars/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
-  import('./routes/carspecs/create.lazy').then((d) => d.Route),
+  import('./routes/admin/cars/index.lazy').then((d) => d.Route),
 )
 
-const CarspecsIdLazyRoute = CarspecsIdLazyImport.update({
-  id: '/carspecs/$id',
-  path: '/carspecs/$id',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/carspecs/$id.lazy').then((d) => d.Route))
-
-const CarsCreateLazyRoute = CarsCreateLazyImport.update({
-  id: '/cars/create',
-  path: '/cars/create',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/cars/create.lazy').then((d) => d.Route))
-
-const CarsIdLazyRoute = CarsIdLazyImport.update({
-  id: '/cars/$id',
-  path: '/cars/$id',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/cars/$id.lazy').then((d) => d.Route))
-
-const CaroptionsCreateLazyRoute = CaroptionsCreateLazyImport.update({
-  id: '/caroptions/create',
-  path: '/caroptions/create',
+const AdminCaroptionsIndexLazyRoute = AdminCaroptionsIndexLazyImport.update({
+  id: '/admin/caroptions/',
+  path: '/admin/caroptions/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
-  import('./routes/caroptions/create.lazy').then((d) => d.Route),
+  import('./routes/admin/caroptions/index.lazy').then((d) => d.Route),
 )
 
-const CaroptionsIdLazyRoute = CaroptionsIdLazyImport.update({
-  id: '/caroptions/$id',
-  path: '/caroptions/$id',
+const AdminTypeCreateLazyRoute = AdminTypeCreateLazyImport.update({
+  id: '/admin/type/create',
+  path: '/admin/type/create',
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
-  import('./routes/caroptions/$id.lazy').then((d) => d.Route),
+  import('./routes/admin/type/create.lazy').then((d) => d.Route),
 )
 
-const TypeEditIdLazyRoute = TypeEditIdLazyImport.update({
-  id: '/type/edit/$id',
-  path: '/type/edit/$id',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/type/edit/$id.lazy').then((d) => d.Route))
-
-const TransmissionEditIdLazyRoute = TransmissionEditIdLazyImport.update({
-  id: '/transmission/edit/$id',
-  path: '/transmission/edit/$id',
+const AdminTypeIdLazyRoute = AdminTypeIdLazyImport.update({
+  id: '/admin/type/$id',
+  path: '/admin/type/$id',
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
-  import('./routes/transmission/edit/$id.lazy').then((d) => d.Route),
+  import('./routes/admin/type/$id.lazy').then((d) => d.Route),
 )
 
-const ModelEditIdLazyRoute = ModelEditIdLazyImport.update({
-  id: '/model/edit/$id',
-  path: '/model/edit/$id',
+const AdminTransmissionCreateLazyRoute =
+  AdminTransmissionCreateLazyImport.update({
+    id: '/admin/transmission/create',
+    path: '/admin/transmission/create',
+    getParentRoute: () => rootRoute,
+  } as any).lazy(() =>
+    import('./routes/admin/transmission/create.lazy').then((d) => d.Route),
+  )
+
+const AdminTransmissionIdLazyRoute = AdminTransmissionIdLazyImport.update({
+  id: '/admin/transmission/$id',
+  path: '/admin/transmission/$id',
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
-  import('./routes/model/edit/$id.lazy').then((d) => d.Route),
+  import('./routes/admin/transmission/$id.lazy').then((d) => d.Route),
 )
 
-const ManufactureEditIdLazyRoute = ManufactureEditIdLazyImport.update({
-  id: '/manufacture/edit/$id',
-  path: '/manufacture/edit/$id',
+const AdminModelCreateLazyRoute = AdminModelCreateLazyImport.update({
+  id: '/admin/model/create',
+  path: '/admin/model/create',
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
-  import('./routes/manufacture/edit/$id.lazy').then((d) => d.Route),
+  import('./routes/admin/model/create.lazy').then((d) => d.Route),
 )
 
-const CarspecsEditIdLazyRoute = CarspecsEditIdLazyImport.update({
-  id: '/carspecs/edit/$id',
-  path: '/carspecs/edit/$id',
+const AdminModelIdLazyRoute = AdminModelIdLazyImport.update({
+  id: '/admin/model/$id',
+  path: '/admin/model/$id',
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
-  import('./routes/carspecs/edit/$id.lazy').then((d) => d.Route),
+  import('./routes/admin/model/$id.lazy').then((d) => d.Route),
 )
 
-const CarsEditIdLazyRoute = CarsEditIdLazyImport.update({
-  id: '/cars/edit/$id',
-  path: '/cars/edit/$id',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/cars/edit/$id.lazy').then((d) => d.Route))
+const AdminManufactureCreateLazyRoute = AdminManufactureCreateLazyImport.update(
+  {
+    id: '/admin/manufacture/create',
+    path: '/admin/manufacture/create',
+    getParentRoute: () => rootRoute,
+  } as any,
+).lazy(() =>
+  import('./routes/admin/manufacture/create.lazy').then((d) => d.Route),
+)
 
-const CaroptionsEditIdLazyRoute = CaroptionsEditIdLazyImport.update({
-  id: '/caroptions/edit/$id',
-  path: '/caroptions/edit/$id',
+const AdminManufactureIdLazyRoute = AdminManufactureIdLazyImport.update({
+  id: '/admin/manufacture/$id',
+  path: '/admin/manufacture/$id',
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
-  import('./routes/caroptions/edit/$id.lazy').then((d) => d.Route),
+  import('./routes/admin/manufacture/$id.lazy').then((d) => d.Route),
+)
+
+const AdminCarspecsCreateLazyRoute = AdminCarspecsCreateLazyImport.update({
+  id: '/admin/carspecs/create',
+  path: '/admin/carspecs/create',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/admin/carspecs/create.lazy').then((d) => d.Route),
+)
+
+const AdminCarspecsIdLazyRoute = AdminCarspecsIdLazyImport.update({
+  id: '/admin/carspecs/$id',
+  path: '/admin/carspecs/$id',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/admin/carspecs/$id.lazy').then((d) => d.Route),
+)
+
+const AdminCarsCreateLazyRoute = AdminCarsCreateLazyImport.update({
+  id: '/admin/cars/create',
+  path: '/admin/cars/create',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/admin/cars/create.lazy').then((d) => d.Route),
+)
+
+const AdminCarsIdLazyRoute = AdminCarsIdLazyImport.update({
+  id: '/admin/cars/$id',
+  path: '/admin/cars/$id',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/admin/cars/$id.lazy').then((d) => d.Route),
+)
+
+const AdminCaroptionsCreateLazyRoute = AdminCaroptionsCreateLazyImport.update({
+  id: '/admin/caroptions/create',
+  path: '/admin/caroptions/create',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/admin/caroptions/create.lazy').then((d) => d.Route),
+)
+
+const AdminCaroptionsIdLazyRoute = AdminCaroptionsIdLazyImport.update({
+  id: '/admin/caroptions/$id',
+  path: '/admin/caroptions/$id',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/admin/caroptions/$id.lazy').then((d) => d.Route),
+)
+
+const AdminTypeEditIdLazyRoute = AdminTypeEditIdLazyImport.update({
+  id: '/admin/type/edit/$id',
+  path: '/admin/type/edit/$id',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/admin/type/edit/$id.lazy').then((d) => d.Route),
+)
+
+const AdminTransmissionEditIdLazyRoute =
+  AdminTransmissionEditIdLazyImport.update({
+    id: '/admin/transmission/edit/$id',
+    path: '/admin/transmission/edit/$id',
+    getParentRoute: () => rootRoute,
+  } as any).lazy(() =>
+    import('./routes/admin/transmission/edit/$id.lazy').then((d) => d.Route),
+  )
+
+const AdminModelEditIdLazyRoute = AdminModelEditIdLazyImport.update({
+  id: '/admin/model/edit/$id',
+  path: '/admin/model/edit/$id',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/admin/model/edit/$id.lazy').then((d) => d.Route),
+)
+
+const AdminManufactureEditIdLazyRoute = AdminManufactureEditIdLazyImport.update(
+  {
+    id: '/admin/manufacture/edit/$id',
+    path: '/admin/manufacture/edit/$id',
+    getParentRoute: () => rootRoute,
+  } as any,
+).lazy(() =>
+  import('./routes/admin/manufacture/edit/$id.lazy').then((d) => d.Route),
+)
+
+const AdminCarspecsEditIdLazyRoute = AdminCarspecsEditIdLazyImport.update({
+  id: '/admin/carspecs/edit/$id',
+  path: '/admin/carspecs/edit/$id',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/admin/carspecs/edit/$id.lazy').then((d) => d.Route),
+)
+
+const AdminCarsEditIdLazyRoute = AdminCarsEditIdLazyImport.update({
+  id: '/admin/cars/edit/$id',
+  path: '/admin/cars/edit/$id',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/admin/cars/edit/$id.lazy').then((d) => d.Route),
+)
+
+const AdminCaroptionsEditIdLazyRoute = AdminCaroptionsEditIdLazyImport.update({
+  id: '/admin/caroptions/edit/$id',
+  path: '/admin/caroptions/edit/$id',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/admin/caroptions/edit/$id.lazy').then((d) => d.Route),
 )
 
 // Populate the FileRoutesByPath interface
@@ -307,109 +373,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterLazyImport
       parentRoute: typeof rootRoute
     }
-    '/caroptions/$id': {
-      id: '/caroptions/$id'
-      path: '/caroptions/$id'
-      fullPath: '/caroptions/$id'
-      preLoaderRoute: typeof CaroptionsIdLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/caroptions/create': {
-      id: '/caroptions/create'
-      path: '/caroptions/create'
-      fullPath: '/caroptions/create'
-      preLoaderRoute: typeof CaroptionsCreateLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/cars/$id': {
-      id: '/cars/$id'
-      path: '/cars/$id'
-      fullPath: '/cars/$id'
-      preLoaderRoute: typeof CarsIdLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/cars/create': {
-      id: '/cars/create'
-      path: '/cars/create'
-      fullPath: '/cars/create'
-      preLoaderRoute: typeof CarsCreateLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/carspecs/$id': {
-      id: '/carspecs/$id'
-      path: '/carspecs/$id'
-      fullPath: '/carspecs/$id'
-      preLoaderRoute: typeof CarspecsIdLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/carspecs/create': {
-      id: '/carspecs/create'
-      path: '/carspecs/create'
-      fullPath: '/carspecs/create'
-      preLoaderRoute: typeof CarspecsCreateLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/manufacture/$id': {
-      id: '/manufacture/$id'
-      path: '/manufacture/$id'
-      fullPath: '/manufacture/$id'
-      preLoaderRoute: typeof ManufactureIdLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/manufacture/create': {
-      id: '/manufacture/create'
-      path: '/manufacture/create'
-      fullPath: '/manufacture/create'
-      preLoaderRoute: typeof ManufactureCreateLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/model/$id': {
-      id: '/model/$id'
-      path: '/model/$id'
-      fullPath: '/model/$id'
-      preLoaderRoute: typeof ModelIdLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/model/create': {
-      id: '/model/create'
-      path: '/model/create'
-      fullPath: '/model/create'
-      preLoaderRoute: typeof ModelCreateLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/transmission/$id': {
-      id: '/transmission/$id'
-      path: '/transmission/$id'
-      fullPath: '/transmission/$id'
-      preLoaderRoute: typeof TransmissionIdLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/transmission/create': {
-      id: '/transmission/create'
-      path: '/transmission/create'
-      fullPath: '/transmission/create'
-      preLoaderRoute: typeof TransmissionCreateLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/type/$id': {
-      id: '/type/$id'
-      path: '/type/$id'
-      fullPath: '/type/$id'
-      preLoaderRoute: typeof TypeIdLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/type/create': {
-      id: '/type/create'
-      path: '/type/create'
-      fullPath: '/type/create'
-      preLoaderRoute: typeof TypeCreateLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/caroptions/': {
-      id: '/caroptions/'
-      path: '/caroptions'
-      fullPath: '/caroptions'
-      preLoaderRoute: typeof CaroptionsIndexLazyImport
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/cars/': {
@@ -419,88 +387,200 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CarsIndexLazyImport
       parentRoute: typeof rootRoute
     }
-    '/carspecs/': {
-      id: '/carspecs/'
-      path: '/carspecs'
-      fullPath: '/carspecs'
-      preLoaderRoute: typeof CarspecsIndexLazyImport
+    '/admin/caroptions/$id': {
+      id: '/admin/caroptions/$id'
+      path: '/admin/caroptions/$id'
+      fullPath: '/admin/caroptions/$id'
+      preLoaderRoute: typeof AdminCaroptionsIdLazyImport
       parentRoute: typeof rootRoute
     }
-    '/manufacture/': {
-      id: '/manufacture/'
-      path: '/manufacture'
-      fullPath: '/manufacture'
-      preLoaderRoute: typeof ManufactureIndexLazyImport
+    '/admin/caroptions/create': {
+      id: '/admin/caroptions/create'
+      path: '/admin/caroptions/create'
+      fullPath: '/admin/caroptions/create'
+      preLoaderRoute: typeof AdminCaroptionsCreateLazyImport
       parentRoute: typeof rootRoute
     }
-    '/model/': {
-      id: '/model/'
-      path: '/model'
-      fullPath: '/model'
-      preLoaderRoute: typeof ModelIndexLazyImport
+    '/admin/cars/$id': {
+      id: '/admin/cars/$id'
+      path: '/admin/cars/$id'
+      fullPath: '/admin/cars/$id'
+      preLoaderRoute: typeof AdminCarsIdLazyImport
       parentRoute: typeof rootRoute
     }
-    '/transmission/': {
-      id: '/transmission/'
-      path: '/transmission'
-      fullPath: '/transmission'
-      preLoaderRoute: typeof TransmissionIndexLazyImport
+    '/admin/cars/create': {
+      id: '/admin/cars/create'
+      path: '/admin/cars/create'
+      fullPath: '/admin/cars/create'
+      preLoaderRoute: typeof AdminCarsCreateLazyImport
       parentRoute: typeof rootRoute
     }
-    '/type/': {
-      id: '/type/'
-      path: '/type'
-      fullPath: '/type'
-      preLoaderRoute: typeof TypeIndexLazyImport
+    '/admin/carspecs/$id': {
+      id: '/admin/carspecs/$id'
+      path: '/admin/carspecs/$id'
+      fullPath: '/admin/carspecs/$id'
+      preLoaderRoute: typeof AdminCarspecsIdLazyImport
       parentRoute: typeof rootRoute
     }
-    '/caroptions/edit/$id': {
-      id: '/caroptions/edit/$id'
-      path: '/caroptions/edit/$id'
-      fullPath: '/caroptions/edit/$id'
-      preLoaderRoute: typeof CaroptionsEditIdLazyImport
+    '/admin/carspecs/create': {
+      id: '/admin/carspecs/create'
+      path: '/admin/carspecs/create'
+      fullPath: '/admin/carspecs/create'
+      preLoaderRoute: typeof AdminCarspecsCreateLazyImport
       parentRoute: typeof rootRoute
     }
-    '/cars/edit/$id': {
-      id: '/cars/edit/$id'
-      path: '/cars/edit/$id'
-      fullPath: '/cars/edit/$id'
-      preLoaderRoute: typeof CarsEditIdLazyImport
+    '/admin/manufacture/$id': {
+      id: '/admin/manufacture/$id'
+      path: '/admin/manufacture/$id'
+      fullPath: '/admin/manufacture/$id'
+      preLoaderRoute: typeof AdminManufactureIdLazyImport
       parentRoute: typeof rootRoute
     }
-    '/carspecs/edit/$id': {
-      id: '/carspecs/edit/$id'
-      path: '/carspecs/edit/$id'
-      fullPath: '/carspecs/edit/$id'
-      preLoaderRoute: typeof CarspecsEditIdLazyImport
+    '/admin/manufacture/create': {
+      id: '/admin/manufacture/create'
+      path: '/admin/manufacture/create'
+      fullPath: '/admin/manufacture/create'
+      preLoaderRoute: typeof AdminManufactureCreateLazyImport
       parentRoute: typeof rootRoute
     }
-    '/manufacture/edit/$id': {
-      id: '/manufacture/edit/$id'
-      path: '/manufacture/edit/$id'
-      fullPath: '/manufacture/edit/$id'
-      preLoaderRoute: typeof ManufactureEditIdLazyImport
+    '/admin/model/$id': {
+      id: '/admin/model/$id'
+      path: '/admin/model/$id'
+      fullPath: '/admin/model/$id'
+      preLoaderRoute: typeof AdminModelIdLazyImport
       parentRoute: typeof rootRoute
     }
-    '/model/edit/$id': {
-      id: '/model/edit/$id'
-      path: '/model/edit/$id'
-      fullPath: '/model/edit/$id'
-      preLoaderRoute: typeof ModelEditIdLazyImport
+    '/admin/model/create': {
+      id: '/admin/model/create'
+      path: '/admin/model/create'
+      fullPath: '/admin/model/create'
+      preLoaderRoute: typeof AdminModelCreateLazyImport
       parentRoute: typeof rootRoute
     }
-    '/transmission/edit/$id': {
-      id: '/transmission/edit/$id'
-      path: '/transmission/edit/$id'
-      fullPath: '/transmission/edit/$id'
-      preLoaderRoute: typeof TransmissionEditIdLazyImport
+    '/admin/transmission/$id': {
+      id: '/admin/transmission/$id'
+      path: '/admin/transmission/$id'
+      fullPath: '/admin/transmission/$id'
+      preLoaderRoute: typeof AdminTransmissionIdLazyImport
       parentRoute: typeof rootRoute
     }
-    '/type/edit/$id': {
-      id: '/type/edit/$id'
-      path: '/type/edit/$id'
-      fullPath: '/type/edit/$id'
-      preLoaderRoute: typeof TypeEditIdLazyImport
+    '/admin/transmission/create': {
+      id: '/admin/transmission/create'
+      path: '/admin/transmission/create'
+      fullPath: '/admin/transmission/create'
+      preLoaderRoute: typeof AdminTransmissionCreateLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/type/$id': {
+      id: '/admin/type/$id'
+      path: '/admin/type/$id'
+      fullPath: '/admin/type/$id'
+      preLoaderRoute: typeof AdminTypeIdLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/type/create': {
+      id: '/admin/type/create'
+      path: '/admin/type/create'
+      fullPath: '/admin/type/create'
+      preLoaderRoute: typeof AdminTypeCreateLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/caroptions/': {
+      id: '/admin/caroptions/'
+      path: '/admin/caroptions'
+      fullPath: '/admin/caroptions'
+      preLoaderRoute: typeof AdminCaroptionsIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/cars/': {
+      id: '/admin/cars/'
+      path: '/admin/cars'
+      fullPath: '/admin/cars'
+      preLoaderRoute: typeof AdminCarsIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/carspecs/': {
+      id: '/admin/carspecs/'
+      path: '/admin/carspecs'
+      fullPath: '/admin/carspecs'
+      preLoaderRoute: typeof AdminCarspecsIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/manufacture/': {
+      id: '/admin/manufacture/'
+      path: '/admin/manufacture'
+      fullPath: '/admin/manufacture'
+      preLoaderRoute: typeof AdminManufactureIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/model/': {
+      id: '/admin/model/'
+      path: '/admin/model'
+      fullPath: '/admin/model'
+      preLoaderRoute: typeof AdminModelIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/transmission/': {
+      id: '/admin/transmission/'
+      path: '/admin/transmission'
+      fullPath: '/admin/transmission'
+      preLoaderRoute: typeof AdminTransmissionIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/type/': {
+      id: '/admin/type/'
+      path: '/admin/type'
+      fullPath: '/admin/type'
+      preLoaderRoute: typeof AdminTypeIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/caroptions/edit/$id': {
+      id: '/admin/caroptions/edit/$id'
+      path: '/admin/caroptions/edit/$id'
+      fullPath: '/admin/caroptions/edit/$id'
+      preLoaderRoute: typeof AdminCaroptionsEditIdLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/cars/edit/$id': {
+      id: '/admin/cars/edit/$id'
+      path: '/admin/cars/edit/$id'
+      fullPath: '/admin/cars/edit/$id'
+      preLoaderRoute: typeof AdminCarsEditIdLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/carspecs/edit/$id': {
+      id: '/admin/carspecs/edit/$id'
+      path: '/admin/carspecs/edit/$id'
+      fullPath: '/admin/carspecs/edit/$id'
+      preLoaderRoute: typeof AdminCarspecsEditIdLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/manufacture/edit/$id': {
+      id: '/admin/manufacture/edit/$id'
+      path: '/admin/manufacture/edit/$id'
+      fullPath: '/admin/manufacture/edit/$id'
+      preLoaderRoute: typeof AdminManufactureEditIdLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/model/edit/$id': {
+      id: '/admin/model/edit/$id'
+      path: '/admin/model/edit/$id'
+      fullPath: '/admin/model/edit/$id'
+      preLoaderRoute: typeof AdminModelEditIdLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/transmission/edit/$id': {
+      id: '/admin/transmission/edit/$id'
+      path: '/admin/transmission/edit/$id'
+      fullPath: '/admin/transmission/edit/$id'
+      preLoaderRoute: typeof AdminTransmissionEditIdLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/type/edit/$id': {
+      id: '/admin/type/edit/$id'
+      path: '/admin/type/edit/$id'
+      fullPath: '/admin/type/edit/$id'
+      preLoaderRoute: typeof AdminTypeEditIdLazyImport
       parentRoute: typeof rootRoute
     }
   }
@@ -513,34 +593,36 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginLazyRoute
   '/profile': typeof ProfileLazyRoute
   '/register': typeof RegisterLazyRoute
-  '/caroptions/$id': typeof CaroptionsIdLazyRoute
-  '/caroptions/create': typeof CaroptionsCreateLazyRoute
-  '/cars/$id': typeof CarsIdLazyRoute
-  '/cars/create': typeof CarsCreateLazyRoute
-  '/carspecs/$id': typeof CarspecsIdLazyRoute
-  '/carspecs/create': typeof CarspecsCreateLazyRoute
-  '/manufacture/$id': typeof ManufactureIdLazyRoute
-  '/manufacture/create': typeof ManufactureCreateLazyRoute
-  '/model/$id': typeof ModelIdLazyRoute
-  '/model/create': typeof ModelCreateLazyRoute
-  '/transmission/$id': typeof TransmissionIdLazyRoute
-  '/transmission/create': typeof TransmissionCreateLazyRoute
-  '/type/$id': typeof TypeIdLazyRoute
-  '/type/create': typeof TypeCreateLazyRoute
-  '/caroptions': typeof CaroptionsIndexLazyRoute
+  '/admin': typeof AdminIndexLazyRoute
   '/cars': typeof CarsIndexLazyRoute
-  '/carspecs': typeof CarspecsIndexLazyRoute
-  '/manufacture': typeof ManufactureIndexLazyRoute
-  '/model': typeof ModelIndexLazyRoute
-  '/transmission': typeof TransmissionIndexLazyRoute
-  '/type': typeof TypeIndexLazyRoute
-  '/caroptions/edit/$id': typeof CaroptionsEditIdLazyRoute
-  '/cars/edit/$id': typeof CarsEditIdLazyRoute
-  '/carspecs/edit/$id': typeof CarspecsEditIdLazyRoute
-  '/manufacture/edit/$id': typeof ManufactureEditIdLazyRoute
-  '/model/edit/$id': typeof ModelEditIdLazyRoute
-  '/transmission/edit/$id': typeof TransmissionEditIdLazyRoute
-  '/type/edit/$id': typeof TypeEditIdLazyRoute
+  '/admin/caroptions/$id': typeof AdminCaroptionsIdLazyRoute
+  '/admin/caroptions/create': typeof AdminCaroptionsCreateLazyRoute
+  '/admin/cars/$id': typeof AdminCarsIdLazyRoute
+  '/admin/cars/create': typeof AdminCarsCreateLazyRoute
+  '/admin/carspecs/$id': typeof AdminCarspecsIdLazyRoute
+  '/admin/carspecs/create': typeof AdminCarspecsCreateLazyRoute
+  '/admin/manufacture/$id': typeof AdminManufactureIdLazyRoute
+  '/admin/manufacture/create': typeof AdminManufactureCreateLazyRoute
+  '/admin/model/$id': typeof AdminModelIdLazyRoute
+  '/admin/model/create': typeof AdminModelCreateLazyRoute
+  '/admin/transmission/$id': typeof AdminTransmissionIdLazyRoute
+  '/admin/transmission/create': typeof AdminTransmissionCreateLazyRoute
+  '/admin/type/$id': typeof AdminTypeIdLazyRoute
+  '/admin/type/create': typeof AdminTypeCreateLazyRoute
+  '/admin/caroptions': typeof AdminCaroptionsIndexLazyRoute
+  '/admin/cars': typeof AdminCarsIndexLazyRoute
+  '/admin/carspecs': typeof AdminCarspecsIndexLazyRoute
+  '/admin/manufacture': typeof AdminManufactureIndexLazyRoute
+  '/admin/model': typeof AdminModelIndexLazyRoute
+  '/admin/transmission': typeof AdminTransmissionIndexLazyRoute
+  '/admin/type': typeof AdminTypeIndexLazyRoute
+  '/admin/caroptions/edit/$id': typeof AdminCaroptionsEditIdLazyRoute
+  '/admin/cars/edit/$id': typeof AdminCarsEditIdLazyRoute
+  '/admin/carspecs/edit/$id': typeof AdminCarspecsEditIdLazyRoute
+  '/admin/manufacture/edit/$id': typeof AdminManufactureEditIdLazyRoute
+  '/admin/model/edit/$id': typeof AdminModelEditIdLazyRoute
+  '/admin/transmission/edit/$id': typeof AdminTransmissionEditIdLazyRoute
+  '/admin/type/edit/$id': typeof AdminTypeEditIdLazyRoute
 }
 
 export interface FileRoutesByTo {
@@ -548,34 +630,36 @@ export interface FileRoutesByTo {
   '/login': typeof LoginLazyRoute
   '/profile': typeof ProfileLazyRoute
   '/register': typeof RegisterLazyRoute
-  '/caroptions/$id': typeof CaroptionsIdLazyRoute
-  '/caroptions/create': typeof CaroptionsCreateLazyRoute
-  '/cars/$id': typeof CarsIdLazyRoute
-  '/cars/create': typeof CarsCreateLazyRoute
-  '/carspecs/$id': typeof CarspecsIdLazyRoute
-  '/carspecs/create': typeof CarspecsCreateLazyRoute
-  '/manufacture/$id': typeof ManufactureIdLazyRoute
-  '/manufacture/create': typeof ManufactureCreateLazyRoute
-  '/model/$id': typeof ModelIdLazyRoute
-  '/model/create': typeof ModelCreateLazyRoute
-  '/transmission/$id': typeof TransmissionIdLazyRoute
-  '/transmission/create': typeof TransmissionCreateLazyRoute
-  '/type/$id': typeof TypeIdLazyRoute
-  '/type/create': typeof TypeCreateLazyRoute
-  '/caroptions': typeof CaroptionsIndexLazyRoute
+  '/admin': typeof AdminIndexLazyRoute
   '/cars': typeof CarsIndexLazyRoute
-  '/carspecs': typeof CarspecsIndexLazyRoute
-  '/manufacture': typeof ManufactureIndexLazyRoute
-  '/model': typeof ModelIndexLazyRoute
-  '/transmission': typeof TransmissionIndexLazyRoute
-  '/type': typeof TypeIndexLazyRoute
-  '/caroptions/edit/$id': typeof CaroptionsEditIdLazyRoute
-  '/cars/edit/$id': typeof CarsEditIdLazyRoute
-  '/carspecs/edit/$id': typeof CarspecsEditIdLazyRoute
-  '/manufacture/edit/$id': typeof ManufactureEditIdLazyRoute
-  '/model/edit/$id': typeof ModelEditIdLazyRoute
-  '/transmission/edit/$id': typeof TransmissionEditIdLazyRoute
-  '/type/edit/$id': typeof TypeEditIdLazyRoute
+  '/admin/caroptions/$id': typeof AdminCaroptionsIdLazyRoute
+  '/admin/caroptions/create': typeof AdminCaroptionsCreateLazyRoute
+  '/admin/cars/$id': typeof AdminCarsIdLazyRoute
+  '/admin/cars/create': typeof AdminCarsCreateLazyRoute
+  '/admin/carspecs/$id': typeof AdminCarspecsIdLazyRoute
+  '/admin/carspecs/create': typeof AdminCarspecsCreateLazyRoute
+  '/admin/manufacture/$id': typeof AdminManufactureIdLazyRoute
+  '/admin/manufacture/create': typeof AdminManufactureCreateLazyRoute
+  '/admin/model/$id': typeof AdminModelIdLazyRoute
+  '/admin/model/create': typeof AdminModelCreateLazyRoute
+  '/admin/transmission/$id': typeof AdminTransmissionIdLazyRoute
+  '/admin/transmission/create': typeof AdminTransmissionCreateLazyRoute
+  '/admin/type/$id': typeof AdminTypeIdLazyRoute
+  '/admin/type/create': typeof AdminTypeCreateLazyRoute
+  '/admin/caroptions': typeof AdminCaroptionsIndexLazyRoute
+  '/admin/cars': typeof AdminCarsIndexLazyRoute
+  '/admin/carspecs': typeof AdminCarspecsIndexLazyRoute
+  '/admin/manufacture': typeof AdminManufactureIndexLazyRoute
+  '/admin/model': typeof AdminModelIndexLazyRoute
+  '/admin/transmission': typeof AdminTransmissionIndexLazyRoute
+  '/admin/type': typeof AdminTypeIndexLazyRoute
+  '/admin/caroptions/edit/$id': typeof AdminCaroptionsEditIdLazyRoute
+  '/admin/cars/edit/$id': typeof AdminCarsEditIdLazyRoute
+  '/admin/carspecs/edit/$id': typeof AdminCarspecsEditIdLazyRoute
+  '/admin/manufacture/edit/$id': typeof AdminManufactureEditIdLazyRoute
+  '/admin/model/edit/$id': typeof AdminModelEditIdLazyRoute
+  '/admin/transmission/edit/$id': typeof AdminTransmissionEditIdLazyRoute
+  '/admin/type/edit/$id': typeof AdminTypeEditIdLazyRoute
 }
 
 export interface FileRoutesById {
@@ -584,34 +668,36 @@ export interface FileRoutesById {
   '/login': typeof LoginLazyRoute
   '/profile': typeof ProfileLazyRoute
   '/register': typeof RegisterLazyRoute
-  '/caroptions/$id': typeof CaroptionsIdLazyRoute
-  '/caroptions/create': typeof CaroptionsCreateLazyRoute
-  '/cars/$id': typeof CarsIdLazyRoute
-  '/cars/create': typeof CarsCreateLazyRoute
-  '/carspecs/$id': typeof CarspecsIdLazyRoute
-  '/carspecs/create': typeof CarspecsCreateLazyRoute
-  '/manufacture/$id': typeof ManufactureIdLazyRoute
-  '/manufacture/create': typeof ManufactureCreateLazyRoute
-  '/model/$id': typeof ModelIdLazyRoute
-  '/model/create': typeof ModelCreateLazyRoute
-  '/transmission/$id': typeof TransmissionIdLazyRoute
-  '/transmission/create': typeof TransmissionCreateLazyRoute
-  '/type/$id': typeof TypeIdLazyRoute
-  '/type/create': typeof TypeCreateLazyRoute
-  '/caroptions/': typeof CaroptionsIndexLazyRoute
+  '/admin/': typeof AdminIndexLazyRoute
   '/cars/': typeof CarsIndexLazyRoute
-  '/carspecs/': typeof CarspecsIndexLazyRoute
-  '/manufacture/': typeof ManufactureIndexLazyRoute
-  '/model/': typeof ModelIndexLazyRoute
-  '/transmission/': typeof TransmissionIndexLazyRoute
-  '/type/': typeof TypeIndexLazyRoute
-  '/caroptions/edit/$id': typeof CaroptionsEditIdLazyRoute
-  '/cars/edit/$id': typeof CarsEditIdLazyRoute
-  '/carspecs/edit/$id': typeof CarspecsEditIdLazyRoute
-  '/manufacture/edit/$id': typeof ManufactureEditIdLazyRoute
-  '/model/edit/$id': typeof ModelEditIdLazyRoute
-  '/transmission/edit/$id': typeof TransmissionEditIdLazyRoute
-  '/type/edit/$id': typeof TypeEditIdLazyRoute
+  '/admin/caroptions/$id': typeof AdminCaroptionsIdLazyRoute
+  '/admin/caroptions/create': typeof AdminCaroptionsCreateLazyRoute
+  '/admin/cars/$id': typeof AdminCarsIdLazyRoute
+  '/admin/cars/create': typeof AdminCarsCreateLazyRoute
+  '/admin/carspecs/$id': typeof AdminCarspecsIdLazyRoute
+  '/admin/carspecs/create': typeof AdminCarspecsCreateLazyRoute
+  '/admin/manufacture/$id': typeof AdminManufactureIdLazyRoute
+  '/admin/manufacture/create': typeof AdminManufactureCreateLazyRoute
+  '/admin/model/$id': typeof AdminModelIdLazyRoute
+  '/admin/model/create': typeof AdminModelCreateLazyRoute
+  '/admin/transmission/$id': typeof AdminTransmissionIdLazyRoute
+  '/admin/transmission/create': typeof AdminTransmissionCreateLazyRoute
+  '/admin/type/$id': typeof AdminTypeIdLazyRoute
+  '/admin/type/create': typeof AdminTypeCreateLazyRoute
+  '/admin/caroptions/': typeof AdminCaroptionsIndexLazyRoute
+  '/admin/cars/': typeof AdminCarsIndexLazyRoute
+  '/admin/carspecs/': typeof AdminCarspecsIndexLazyRoute
+  '/admin/manufacture/': typeof AdminManufactureIndexLazyRoute
+  '/admin/model/': typeof AdminModelIndexLazyRoute
+  '/admin/transmission/': typeof AdminTransmissionIndexLazyRoute
+  '/admin/type/': typeof AdminTypeIndexLazyRoute
+  '/admin/caroptions/edit/$id': typeof AdminCaroptionsEditIdLazyRoute
+  '/admin/cars/edit/$id': typeof AdminCarsEditIdLazyRoute
+  '/admin/carspecs/edit/$id': typeof AdminCarspecsEditIdLazyRoute
+  '/admin/manufacture/edit/$id': typeof AdminManufactureEditIdLazyRoute
+  '/admin/model/edit/$id': typeof AdminModelEditIdLazyRoute
+  '/admin/transmission/edit/$id': typeof AdminTransmissionEditIdLazyRoute
+  '/admin/type/edit/$id': typeof AdminTypeEditIdLazyRoute
 }
 
 export interface FileRouteTypes {
@@ -621,102 +707,108 @@ export interface FileRouteTypes {
     | '/login'
     | '/profile'
     | '/register'
-    | '/caroptions/$id'
-    | '/caroptions/create'
-    | '/cars/$id'
-    | '/cars/create'
-    | '/carspecs/$id'
-    | '/carspecs/create'
-    | '/manufacture/$id'
-    | '/manufacture/create'
-    | '/model/$id'
-    | '/model/create'
-    | '/transmission/$id'
-    | '/transmission/create'
-    | '/type/$id'
-    | '/type/create'
-    | '/caroptions'
+    | '/admin'
     | '/cars'
-    | '/carspecs'
-    | '/manufacture'
-    | '/model'
-    | '/transmission'
-    | '/type'
-    | '/caroptions/edit/$id'
-    | '/cars/edit/$id'
-    | '/carspecs/edit/$id'
-    | '/manufacture/edit/$id'
-    | '/model/edit/$id'
-    | '/transmission/edit/$id'
-    | '/type/edit/$id'
+    | '/admin/caroptions/$id'
+    | '/admin/caroptions/create'
+    | '/admin/cars/$id'
+    | '/admin/cars/create'
+    | '/admin/carspecs/$id'
+    | '/admin/carspecs/create'
+    | '/admin/manufacture/$id'
+    | '/admin/manufacture/create'
+    | '/admin/model/$id'
+    | '/admin/model/create'
+    | '/admin/transmission/$id'
+    | '/admin/transmission/create'
+    | '/admin/type/$id'
+    | '/admin/type/create'
+    | '/admin/caroptions'
+    | '/admin/cars'
+    | '/admin/carspecs'
+    | '/admin/manufacture'
+    | '/admin/model'
+    | '/admin/transmission'
+    | '/admin/type'
+    | '/admin/caroptions/edit/$id'
+    | '/admin/cars/edit/$id'
+    | '/admin/carspecs/edit/$id'
+    | '/admin/manufacture/edit/$id'
+    | '/admin/model/edit/$id'
+    | '/admin/transmission/edit/$id'
+    | '/admin/type/edit/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/login'
     | '/profile'
     | '/register'
-    | '/caroptions/$id'
-    | '/caroptions/create'
-    | '/cars/$id'
-    | '/cars/create'
-    | '/carspecs/$id'
-    | '/carspecs/create'
-    | '/manufacture/$id'
-    | '/manufacture/create'
-    | '/model/$id'
-    | '/model/create'
-    | '/transmission/$id'
-    | '/transmission/create'
-    | '/type/$id'
-    | '/type/create'
-    | '/caroptions'
+    | '/admin'
     | '/cars'
-    | '/carspecs'
-    | '/manufacture'
-    | '/model'
-    | '/transmission'
-    | '/type'
-    | '/caroptions/edit/$id'
-    | '/cars/edit/$id'
-    | '/carspecs/edit/$id'
-    | '/manufacture/edit/$id'
-    | '/model/edit/$id'
-    | '/transmission/edit/$id'
-    | '/type/edit/$id'
+    | '/admin/caroptions/$id'
+    | '/admin/caroptions/create'
+    | '/admin/cars/$id'
+    | '/admin/cars/create'
+    | '/admin/carspecs/$id'
+    | '/admin/carspecs/create'
+    | '/admin/manufacture/$id'
+    | '/admin/manufacture/create'
+    | '/admin/model/$id'
+    | '/admin/model/create'
+    | '/admin/transmission/$id'
+    | '/admin/transmission/create'
+    | '/admin/type/$id'
+    | '/admin/type/create'
+    | '/admin/caroptions'
+    | '/admin/cars'
+    | '/admin/carspecs'
+    | '/admin/manufacture'
+    | '/admin/model'
+    | '/admin/transmission'
+    | '/admin/type'
+    | '/admin/caroptions/edit/$id'
+    | '/admin/cars/edit/$id'
+    | '/admin/carspecs/edit/$id'
+    | '/admin/manufacture/edit/$id'
+    | '/admin/model/edit/$id'
+    | '/admin/transmission/edit/$id'
+    | '/admin/type/edit/$id'
   id:
     | '__root__'
     | '/'
     | '/login'
     | '/profile'
     | '/register'
-    | '/caroptions/$id'
-    | '/caroptions/create'
-    | '/cars/$id'
-    | '/cars/create'
-    | '/carspecs/$id'
-    | '/carspecs/create'
-    | '/manufacture/$id'
-    | '/manufacture/create'
-    | '/model/$id'
-    | '/model/create'
-    | '/transmission/$id'
-    | '/transmission/create'
-    | '/type/$id'
-    | '/type/create'
-    | '/caroptions/'
+    | '/admin/'
     | '/cars/'
-    | '/carspecs/'
-    | '/manufacture/'
-    | '/model/'
-    | '/transmission/'
-    | '/type/'
-    | '/caroptions/edit/$id'
-    | '/cars/edit/$id'
-    | '/carspecs/edit/$id'
-    | '/manufacture/edit/$id'
-    | '/model/edit/$id'
-    | '/transmission/edit/$id'
-    | '/type/edit/$id'
+    | '/admin/caroptions/$id'
+    | '/admin/caroptions/create'
+    | '/admin/cars/$id'
+    | '/admin/cars/create'
+    | '/admin/carspecs/$id'
+    | '/admin/carspecs/create'
+    | '/admin/manufacture/$id'
+    | '/admin/manufacture/create'
+    | '/admin/model/$id'
+    | '/admin/model/create'
+    | '/admin/transmission/$id'
+    | '/admin/transmission/create'
+    | '/admin/type/$id'
+    | '/admin/type/create'
+    | '/admin/caroptions/'
+    | '/admin/cars/'
+    | '/admin/carspecs/'
+    | '/admin/manufacture/'
+    | '/admin/model/'
+    | '/admin/transmission/'
+    | '/admin/type/'
+    | '/admin/caroptions/edit/$id'
+    | '/admin/cars/edit/$id'
+    | '/admin/carspecs/edit/$id'
+    | '/admin/manufacture/edit/$id'
+    | '/admin/model/edit/$id'
+    | '/admin/transmission/edit/$id'
+    | '/admin/type/edit/$id'
   fileRoutesById: FileRoutesById
 }
 
@@ -725,34 +817,36 @@ export interface RootRouteChildren {
   LoginLazyRoute: typeof LoginLazyRoute
   ProfileLazyRoute: typeof ProfileLazyRoute
   RegisterLazyRoute: typeof RegisterLazyRoute
-  CaroptionsIdLazyRoute: typeof CaroptionsIdLazyRoute
-  CaroptionsCreateLazyRoute: typeof CaroptionsCreateLazyRoute
-  CarsIdLazyRoute: typeof CarsIdLazyRoute
-  CarsCreateLazyRoute: typeof CarsCreateLazyRoute
-  CarspecsIdLazyRoute: typeof CarspecsIdLazyRoute
-  CarspecsCreateLazyRoute: typeof CarspecsCreateLazyRoute
-  ManufactureIdLazyRoute: typeof ManufactureIdLazyRoute
-  ManufactureCreateLazyRoute: typeof ManufactureCreateLazyRoute
-  ModelIdLazyRoute: typeof ModelIdLazyRoute
-  ModelCreateLazyRoute: typeof ModelCreateLazyRoute
-  TransmissionIdLazyRoute: typeof TransmissionIdLazyRoute
-  TransmissionCreateLazyRoute: typeof TransmissionCreateLazyRoute
-  TypeIdLazyRoute: typeof TypeIdLazyRoute
-  TypeCreateLazyRoute: typeof TypeCreateLazyRoute
-  CaroptionsIndexLazyRoute: typeof CaroptionsIndexLazyRoute
+  AdminIndexLazyRoute: typeof AdminIndexLazyRoute
   CarsIndexLazyRoute: typeof CarsIndexLazyRoute
-  CarspecsIndexLazyRoute: typeof CarspecsIndexLazyRoute
-  ManufactureIndexLazyRoute: typeof ManufactureIndexLazyRoute
-  ModelIndexLazyRoute: typeof ModelIndexLazyRoute
-  TransmissionIndexLazyRoute: typeof TransmissionIndexLazyRoute
-  TypeIndexLazyRoute: typeof TypeIndexLazyRoute
-  CaroptionsEditIdLazyRoute: typeof CaroptionsEditIdLazyRoute
-  CarsEditIdLazyRoute: typeof CarsEditIdLazyRoute
-  CarspecsEditIdLazyRoute: typeof CarspecsEditIdLazyRoute
-  ManufactureEditIdLazyRoute: typeof ManufactureEditIdLazyRoute
-  ModelEditIdLazyRoute: typeof ModelEditIdLazyRoute
-  TransmissionEditIdLazyRoute: typeof TransmissionEditIdLazyRoute
-  TypeEditIdLazyRoute: typeof TypeEditIdLazyRoute
+  AdminCaroptionsIdLazyRoute: typeof AdminCaroptionsIdLazyRoute
+  AdminCaroptionsCreateLazyRoute: typeof AdminCaroptionsCreateLazyRoute
+  AdminCarsIdLazyRoute: typeof AdminCarsIdLazyRoute
+  AdminCarsCreateLazyRoute: typeof AdminCarsCreateLazyRoute
+  AdminCarspecsIdLazyRoute: typeof AdminCarspecsIdLazyRoute
+  AdminCarspecsCreateLazyRoute: typeof AdminCarspecsCreateLazyRoute
+  AdminManufactureIdLazyRoute: typeof AdminManufactureIdLazyRoute
+  AdminManufactureCreateLazyRoute: typeof AdminManufactureCreateLazyRoute
+  AdminModelIdLazyRoute: typeof AdminModelIdLazyRoute
+  AdminModelCreateLazyRoute: typeof AdminModelCreateLazyRoute
+  AdminTransmissionIdLazyRoute: typeof AdminTransmissionIdLazyRoute
+  AdminTransmissionCreateLazyRoute: typeof AdminTransmissionCreateLazyRoute
+  AdminTypeIdLazyRoute: typeof AdminTypeIdLazyRoute
+  AdminTypeCreateLazyRoute: typeof AdminTypeCreateLazyRoute
+  AdminCaroptionsIndexLazyRoute: typeof AdminCaroptionsIndexLazyRoute
+  AdminCarsIndexLazyRoute: typeof AdminCarsIndexLazyRoute
+  AdminCarspecsIndexLazyRoute: typeof AdminCarspecsIndexLazyRoute
+  AdminManufactureIndexLazyRoute: typeof AdminManufactureIndexLazyRoute
+  AdminModelIndexLazyRoute: typeof AdminModelIndexLazyRoute
+  AdminTransmissionIndexLazyRoute: typeof AdminTransmissionIndexLazyRoute
+  AdminTypeIndexLazyRoute: typeof AdminTypeIndexLazyRoute
+  AdminCaroptionsEditIdLazyRoute: typeof AdminCaroptionsEditIdLazyRoute
+  AdminCarsEditIdLazyRoute: typeof AdminCarsEditIdLazyRoute
+  AdminCarspecsEditIdLazyRoute: typeof AdminCarspecsEditIdLazyRoute
+  AdminManufactureEditIdLazyRoute: typeof AdminManufactureEditIdLazyRoute
+  AdminModelEditIdLazyRoute: typeof AdminModelEditIdLazyRoute
+  AdminTransmissionEditIdLazyRoute: typeof AdminTransmissionEditIdLazyRoute
+  AdminTypeEditIdLazyRoute: typeof AdminTypeEditIdLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -760,34 +854,36 @@ const rootRouteChildren: RootRouteChildren = {
   LoginLazyRoute: LoginLazyRoute,
   ProfileLazyRoute: ProfileLazyRoute,
   RegisterLazyRoute: RegisterLazyRoute,
-  CaroptionsIdLazyRoute: CaroptionsIdLazyRoute,
-  CaroptionsCreateLazyRoute: CaroptionsCreateLazyRoute,
-  CarsIdLazyRoute: CarsIdLazyRoute,
-  CarsCreateLazyRoute: CarsCreateLazyRoute,
-  CarspecsIdLazyRoute: CarspecsIdLazyRoute,
-  CarspecsCreateLazyRoute: CarspecsCreateLazyRoute,
-  ManufactureIdLazyRoute: ManufactureIdLazyRoute,
-  ManufactureCreateLazyRoute: ManufactureCreateLazyRoute,
-  ModelIdLazyRoute: ModelIdLazyRoute,
-  ModelCreateLazyRoute: ModelCreateLazyRoute,
-  TransmissionIdLazyRoute: TransmissionIdLazyRoute,
-  TransmissionCreateLazyRoute: TransmissionCreateLazyRoute,
-  TypeIdLazyRoute: TypeIdLazyRoute,
-  TypeCreateLazyRoute: TypeCreateLazyRoute,
-  CaroptionsIndexLazyRoute: CaroptionsIndexLazyRoute,
+  AdminIndexLazyRoute: AdminIndexLazyRoute,
   CarsIndexLazyRoute: CarsIndexLazyRoute,
-  CarspecsIndexLazyRoute: CarspecsIndexLazyRoute,
-  ManufactureIndexLazyRoute: ManufactureIndexLazyRoute,
-  ModelIndexLazyRoute: ModelIndexLazyRoute,
-  TransmissionIndexLazyRoute: TransmissionIndexLazyRoute,
-  TypeIndexLazyRoute: TypeIndexLazyRoute,
-  CaroptionsEditIdLazyRoute: CaroptionsEditIdLazyRoute,
-  CarsEditIdLazyRoute: CarsEditIdLazyRoute,
-  CarspecsEditIdLazyRoute: CarspecsEditIdLazyRoute,
-  ManufactureEditIdLazyRoute: ManufactureEditIdLazyRoute,
-  ModelEditIdLazyRoute: ModelEditIdLazyRoute,
-  TransmissionEditIdLazyRoute: TransmissionEditIdLazyRoute,
-  TypeEditIdLazyRoute: TypeEditIdLazyRoute,
+  AdminCaroptionsIdLazyRoute: AdminCaroptionsIdLazyRoute,
+  AdminCaroptionsCreateLazyRoute: AdminCaroptionsCreateLazyRoute,
+  AdminCarsIdLazyRoute: AdminCarsIdLazyRoute,
+  AdminCarsCreateLazyRoute: AdminCarsCreateLazyRoute,
+  AdminCarspecsIdLazyRoute: AdminCarspecsIdLazyRoute,
+  AdminCarspecsCreateLazyRoute: AdminCarspecsCreateLazyRoute,
+  AdminManufactureIdLazyRoute: AdminManufactureIdLazyRoute,
+  AdminManufactureCreateLazyRoute: AdminManufactureCreateLazyRoute,
+  AdminModelIdLazyRoute: AdminModelIdLazyRoute,
+  AdminModelCreateLazyRoute: AdminModelCreateLazyRoute,
+  AdminTransmissionIdLazyRoute: AdminTransmissionIdLazyRoute,
+  AdminTransmissionCreateLazyRoute: AdminTransmissionCreateLazyRoute,
+  AdminTypeIdLazyRoute: AdminTypeIdLazyRoute,
+  AdminTypeCreateLazyRoute: AdminTypeCreateLazyRoute,
+  AdminCaroptionsIndexLazyRoute: AdminCaroptionsIndexLazyRoute,
+  AdminCarsIndexLazyRoute: AdminCarsIndexLazyRoute,
+  AdminCarspecsIndexLazyRoute: AdminCarspecsIndexLazyRoute,
+  AdminManufactureIndexLazyRoute: AdminManufactureIndexLazyRoute,
+  AdminModelIndexLazyRoute: AdminModelIndexLazyRoute,
+  AdminTransmissionIndexLazyRoute: AdminTransmissionIndexLazyRoute,
+  AdminTypeIndexLazyRoute: AdminTypeIndexLazyRoute,
+  AdminCaroptionsEditIdLazyRoute: AdminCaroptionsEditIdLazyRoute,
+  AdminCarsEditIdLazyRoute: AdminCarsEditIdLazyRoute,
+  AdminCarspecsEditIdLazyRoute: AdminCarspecsEditIdLazyRoute,
+  AdminManufactureEditIdLazyRoute: AdminManufactureEditIdLazyRoute,
+  AdminModelEditIdLazyRoute: AdminModelEditIdLazyRoute,
+  AdminTransmissionEditIdLazyRoute: AdminTransmissionEditIdLazyRoute,
+  AdminTypeEditIdLazyRoute: AdminTypeEditIdLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -806,34 +902,36 @@ export const routeTree = rootRoute
         "/login",
         "/profile",
         "/register",
-        "/caroptions/$id",
-        "/caroptions/create",
-        "/cars/$id",
-        "/cars/create",
-        "/carspecs/$id",
-        "/carspecs/create",
-        "/manufacture/$id",
-        "/manufacture/create",
-        "/model/$id",
-        "/model/create",
-        "/transmission/$id",
-        "/transmission/create",
-        "/type/$id",
-        "/type/create",
-        "/caroptions/",
+        "/admin/",
         "/cars/",
-        "/carspecs/",
-        "/manufacture/",
-        "/model/",
-        "/transmission/",
-        "/type/",
-        "/caroptions/edit/$id",
-        "/cars/edit/$id",
-        "/carspecs/edit/$id",
-        "/manufacture/edit/$id",
-        "/model/edit/$id",
-        "/transmission/edit/$id",
-        "/type/edit/$id"
+        "/admin/caroptions/$id",
+        "/admin/caroptions/create",
+        "/admin/cars/$id",
+        "/admin/cars/create",
+        "/admin/carspecs/$id",
+        "/admin/carspecs/create",
+        "/admin/manufacture/$id",
+        "/admin/manufacture/create",
+        "/admin/model/$id",
+        "/admin/model/create",
+        "/admin/transmission/$id",
+        "/admin/transmission/create",
+        "/admin/type/$id",
+        "/admin/type/create",
+        "/admin/caroptions/",
+        "/admin/cars/",
+        "/admin/carspecs/",
+        "/admin/manufacture/",
+        "/admin/model/",
+        "/admin/transmission/",
+        "/admin/type/",
+        "/admin/caroptions/edit/$id",
+        "/admin/cars/edit/$id",
+        "/admin/carspecs/edit/$id",
+        "/admin/manufacture/edit/$id",
+        "/admin/model/edit/$id",
+        "/admin/transmission/edit/$id",
+        "/admin/type/edit/$id"
       ]
     },
     "/": {
@@ -848,89 +946,95 @@ export const routeTree = rootRoute
     "/register": {
       "filePath": "register.lazy.jsx"
     },
-    "/caroptions/$id": {
-      "filePath": "caroptions/$id.lazy.jsx"
-    },
-    "/caroptions/create": {
-      "filePath": "caroptions/create.lazy.jsx"
-    },
-    "/cars/$id": {
-      "filePath": "cars/$id.lazy.jsx"
-    },
-    "/cars/create": {
-      "filePath": "cars/create.lazy.jsx"
-    },
-    "/carspecs/$id": {
-      "filePath": "carspecs/$id.lazy.jsx"
-    },
-    "/carspecs/create": {
-      "filePath": "carspecs/create.lazy.jsx"
-    },
-    "/manufacture/$id": {
-      "filePath": "manufacture/$id.lazy.jsx"
-    },
-    "/manufacture/create": {
-      "filePath": "manufacture/create.lazy.jsx"
-    },
-    "/model/$id": {
-      "filePath": "model/$id.lazy.jsx"
-    },
-    "/model/create": {
-      "filePath": "model/create.lazy.jsx"
-    },
-    "/transmission/$id": {
-      "filePath": "transmission/$id.lazy.jsx"
-    },
-    "/transmission/create": {
-      "filePath": "transmission/create.lazy.jsx"
-    },
-    "/type/$id": {
-      "filePath": "type/$id.lazy.jsx"
-    },
-    "/type/create": {
-      "filePath": "type/create.lazy.jsx"
-    },
-    "/caroptions/": {
-      "filePath": "caroptions/index.lazy.jsx"
+    "/admin/": {
+      "filePath": "admin/index.lazy.jsx"
     },
     "/cars/": {
       "filePath": "cars/index.lazy.jsx"
     },
-    "/carspecs/": {
-      "filePath": "carspecs/index.lazy.jsx"
+    "/admin/caroptions/$id": {
+      "filePath": "admin/caroptions/$id.lazy.jsx"
     },
-    "/manufacture/": {
-      "filePath": "manufacture/index.lazy.jsx"
+    "/admin/caroptions/create": {
+      "filePath": "admin/caroptions/create.lazy.jsx"
     },
-    "/model/": {
-      "filePath": "model/index.lazy.jsx"
+    "/admin/cars/$id": {
+      "filePath": "admin/cars/$id.lazy.jsx"
     },
-    "/transmission/": {
-      "filePath": "transmission/index.lazy.jsx"
+    "/admin/cars/create": {
+      "filePath": "admin/cars/create.lazy.jsx"
     },
-    "/type/": {
-      "filePath": "type/index.lazy.jsx"
+    "/admin/carspecs/$id": {
+      "filePath": "admin/carspecs/$id.lazy.jsx"
     },
-    "/caroptions/edit/$id": {
-      "filePath": "caroptions/edit/$id.lazy.jsx"
+    "/admin/carspecs/create": {
+      "filePath": "admin/carspecs/create.lazy.jsx"
     },
-    "/cars/edit/$id": {
-      "filePath": "cars/edit/$id.lazy.jsx"
+    "/admin/manufacture/$id": {
+      "filePath": "admin/manufacture/$id.lazy.jsx"
     },
-    "/carspecs/edit/$id": {
-      "filePath": "carspecs/edit/$id.lazy.jsx"
+    "/admin/manufacture/create": {
+      "filePath": "admin/manufacture/create.lazy.jsx"
     },
-    "/manufacture/edit/$id": {
-      "filePath": "manufacture/edit/$id.lazy.jsx"
+    "/admin/model/$id": {
+      "filePath": "admin/model/$id.lazy.jsx"
     },
-    "/model/edit/$id": {
-      "filePath": "model/edit/$id.lazy.jsx"
+    "/admin/model/create": {
+      "filePath": "admin/model/create.lazy.jsx"
     },
-    "/transmission/edit/$id": {
-      "filePath": "transmission/edit/$id.lazy.jsx"
+    "/admin/transmission/$id": {
+      "filePath": "admin/transmission/$id.lazy.jsx"
     },
-    "/type/edit/$id": {
-      "filePath": "type/edit/$id.lazy.jsx"
+    "/admin/transmission/create": {
+      "filePath": "admin/transmission/create.lazy.jsx"
+    },
+    "/admin/type/$id": {
+      "filePath": "admin/type/$id.lazy.jsx"
+    },
+    "/admin/type/create": {
+      "filePath": "admin/type/create.lazy.jsx"
+    },
+    "/admin/caroptions/": {
+      "filePath": "admin/caroptions/index.lazy.jsx"
+    },
+    "/admin/cars/": {
+      "filePath": "admin/cars/index.lazy.jsx"
+    },
+    "/admin/carspecs/": {
+      "filePath": "admin/carspecs/index.lazy.jsx"
+    },
+    "/admin/manufacture/": {
+      "filePath": "admin/manufacture/index.lazy.jsx"
+    },
+    "/admin/model/": {
+      "filePath": "admin/model/index.lazy.jsx"
+    },
+    "/admin/transmission/": {
+      "filePath": "admin/transmission/index.lazy.jsx"
+    },
+    "/admin/type/": {
+      "filePath": "admin/type/index.lazy.jsx"
+    },
+    "/admin/caroptions/edit/$id": {
+      "filePath": "admin/caroptions/edit/$id.lazy.jsx"
+    },
+    "/admin/cars/edit/$id": {
+      "filePath": "admin/cars/edit/$id.lazy.jsx"
+    },
+    "/admin/carspecs/edit/$id": {
+      "filePath": "admin/carspecs/edit/$id.lazy.jsx"
+    },
+    "/admin/manufacture/edit/$id": {
+      "filePath": "admin/manufacture/edit/$id.lazy.jsx"
+    },
+    "/admin/model/edit/$id": {
+      "filePath": "admin/model/edit/$id.lazy.jsx"
+    },
+    "/admin/transmission/edit/$id": {
+      "filePath": "admin/transmission/edit/$id.lazy.jsx"
+    },
+    "/admin/type/edit/$id": {
+      "filePath": "admin/type/edit/$id.lazy.jsx"
     }
   }
 }

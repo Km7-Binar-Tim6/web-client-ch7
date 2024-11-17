@@ -6,7 +6,7 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { useDispatch, useSelector } from "react-redux";
-import { setToken } from "../redux/slices/auth";
+import { setToken, setUser } from "../redux/slices/auth"; // pastikan Anda memiliki setUser
 import { login } from "../service/auth";
 import { toast } from "react-toastify";
 
@@ -18,16 +18,21 @@ function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { token } = useSelector((state) => state.auth);
+  const { token, user } = useSelector((state) => state.auth); // Mengambil user dari Redux
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    if (token) {
-      navigate({ to: "/" });
+    if (token && user) {
+      // Redirect berdasarkan role_id
+      if (user.role_id === 1) {
+        navigate({ to: "/admin" });
+      } else if (user.role_id === 2) {
+        navigate({ to: "/" });
+      }
     }
-  }, [navigate, token]);
+  }, [navigate, token, user]);
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -36,7 +41,8 @@ function Login() {
     const result = await login(body);
     if (result.success) {
       dispatch(setToken(result.data.token));
-      navigate({ to: "/" });
+      dispatch(setUser(result.data.user)); // Simpan data user ke Redux
+      navigate({ to: result.data.user.role_id === 1 ? "/admin" : "/" }); // Arahkan sesuai role_id
       return;
     }
 

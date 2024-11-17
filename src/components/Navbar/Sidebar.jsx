@@ -10,8 +10,8 @@ const Sidebar = ({ sidebarOpen }) => {
     >
       <div className="h-100 sidebar-content">
         <div className="sidebar-logo p-3">
-          <Link to="/" className="fw-bold fs-5">
-            Students
+          <Link to="/admin" className="fw-bold fs-5">
+            Admin
           </Link>
         </div>
         <ul className="nav flex-column sidebar-nav p-0">
@@ -19,7 +19,7 @@ const Sidebar = ({ sidebarOpen }) => {
 
           <li className="sidebar-item">
             <Link
-              to="/"
+              to="/admin"
               className="nav-link sidebar-link d-flex align-items-center"
             >
               <FaList className="me-2" /> Dashboard
@@ -28,7 +28,7 @@ const Sidebar = ({ sidebarOpen }) => {
 
           <li className="sidebar-item">
             <Link
-              to="/cars"
+              to="/admin/cars"
               className="nav-link sidebar-link d-flex align-items-center"
             >
               <FaList className="me-2" /> Car List
@@ -36,7 +36,7 @@ const Sidebar = ({ sidebarOpen }) => {
           </li>
           <li className="sidebar-item">
             <Link
-              to="/manufacture"
+              to="/admin/manufacture"
               className="nav-link sidebar-link d-flex align-items-center"
             >
               <FaList className="me-2" /> Manufacture
@@ -44,7 +44,7 @@ const Sidebar = ({ sidebarOpen }) => {
           </li>
           <li className="sidebar-item">
             <Link
-              to="/transmission"
+              to="/admin/transmission"
               className="nav-link sidebar-link d-flex align-items-center"
             >
               <FaList className="me-2" /> Transmission
@@ -52,7 +52,7 @@ const Sidebar = ({ sidebarOpen }) => {
           </li>
           <li className="sidebar-item">
             <Link
-              to="/type"
+              to="/admin/type"
               className="nav-link sidebar-link d-flex align-items-center"
             >
               <FaList className="me-2" /> Type
@@ -61,7 +61,7 @@ const Sidebar = ({ sidebarOpen }) => {
 
           <li className="sidebar-item">
             <Link
-              to="/model"
+              to="/admin/model"
               className="nav-link sidebar-link d-flex align-items-center"
             >
               <FaList className="me-2" /> Model
@@ -69,20 +69,20 @@ const Sidebar = ({ sidebarOpen }) => {
           </li>
           <li className="sidebar-item">
             <Link
-              to="/caroptions"
+              to="/admin/caroptions"
               className="nav-link sidebar-link d-flex align-items-center"
             >
               <FaList className="me-2" /> Car Options
             </Link>
           </li>
           <li className="sidebar-item">
-              <Link
-                to="/carspecs"
-                className="nav-link sidebar-link d-flex align-items-center"
-              >
-                <FaList className="me-2" /> Car Specs
-              </Link>
-            </li>
+            <Link
+              to="/admin/carspecs"
+              className="nav-link sidebar-link d-flex align-items-center"
+            >
+              <FaList className="me-2" /> Car Specs
+            </Link>
+          </li>
         </ul>
       </div>
     </aside>

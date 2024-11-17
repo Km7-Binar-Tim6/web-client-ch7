@@ -1,4 +1,12 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
+import Navbar from "../components/User/Navbar";
+import Hero from "../components/User/Hero";
+import Services from "../components/User/Services";
+import WhyUs from "../components/User/WhyUs";
+import Testimonial from "../components/User/Testimonials";
+import PesanMobil from "../components/User/PesanMobil";
+import FAQSection from "../components/User/FAQSection";
+import Footer from "../components/User/Footer";
 
 export const Route = createLazyFileRoute("/")({
   component: Index,
@@ -6,9 +14,16 @@ export const Route = createLazyFileRoute("/")({
 
 function Index() {
   return (
-    <div className="mt-4">
-      <h1>Ini adalah dashboard utama silahkan menggunakan sidebar untuk akses feature cars, manufacture, transmission, dll apa saja</h1>
-    </div>
+    <>
+      <Navbar />
+      <Hero />
+      <Services />
+      <WhyUs />
+      <Testimonial />
+      <PesanMobil />
+      <FAQSection />
+      <Footer />
+    </>
   );
 }
 

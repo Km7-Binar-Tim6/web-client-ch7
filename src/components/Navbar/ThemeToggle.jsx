@@ -12,7 +12,7 @@ const ThemeToggle = () => {
   };
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") || "dark"; // Get saved theme from localStorage
+    const savedTheme = localStorage.getItem("theme") || "light"; // Get saved theme from localStorage
     setTheme(savedTheme);
     document.documentElement.setAttribute("data-bs-theme", savedTheme); // Apply saved theme on <html> element
   }, []);

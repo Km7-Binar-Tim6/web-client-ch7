@@ -13,20 +13,32 @@ import { useState } from "react";
 export const Route = createRootRoute({
   component: () => {
     const location = useLocation();
-    const isLoginPage =
-      location.pathname === "/login" || location.pathname === "/register";
+    const isAuthPage =
+      location.pathname === "/login" ||
+      location.pathname === "/register" ||
+      location.pathname === "/";
+
+    // Check if the current route starts with '/admin'
+    const isAdminPage = location.pathname.startsWith("/admin");
+
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     return (
       <div className={`layout ${sidebarOpen ? "sidebar-open" : ""}`}>
-        {!isLoginPage && <Sidebar sidebarOpen={sidebarOpen} />}
+        {/* Show Sidebar and NavigationBar only on /admin and its subroutes */}
+        {isAdminPage && <Sidebar sidebarOpen={sidebarOpen} />}
         <div className="content-wrapper">
-          {!isLoginPage && <NavigationBar setSidebarOpen={setSidebarOpen} />}
+          {isAdminPage && <NavigationBar setSidebarOpen={setSidebarOpen} />}
           <main className="content px-3 py-2">
             <Container fluid>
-              <ProtectedRoute>
+              {/* Protect all routes except login/register */}
+              {isAuthPage ? (
                 <Outlet />
-              </ProtectedRoute>
+              ) : (
+                <ProtectedRoute>
+                  <Outlet />
+                </ProtectedRoute>
+              )}
             </Container>
           </main>
         </div>

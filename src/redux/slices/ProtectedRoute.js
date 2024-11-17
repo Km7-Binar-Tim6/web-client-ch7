@@ -6,36 +6,41 @@ import PropTypes from "prop-types";
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const { token, user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
-  const location = useLocation(); // Get current path
+  const location = useLocation();
 
   useEffect(() => {
-    // If user is not logged in and is not on login/register page, redirect to login
-    if (
-      !token &&
-      location.pathname !== "/login" &&
-      location.pathname !== "/register"
-    ) {
-      navigate({ to: "/login" });
+    // Redirect to login if not authenticated
+    if (!token) {
+      if (
+        location.pathname !== "/login" &&
+        location.pathname !== "/register" &&
+        location.pathname !== "/"
+      ) {
+        navigate({ to: "/" });
+      }
     } else if (allowedRoles && !allowedRoles.includes(user?.role_id)) {
-      // If role is not allowed, redirect to homepage or a 403 page
+      // Redirect to home or a 403 page if user role is not allowed
       navigate({ to: "/" });
     }
-  }, [token, navigate, user?.role_id, allowedRoles, location.pathname]);
+  }, [token, user?.role_id, allowedRoles, navigate, location.pathname]);
 
-  if (
-    !token &&
-    location.pathname !== "/login" &&
-    location.pathname !== "/register"
-  ) {
-    return null; // Render nothing while redirecting
+  // Prevent rendering if redirecting
+  if (!token) {
+    if (
+      location.pathname !== "/login" &&
+      location.pathname !== "/register" &&
+      location.pathname !== "/"
+    ) {
+      return null; // Render nothing during redirect
+    }
   }
 
-  return children; // Render protected content if user has the right role
+  return children; // Render children only if all checks pass
 };
 
 ProtectedRoute.propTypes = {
-  children: PropTypes.node.isRequired, // Renderable content
-  allowedRoles: PropTypes.arrayOf(PropTypes.number), // Allowed roles array (e.g., [1] for admin)
+  children: PropTypes.node.isRequired,
+  allowedRoles: PropTypes.arrayOf(PropTypes.number),
 };
 
 export default ProtectedRoute;
