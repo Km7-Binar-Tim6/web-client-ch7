@@ -51,6 +51,10 @@ function CarSpecsEdit() {
     const request = {
       spec_name: specName,
     };
+    if (!specName || specName === carSpecs.spec_name) {
+      toast.error("Spec name is required and cannot be the same as before");
+      return;
+    }
     updatingSpecs(request);
   };
 
@@ -60,7 +64,7 @@ function CarSpecsEdit() {
         <Col>
           <Button
             variant="outline-secondary"
-            onClick={() => navigate({ to: "/admin/carspecs/$id" })}
+            onClick={() => navigate({ to: "/admin/carspecs" })}
             style={{
               display: "flex",
               alignItems: "center",
