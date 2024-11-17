@@ -14,27 +14,22 @@ function CarSpecsDetail() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
   const [carSpecs, setCarSpecs] = useState(null);
-  const [isLoading, setIsLoading] = useState(null);
   const [isNotFound, setIsNotFound] = useState(null);
 
-  useEffect(() => {
-    const getDetailCarSpecsData = async (id) => {
-      setIsLoading(true);
-      const result = await getDetailCarSpecs(id);
-      if (result?.success) {
-        setCarSpecs(result.data);
-        setIsNotFound(false);
-      } else {
-        setIsNotFound(true);
-      }
-      setIsLoading(false);
-    };
-    if (id) {
-      getDetailCarSpecsData(id);
-    }
-  }, [id]);
+  const { data, isSuccess, isPending } = useQuery({
+    queryKey: ["carSpecs", id],
+    queryFn: () => getDetailCarSpecs(id),
+    enabled: !!id,
+  });
 
-  if (isLoading) {
+  useEffect(() => {
+    if (isSuccess) {
+      setCarSpecs(data);
+      setIsNotFound(false);
+    }
+  }, [data, isSuccess]);
+
+  if (isPending) {
     return (
       <Row className="mt-5">
         <Col>

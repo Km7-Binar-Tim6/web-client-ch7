@@ -11,6 +11,8 @@ import {
 } from "../../../../service/carspecs";
 import { toast } from "react-toastify";
 import { FaArrowLeft } from "react-icons/fa";
+import { useMutation, useQuery } from "@tanstack/react-query";
+
 export const Route = createLazyFileRoute("/admin/carspecs/edit/$id")({
   component: CarSpecsEdit,
 });
@@ -20,43 +22,36 @@ function CarSpecsEdit() {
   const navigate = useNavigate();
 
   const [specName, setSpecName] = useState("");
-  const [setIsLoading] = useState(false);
-  const [isNotFound, setIsNotFound] = useState(false);
+
+  const { data: carSpecs, isSuccess } = useQuery({
+    queryKey: ["carSpecs", id],
+    queryFn: () => getDetailCarSpecs(id),
+    enabled: !!id,
+  });
+
+  const { mutate: updatingSpecs, isPending: isUpdatingSpecs } = useMutation({
+    mutationFn: (data) => updateCarSpecs(id, data),
+    onSuccess: () => {
+      navigate({ to: "/admin/carspecs" });
+    },
+    onError: (error) => {
+      toast.error(error?.message);
+    },
+  });
 
   useEffect(() => {
-    const getDetailCarSpecsData = async (id) => {
-      setIsLoading(true);
-      const result = await getDetailCarSpecs(id);
-      if (result?.success) {
-        setSpecName(result.data.spec_name);
-        setIsNotFound(false);
-      } else {
-        setIsNotFound(true);
-        navigate({ to: "/admin/carspecs" });
-      }
-      setIsLoading(false);
-    };
-    if (id) {
-      getDetailCarSpecsData(id);
+    if (isSuccess) {
+      setSpecName(carSpecs.spec_name);
     }
-  }, [id]);
+  }, [carSpecs, isSuccess]);
 
-  if (isNotFound) {
-    navigate({ to: "/admin/carspecs" });
-    return;
-  }
 
   const onSubmit = async (event) => {
     event.preventDefault();
     const request = {
       spec_name: specName,
     };
-    const result = await updateCarSpecs(id, request);
-    if (result?.success) {
-      navigate({ to: "/admin/carspecs" });
-      return;
-    }
-    toast.error(result?.message);
+    updatingSpecs(request);
   };
 
   return (
@@ -96,7 +91,11 @@ function CarSpecsEdit() {
                     }}
                   />
                 </Form.Group>
-                <Button type="submit" variant="primary">
+                <Button
+                  type="submit"
+                  variant="primary"
+                  disabled={isUpdatingSpecs}
+                >
                   Update
                 </Button>
               </Form>
