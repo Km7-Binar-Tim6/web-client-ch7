@@ -1,14 +1,25 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const CariMobilMenu = ({ onSearch }) => {
   const [tanggal, setTanggal] = useState("");
   const [capacity, setCapacity] = useState(1);
-  const [rentperday, setRentPerDay] = useState(""); // Tambahkan rentperday
+  const [rentperday, setRentPerDay] = useState("");
+
+  const { token } = useSelector((state) => state.auth); // Akses status login
+
+  const isFormValid = tanggal && capacity > 0 && rentperday >= 0; // Validasi semua field
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Panggil fungsi onSearch dengan filter
+    if (!token) {
+      // Tampilkan toast jika belum login
+      toast.warning("Silahkan login terlebih dahulu!");
+      return;
+    }
+    // Panggil fungsi onSearch jika login dan semua validasi terpenuhi
     onSearch({
       rentperday: rentperday ? Number(rentperday) : Infinity, // Harga maksimum
       capacity: capacity || 1, // Kapasitas default ke 1
@@ -62,7 +73,11 @@ const CariMobilMenu = ({ onSearch }) => {
             />
           </div>
           <div className="col-12 text-end">
-            <button type="submit" className="btn btn-success px-4 py-2">
+            <button
+              type="submit"
+              className="btn btn-success px-4 py-2"
+              disabled={!isFormValid} // Nonaktifkan jika form tidak valid
+            >
               Cari Mobil
             </button>
           </div>

@@ -16,7 +16,8 @@ export const Route = createRootRoute({
     const isAuthPage =
       location.pathname === "/login" ||
       location.pathname === "/register" ||
-      location.pathname === "/";
+      location.pathname === "/" ||
+      location.pathname === "/cars";
 
     // Check if the current route starts with '/admin'
     const isAdminPage = location.pathname.startsWith("/admin");

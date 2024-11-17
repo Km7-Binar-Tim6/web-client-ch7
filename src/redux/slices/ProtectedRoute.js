@@ -14,7 +14,8 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
       if (
         location.pathname !== "/login" &&
         location.pathname !== "/register" &&
-        location.pathname !== "/"
+        location.pathname !== "/" &&
+        location.pathname !== "/cars"
       ) {
         navigate({ to: "/" });
       }
@@ -29,7 +30,8 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
     if (
       location.pathname !== "/login" &&
       location.pathname !== "/register" &&
-      location.pathname !== "/"
+      location.pathname !== "/" &&
+      location.pathname !== "/cars"
     ) {
       return null; // Render nothing during redirect
     }
