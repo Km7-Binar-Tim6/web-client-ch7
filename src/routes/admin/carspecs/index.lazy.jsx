@@ -28,13 +28,15 @@ function Index() {
     enabled: !!token,
   });
 
+  const sortedCarSpecs = data?.sort((a, b) => a.id - b.id);
+
   const refetchData = async () => {
     await queryClient.invalidateQueries({ queryKey: ["carSpecs"] });
   }
 
   useEffect(() => {
     if (isSuccess) {
-      setCarSpecs(data);
+      setCarSpecs(sortedCarSpecs);
     }
   }, [data, isSuccess]);
 
@@ -80,7 +82,7 @@ function Index() {
         <Table striped bordered hover className="mt-4">
           <thead>
             <tr>
-              <th>ID</th>
+              <th >ID</th> 
               <th>Spec Name</th>
               <th>Actions</th>
             </tr>

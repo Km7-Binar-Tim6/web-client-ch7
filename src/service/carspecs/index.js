@@ -10,8 +10,8 @@ export const getCarSpecs = async () => {
         }
     });
     const result = await response.json();
-    if (result?.success) {
-        return result.data;
+    if (!result?.success) {
+        throw new Error(result?.message);
     }
     return result?.data;
 }
@@ -27,8 +27,8 @@ export const getDetailCarSpecs = async (id) => {
         },
     });
     const result = await response.json();
-    if (result?.success) {
-        return result.data;
+    if (!result?.success) {
+        throw new Error(result?.message);
     }
     return result?.data;
 }
@@ -48,8 +48,8 @@ export const createCarSpecs = async (data) => {
         }
     });
     const result = await response.json();
-    if (result?.success) {
-        return result.data;
+    if (!result?.success) {
+        throw new Error(result?.message);
     }
     return result?.data;
 }
@@ -66,8 +66,8 @@ export const deleteCarSpecs = async (id) => {
         }
     });
     const result = await response.json();
-    if (result?.success) {
-        return result.data;
+    if (!result?.success) {
+        throw new Error(result?.message);
     }
     return result?.data;
 }
@@ -86,8 +86,8 @@ export const updateCarSpecs = async (id, data) => {
         }
     });
     const result = await response.json();
-    if (result?.success) {
-        return result.data;
+    if (!result?.success) {
+        throw new Error(result?.message);
     }
     return result?.data;
 }

@@ -20,6 +20,10 @@ function CreateCarSpecs() {
 
   const { mutate: create, isPending } = useMutation({
     mutationFn: (data) => {
+      if (specName === data?.spec_name) {
+        toast.error("Specification name already exists");
+        return;
+      }
       return createCarSpecs(data);
     },
     onSuccess: () => {
@@ -35,8 +39,11 @@ function CreateCarSpecs() {
     const request = {
       spec_name: specName,
     };
+    if (!specName) {
+      toast.error("Spec name is required");
+      return;
+    }
     create(request);
-
   };
 
   return (
@@ -56,7 +63,6 @@ function CreateCarSpecs() {
                   <Form.Control
                     type="text"
                     placeholder="Specification Name"
-                    required
                     value={specName}
                     onChange={(event) => {
                       setSpecName(event.target.value);

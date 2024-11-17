@@ -47,7 +47,7 @@ export const getDetailCar = async (id) => {
     // get data
     const result = await response.json();
     return result;
-};
+}
 
 export const deleteCar = async (id) => {
     const token = localStorage.getItem("token");
@@ -157,4 +157,3 @@ export const updateCar = async (id, request) => {
     const result = await response.json();
     return result;
 }
-
