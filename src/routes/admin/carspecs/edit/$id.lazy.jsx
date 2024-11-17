@@ -20,7 +20,7 @@ function CarSpecsEdit() {
   const navigate = useNavigate();
 
   const [specName, setSpecName] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [setIsLoading] = useState(false);
   const [isNotFound, setIsNotFound] = useState(false);
 
   useEffect(() => {
@@ -32,7 +32,7 @@ function CarSpecsEdit() {
         setIsNotFound(false);
       } else {
         setIsNotFound(true);
-        navigate({ to: "/carspecs" });
+        navigate({ to: "/admin/carspecs" });
       }
       setIsLoading(false);
     };
@@ -42,7 +42,7 @@ function CarSpecsEdit() {
   }, [id]);
 
   if (isNotFound) {
-    navigate({ to: "/carspecs" });
+    navigate({ to: "/admin/carspecs" });
     return;
   }
 
@@ -53,7 +53,7 @@ function CarSpecsEdit() {
     };
     const result = await updateCarSpecs(id, request);
     if (result?.success) {
-      navigate({ to: "/carspecs" });
+      navigate({ to: "/admin/carspecs" });
       return;
     }
     toast.error(result?.message);
@@ -65,7 +65,7 @@ function CarSpecsEdit() {
         <Col>
           <Button
             variant="outline-secondary"
-            onClick={() => navigate({ to: "/carspecs/$id" })}
+            onClick={() => navigate({ to: "/admin/carspecs/$id" })}
             style={{
               display: "flex",
               alignItems: "center",

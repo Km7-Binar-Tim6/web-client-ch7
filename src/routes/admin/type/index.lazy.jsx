@@ -1,55 +1,55 @@
-import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import Table from 'react-bootstrap/Table'
-import Button from 'react-bootstrap/Button'
-import { FaPlus } from 'react-icons/fa'
-import { getType } from '../../../service/type'
-import TypeItem from '../../../components/Type/TypeItem'
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import Table from "react-bootstrap/Table";
+import Button from "react-bootstrap/Button";
+import { FaPlus } from "react-icons/fa";
+import { getType } from "../../../service/type";
+import TypeItem from "../../../components/Type/TypeItem";
 
-export const Route = createLazyFileRoute('/admin/type/')({
+export const Route = createLazyFileRoute("/admin/type/")({
   component: Type,
-})
+});
 
 function Type() {
-  const navigate = useNavigate()
-  const { token, user } = useSelector((state) => state.auth)
+  const navigate = useNavigate();
+  const { token, user } = useSelector((state) => state.auth);
 
-  const [types, setTypes] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [types, setTypes] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getTypeData = async () => {
-    setIsLoading(true)
-    const result = await getType()
+    setIsLoading(true);
+    const result = await getType();
     if (result.success) {
-      setTypes(result.data)
+      setTypes(result.data);
     }
-    setIsLoading(false)
-  }
+    setIsLoading(false);
+  };
 
   const refetchData = async () => {
-    await getTypeData()
-  }
+    await getTypeData();
+  };
 
   useEffect(() => {
     const getTypeData = async () => {
-      setIsLoading(true)
-      const result = await getType()
+      setIsLoading(true);
+      const result = await getType();
       if (result.success) {
-        setTypes(result.data)
+        setTypes(result.data);
       }
-      setIsLoading(false)
-    }
+      setIsLoading(false);
+    };
 
     if (token) {
-      getTypeData()
+      getTypeData();
     } else {
-      navigate({ to: '/login' })
+      navigate({ to: "/login" });
     }
-  }, [token, navigate])
+  }, [token, navigate]);
 
   if (!token) {
-    return null
+    return null;
   }
 
   if (isLoading) {
@@ -57,7 +57,7 @@ function Type() {
       <div className="mt-4">
         <h1>Loading...</h1>
       </div>
-    )
+    );
   }
 
   return (
@@ -67,7 +67,7 @@ function Type() {
         {user && user.role_id === 1 && (
           <Button
             variant="primary"
-            onClick={() => navigate({ to: '/type/create' })}
+            onClick={() => navigate({ to: "/admin/type/create" })}
             className="d-flex align-items-center"
           >
             <FaPlus className="me-2" />
@@ -95,7 +95,7 @@ function Type() {
         </Table>
       )}
     </>
-  )
+  );
 }
 
-export default Type
+export default Type;

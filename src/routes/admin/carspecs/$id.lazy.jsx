@@ -73,7 +73,7 @@ function CarSpecsDetail() {
               variant="secondary"
               size="md"
               className="d-block mt-4 justcfl"
-              onClick={() => navigate({ to: "/carspecs" })}
+              onClick={() => navigate({ to: "/admin/carspecs" })}
             >
               Back to Car Specs List
             </Button>

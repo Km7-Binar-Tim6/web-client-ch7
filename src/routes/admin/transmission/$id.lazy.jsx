@@ -80,7 +80,7 @@ function TransmissionDetail() {
               variant="secondary"
               size="md"
               className="d-block mt-4"
-              onClick={() => navigate({ to: "/transmission" })}
+              onClick={() => navigate({ to: "/admin/transmission" })}
             >
               Back to Transmission List
             </Button>

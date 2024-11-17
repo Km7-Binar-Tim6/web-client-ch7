@@ -24,7 +24,7 @@ function CreateCarSpecs() {
     };
     const result = await createCarSpecs(request);
     if (result?.success) {
-      navigate({ to: "/carspecs" });
+      navigate({ to: "/admin/carspecs" });
       return;
     }
     toast.error(result?.message);

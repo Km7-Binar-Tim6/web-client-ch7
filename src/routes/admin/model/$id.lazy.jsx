@@ -77,7 +77,7 @@ function ModelDetail() {
               variant="secondary"
               size="md"
               className="d-block mt-4 justcfl"
-              onClick={() => navigate({ to: "/model" })}
+              onClick={() => navigate({ to: "/admin/model" })}
             >
               Back to Model List
             </Button>

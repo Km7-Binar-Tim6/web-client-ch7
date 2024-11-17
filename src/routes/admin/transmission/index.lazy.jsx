@@ -67,7 +67,7 @@ function Transmission() {
         {user && user.role_id === 1 && (
           <Button
             variant="primary"
-            onClick={() => navigate({ to: "/transmission/create" })}
+            onClick={() => navigate({ to: "/admin/transmission/create" })}
             className="d-flex align-items-center"
           >
             <FaPlus className="me-2" />

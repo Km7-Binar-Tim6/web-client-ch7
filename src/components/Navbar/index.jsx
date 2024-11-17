@@ -27,7 +27,7 @@ const NavigationBar = ({ setSidebarOpen }) => {
       }
       dispatch(setUser(null));
       dispatch(setToken(null));
-      navigate({ to: "/login" });
+      navigate({ to: "/" });
     };
 
     if (token) {
@@ -45,7 +45,7 @@ const NavigationBar = ({ setSidebarOpen }) => {
     event.preventDefault();
     dispatch(setUser(null));
     dispatch(setToken(null));
-    navigate({ to: "/login" });
+    navigate({ to: "/" });
   };
 
   return (

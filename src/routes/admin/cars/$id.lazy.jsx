@@ -71,7 +71,7 @@ function CarDetail() {
           onClick: async () => {
             const result = await deleteCar(id);
             if (result?.success) {
-              navigate({ to: "/cars" });
+              navigate({ to: "/admin/cars" });
               return;
             }
 
@@ -92,7 +92,7 @@ function CarDetail() {
         <Col>
           <Button
             variant="outline-secondary"
-            onClick={() => navigate({ to: "/cars" })}
+            onClick={() => navigate({ to: "/admin/cars" })}
             style={{
               display: "flex",
               alignItems: "center",

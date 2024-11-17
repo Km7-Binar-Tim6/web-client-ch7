@@ -54,7 +54,7 @@ function EditModel() {
     const result = await updateModel(id, request);
 
     if (result?.success) {
-      navigate({ to: `/model/${id}` }); // Redirect to the model detail page after update
+      navigate({ to: `/admin/model/${id}` }); // Redirect to the model detail page after update
     } else {
       alert(result?.message || "Failed to update model");
     }

@@ -38,14 +38,14 @@ const ModelItem = ({ model, refetchData }) => {
       <td>{model.id}</td>
       <td>{model.model_name}</td>
       <td>
-        <Link to={`/model/${model.id}`} className="btn btn-primary me-2">
+        <Link to={`/admin/model/${model.id}`} className="btn btn-primary me-2">
           Detail
         </Link>
         {user?.role_id === 1 && (
           <>
             <Button
               as={Link}
-              href={`/model/edit/${model.id}`}
+              href={`/admin/model/edit/${model.id}`}
               variant="warning"
               size="sm"
               className="me-2"

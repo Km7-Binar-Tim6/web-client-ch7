@@ -54,7 +54,7 @@ function EditType() {
     const result = await updateType(id, request);
 
     if (result?.success) {
-      navigate({ to: `/type/${id}` }); // Redirect to the type detail page after update
+      navigate({ to: `/admin/type/${id}` }); // Redirect to the type detail page after update
     } else {
       alert(result?.message || "Failed to update type");
     }

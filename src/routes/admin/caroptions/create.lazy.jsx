@@ -31,7 +31,7 @@ function CreateCarOption() {
 
     const result = await createCarOption(request);
     if (result?.success) {
-      navigate({ to: "/caroptions" });
+      navigate({ to: "/admin/caroptions" });
       return;
     }
 

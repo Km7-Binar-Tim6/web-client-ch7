@@ -80,7 +80,7 @@ function ManufacturesDetail() {
               variant="secondary"
               size="md"
               className="d-block mt-4 justcfl"
-              onClick={() => navigate({ to: "/manufacture" })}
+              onClick={() => navigate({ to: "/admin/manufacture" })}
             >
               Back to Manufacture List
             </Button>

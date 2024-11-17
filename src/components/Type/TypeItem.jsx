@@ -38,14 +38,14 @@ const TypeItem = ({ type, refetchData }) => {
       <td>{type.id}</td>
       <td>{type.type_option}</td>
       <td>
-        <Link to={`/type/${type.id}`} className="btn btn-primary me-2">
+        <Link to={`/admin/type/${type.id}`} className="btn btn-primary me-2">
           Detail
         </Link>
         {user?.role_id === 1 && (
           <>
             <Button
               as={Link}
-              href={`/type/edit/${type.id}`}
+              href={`/admin/type/edit/${type.id}`}
               variant="warning"
               size="sm"
               className="me-2"

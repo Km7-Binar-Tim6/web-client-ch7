@@ -31,7 +31,7 @@ function CreateManufacture() {
 
     const result = await createManufacture(request);
     if (result?.success) {
-      navigate({ to: "/manufacture" });
+      navigate({ to: "/admin/manufacture" });
       return;
     }
 

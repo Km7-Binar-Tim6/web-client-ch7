@@ -57,7 +57,7 @@ function EditCarOption() {
     const result = await updateCarOption(id, request);
 
     if (result?.success) {
-      navigate({ to: `/caroptions/${id}` });
+      navigate({ to: `/admin/caroptions/${id}` });
     } else {
       alert(result?.message || "Failed to update car option");
     }

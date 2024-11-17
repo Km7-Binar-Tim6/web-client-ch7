@@ -185,8 +185,10 @@ function CarDetail() {
               <Card.Text style={{ fontSize: "16px", fontWeight: "bold" }}>
                 Specs:
                 <ul>
-                  {car?.specs?.map((spec) => (
-                    <li key={spec?.id}>{spec?.carspecs?.spec_name}</li>
+                  {car?.specs?.map((spec, index) => (
+                    <li key={spec?.id || `spec-${index}`}>
+                      {spec?.carspecs?.spec_name}
+                    </li>
                   ))}
                 </ul>
               </Card.Text>
@@ -195,8 +197,10 @@ function CarDetail() {
               <Card.Text style={{ fontSize: "16px", fontWeight: "bold" }}>
                 Options:
                 <ul>
-                  {car?.options?.map((option) => (
-                    <li key={option?.id}>{option?.caroptions?.option_name}</li>
+                  {car?.options?.map((option, index) => (
+                    <li key={option?.id || `option-${index}`}>
+                      {option?.caroptions?.option_name}
+                    </li>
                   ))}
                 </ul>
               </Card.Text>

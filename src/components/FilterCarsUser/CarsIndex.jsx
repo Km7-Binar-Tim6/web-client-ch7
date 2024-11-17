@@ -1,36 +1,18 @@
 import { useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { FaPlus } from "react-icons/fa";
-import { getCars } from "../../service/car";
 import CarItem from "../../components/FilterCarsUser/CarItem";
 import PropTypes from "prop-types"; // Import PropTypes
 
 function CarsIndex({ cars }) {
   // Add cars as a prop
   const navigate = useNavigate();
-  const { token, user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
 
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    if (!token) {
-      navigate({ to: "/login" });
-    }
-  }, [token, navigate]);
-
-  if (!token) {
-    return (
-      <Row className="mt-4">
-        <Col>
-          <h1 className="text-center">Please login first to get car data!</h1>
-        </Col>
-      </Row>
-    );
-  }
+  const [isLoading] = useState(false);
 
   if (isLoading) {
     return (

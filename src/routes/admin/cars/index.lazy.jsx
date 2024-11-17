@@ -61,7 +61,7 @@ function Index() {
         {user && user.role_id === 1 && (
           <Button
             variant="primary"
-            onClick={() => navigate({ to: "/cars/create" })}
+            onClick={() => navigate({ to: "/admin/cars/create" })}
             className="d-flex align-items-center"
           >
             <FaPlus className="me-2" />

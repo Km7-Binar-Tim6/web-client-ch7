@@ -5,7 +5,6 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import Image from "react-bootstrap/Image";
 import { getManufacture } from "../../../service/manufacture";
 import { getCarOptions } from "../../../service/carOption";
 import { getCarSpecs } from "../../../service/carspecs";
@@ -34,7 +33,7 @@ function CreateCar() {
   const [available, setAvailable] = useState("");
   const [year, setYear] = useState("");
   const [image, setImage] = useState(undefined);
-  const [currentImage, setCurrentImage] = useState(undefined);
+  const [setCurrentImage] = useState(undefined);
 
   const [manufactureId, setManufactureId] = useState("");
   const [manufactures, setManufactures] = useState([]);
@@ -138,7 +137,7 @@ function CreateCar() {
     };
     const result = await createCar(request);
     if (result?.success) {
-      navigate({ to: "/cars" });
+      navigate({ to: "/admin/cars" });
       return;
     }
     toast.error(result.message);

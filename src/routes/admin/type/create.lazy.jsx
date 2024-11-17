@@ -30,7 +30,7 @@ function CreateType() {
 
     const result = await createType(request);
     if (result?.success) {
-      navigate({ to: "/type" });
+      navigate({ to: "/admin/type" });
       return;
     }
 

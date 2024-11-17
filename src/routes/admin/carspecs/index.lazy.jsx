@@ -1,4 +1,4 @@
-import { createLazyFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Row from "react-bootstrap/Row";
@@ -76,7 +76,7 @@ function Index() {
         {user && user.role_id === 1 && (
           <Button
             variant="primary"
-            onClick={() => navigate({ to: "/carspecs/create" })}
+            onClick={() => navigate({ to: "/admin/carspecs/create" })}
             className="d-flex align-items-center"
           >
             <FaPlus className="me-2" />

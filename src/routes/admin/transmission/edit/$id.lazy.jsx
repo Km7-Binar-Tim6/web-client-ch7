@@ -57,7 +57,7 @@ function EditTransmission() {
     const result = await updateTransmission(id, request);
 
     if (result?.success) {
-      navigate({ to: `/transmission/${id}` });
+      navigate({ to: `/admin/transmission/${id}` });
     } else {
       alert(result?.message || "Failed to update transmission");
     }

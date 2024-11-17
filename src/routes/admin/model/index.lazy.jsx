@@ -44,7 +44,7 @@ function Model() {
     if (token) {
       getModelData();
     } else {
-      navigate({ to: "/login" });
+      navigate({ to: "/admin/login" });
     }
   }, [token, navigate]);
 
@@ -67,7 +67,7 @@ function Model() {
         {user && user.role_id === 1 && (
           <Button
             variant="primary"
-            onClick={() => navigate({ to: "/model/create" })}
+            onClick={() => navigate({ to: "/admin/model/create" })}
             className="d-flex align-items-center"
           >
             <FaPlus className="me-2" />

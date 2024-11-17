@@ -67,7 +67,7 @@ function CarOption() {
         {user && user.role_id === 1 && (
           <Button
             variant="primary"
-            onClick={() => navigate({ to: "/caroptions/create" })}
+            onClick={() => navigate({ to: "/admin/caroptions/create" })}
             className="d-flex align-items-center"
           >
             <FaPlus className="me-2" />

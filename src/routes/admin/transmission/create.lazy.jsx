@@ -31,7 +31,7 @@ function CreateTransmission() {
 
     const result = await createTransmission(request);
     if (result?.success) {
-      navigate({ to: "/transmission" });
+      navigate({ to: "/admin/transmission" });
       return;
     }
 

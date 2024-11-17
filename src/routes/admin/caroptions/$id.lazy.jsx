@@ -80,7 +80,7 @@ function CarOptionDetail() {
               variant="secondary"
               size="md"
               className="d-block mt-4"
-              onClick={() => navigate({ to: "/caroptions" })}
+              onClick={() => navigate({ to: "/admin/caroptions" })}
             >
               Back to Car Option List
             </Button>

@@ -79,7 +79,7 @@ function TypeDetail() {
               variant="secondary"
               size="md"
               className="d-block mt-4 justcfl"
-              onClick={() => navigate({ to: "/type" })}
+              onClick={() => navigate({ to: "/admin/type" })}
             >
               Back to Manufacture List
             </Button>

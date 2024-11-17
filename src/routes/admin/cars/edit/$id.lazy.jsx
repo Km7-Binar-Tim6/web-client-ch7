@@ -5,7 +5,6 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import Image from "react-bootstrap/Image";
 import { getDetailCar, updateCar } from "../../../../service/car";
 import { getManufacture } from "../../../../service/manufacture";
 import { getCarOptions } from "../../../../service/carOption";
@@ -124,7 +123,7 @@ function EditCar() {
         setIsNotFound(false);
       } else {
         setIsNotFound(true);
-        navigate({ to: "/cars" });
+        navigate({ to: "/admin/cars" });
       }
     };
     if (id) {
@@ -133,7 +132,7 @@ function EditCar() {
   }, [id]);
 
   if (isNotFound) {
-    navigate({ to: "/cars" });
+    navigate({ to: "/admin/cars" });
     return;
   }
 
@@ -181,7 +180,7 @@ function EditCar() {
 
     const result = await updateCar(id, request);
     if (result?.success) {
-      navigate({ to: `/cars/${id}` });
+      navigate({ to: `/admin/cars/${id}` });
       return;
     }
     toast.error(result.message);

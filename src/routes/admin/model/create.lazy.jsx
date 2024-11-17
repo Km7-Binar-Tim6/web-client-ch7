@@ -30,7 +30,7 @@ function CreateModel() {
 
     const result = await createModel(request);
     if (result?.success) {
-      navigate({ to: "/model" });
+      navigate({ to: "/admin/model" });
       return;
     }
 

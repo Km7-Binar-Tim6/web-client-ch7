@@ -57,7 +57,7 @@ function EditManufacture() {
     const result = await updateManufacture(id, request);
 
     if (result?.success) {
-      navigate({ to: `/manufacture/${id}` }); // Redirect to the manufacture detail page after update
+      navigate({ to: `/admin/manufacture/${id}` }); // Redirect to the manufacture detail page after update
     } else {
       alert(result?.message || "Failed to update manufacture");
     }

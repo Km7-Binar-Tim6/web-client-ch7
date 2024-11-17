@@ -39,7 +39,7 @@ const ManufactureItem = ({ manufacture, refetchData }) => {
       <td>{manufacture.manufacture_name}</td>
       <td>
         <Link
-          to={`/manufacture/${manufacture.id}`}
+          to={`/admin/manufacture/${manufacture.id}`}
           className="btn btn-primary me-2"
         >
           Detail
@@ -48,7 +48,7 @@ const ManufactureItem = ({ manufacture, refetchData }) => {
           <>
             <Button
               as={Link}
-              href={`/manufacture/edit/${manufacture.id}`}
+              href={`/admin/manufacture/edit/${manufacture.id}`}
               variant="warning"
               size="sm"
               className="me-2"

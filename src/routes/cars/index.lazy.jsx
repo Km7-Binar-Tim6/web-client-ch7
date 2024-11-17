@@ -5,7 +5,7 @@ import Navbar from "../../components/FilterCarsUser/Navbar";
 import HeroCariMobil from "../../components/FilterCarsUser/HeroCariMobil";
 import CariMobilMenu from "../../components/FilterCarsUser/CariMobilMenu";
 import Footer from "../../components/User/Footer";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CarsIndex from "../../components/FilterCarsUser/CarsIndex";
 import { getCars } from "../../service/car";
 
@@ -14,25 +14,47 @@ export const Route = createLazyFileRoute("/cars/")({
 });
 
 function UserFilterCars() {
-  const [filteredCars, setFilteredCars] = useState([]);
+  const [allCars, setAllCars] = useState([]); // Semua data mobil
+  const [filteredCars, setFilteredCars] = useState([]); // Data mobil yang difilter
+  const [filters, setFilters] = useState({ rentperday: "", capacity: "" }); // State untuk filter
 
-  // Function to handle search button click (fetch all cars)
+  useEffect(() => {
+    // Terapkan filter setiap kali filters atau allCars berubah
+    const filtered = allCars.filter((car) => {
+      return (
+        (filters.rentperday === "" ||
+          car.rentperday >= Number(filters.rentperday)) &&
+        (filters.capacity === "" || car.capacity >= Number(filters.capacity)) &&
+        car.available === true
+      );
+    });
+    setFilteredCars(filtered);
+  }, [filters, allCars]);
+
   const handleSearch = async () => {
-    const result = await getCars(); // Fetch all cars without filter parameters
+    const result = await getCars(); // Ambil semua data mobil dari API
 
     if (result.success) {
-      setFilteredCars(result.data); // Set all cars to the state
+      setAllCars(result.data); // Simpan semua data mobil
     } else {
-      setFilteredCars([]); // Clear results if API fails
+      setAllCars([]);
+      setFilteredCars([]);
     }
+  };
+
+  const handleFilterChange = (newFilters) => {
+    setFilters((prevFilters) => ({ ...prevFilters, ...newFilters })); // Update filter
   };
 
   return (
     <>
       <Navbar />
       <HeroCariMobil />
-      <CariMobilMenu onSearch={handleSearch} />
-      <CarsIndex cars={filteredCars} /> {/* Pass filteredCars as prop */}
+      <CariMobilMenu
+        onFilterChange={handleFilterChange} // Kirim handler perubahan filter
+        onSearch={handleSearch} // Kirim handler pencarian
+      />
+      <CarsIndex cars={filteredCars} />
       <Footer />
     </>
   );
