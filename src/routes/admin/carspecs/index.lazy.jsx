@@ -8,6 +8,7 @@ import Table from "react-bootstrap/Table";
 import CarSpecsItem from "../../../components/CarSpecs/CarSpecsitem";
 import { getCarSpecs } from "../../../service/carspecs";
 import { FaPlus } from "react-icons/fa";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const Route = createLazyFileRoute("/admin/carspecs/")({
   component: Index,
@@ -18,37 +19,25 @@ function Index() {
   const { token, user } = useSelector((state) => state.auth);
 
   const [carSpecs, setCarSpecs] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const getCarSpecsData = async () => {
-    setIsLoading(true);
-    const result = await getCarSpecs();
-    if (result.success) {
-      setCarSpecs(result.data);
-    }
-    setIsLoading(false);
-  };
+  const queryClient = useQueryClient();
+
+  const { data, isSuccess, isPending } = useQuery({
+    queryKey: ["carSpecs"],
+    queryFn: getCarSpecs,
+    enabled: !!token,
+  });
 
   const refetchData = async () => {
-    await getCarSpecsData();
-  };
+    await queryClient.invalidateQueries({ queryKey: ["carSpecs"] });
+  }
 
   useEffect(() => {
-    const getCarSpecsData = async () => {
-      setIsLoading(true);
-      const result = await getCarSpecs();
-      if (result.success) {
-        setCarSpecs(result.data);
-      }
-      setIsLoading(false);
-    };
-
-    if (token) {
-      getCarSpecsData();
-    } else {
-      navigate({ to: "/login" });
+    if (isSuccess) {
+      setCarSpecs(data);
     }
-  }, [token, navigate]);
+  }, [data, isSuccess]);
+
 
   if (!token) {
     return (
@@ -61,7 +50,7 @@ function Index() {
       </Row>
     );
   }
-  if (isLoading) {
+  if (isPending) {
     return (
       <Row className="mt-4">
         <h1>Loading...</h1>

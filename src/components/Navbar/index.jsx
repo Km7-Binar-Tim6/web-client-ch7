@@ -45,6 +45,7 @@ const NavigationBar = ({ setSidebarOpen }) => {
     event.preventDefault();
     dispatch(setUser(null));
     dispatch(setToken(null));
+    
     navigate({ to: "/" });
   };
 
