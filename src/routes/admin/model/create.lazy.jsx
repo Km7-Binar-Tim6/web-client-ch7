@@ -5,9 +5,11 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import { useMutation } from "@tanstack/react-query";
 import { createModel } from "../../../service/model";
 import { toast } from "react-toastify";
 import ProtectedRoute from "../../../redux/slices/ProtectedRoute.js";
+
 export const Route = createLazyFileRoute("/admin/model/create")({
   component: () => (
     <ProtectedRoute allowedRoles={[1]}>
@@ -18,8 +20,19 @@ export const Route = createLazyFileRoute("/admin/model/create")({
 
 function CreateModel() {
   const navigate = useNavigate();
-
   const [name, setName] = useState("");
+
+  // Using useMutation to handle the createModel API call
+  const mutation = useMutation({
+    mutationFn: (newModel) => createModel(newModel), // The function that will call the API
+    onSuccess: () => {
+      toast.success("Model created successfully");
+      navigate({ to: "/admin/model" }); // Navigate after successful creation
+    },
+    onError: (error) => {
+      toast.error(error?.message || "Failed to create model");
+    },
+  });
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -28,13 +41,8 @@ function CreateModel() {
       model_name: name,
     };
 
-    const result = await createModel(request);
-    if (result?.success) {
-      navigate({ to: "/admin/model" });
-      return;
-    }
-
-    toast.error(result?.message || "Failed to create model");
+    // Trigger the mutation
+    mutation.mutate(request);
   };
 
   return (
@@ -54,8 +62,12 @@ function CreateModel() {
                 />
               </Form.Group>
 
-              <Button variant="primary" type="submit">
-                Submit
+              <Button
+                variant="primary"
+                type="submit"
+                disabled={mutation.isLoading} // Disable submit button while creating
+              >
+                {mutation.isLoading ? "Submitting..." : "Submit"}
               </Button>
             </Form>
           </Card.Body>
@@ -64,3 +76,5 @@ function CreateModel() {
     </Row>
   );
 }
+
+export default CreateModel;

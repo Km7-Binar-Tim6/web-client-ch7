@@ -1,10 +1,11 @@
 import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import {
   getDetailManufacture,
   updateManufacture,
@@ -23,44 +24,39 @@ function EditManufacture() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
 
-  const [name, setName] = useState(""); // To store the manufacture name
-  const [isLoading, setIsLoading] = useState(true); // For loading state
-  const [error, setError] = useState(null); // For handling errors
+  // TanStack Query to fetch manufacture details
+  const {
+    data: manufacture,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["manufacture", id], // Unique key for caching, including the ID
+    queryFn: () => getDetailManufacture(id), // Function to fetch manufacture details
+    enabled: !!id, // Only fetch if ID is available
+  });
 
-  useEffect(() => {
-    const fetchManufacture = async () => {
-      try {
-        const result = await getDetailManufacture(id);
-        if (result?.success && result.data) {
-          setName(result.data.manufacture_name); // Set the correct field name (manufacture_name)
-          setError(null); // Reset error if data is fetched successfully
-        } else {
-          setError("Failed to load manufacture details.");
-        }
-      } catch (error) {
-        console.error("Error fetching manufacture details:", error);
-        setError("An error occurred while fetching data.");
-      } finally {
-        setIsLoading(false); // End loading state
-      }
-    };
+  // Mutation for updating manufacture
+  const updateMutation = useMutation({
+    mutationFn: (name) => updateManufacture(id, { manufacture_name: name }), // Function to update manufacture
+    onSuccess: () => {
+      navigate({ to: `/admin/manufacture/${id}` }); // Redirect after success
+    },
+    onError: (error) => {
+      alert(error?.message || "Failed to update manufacture");
+    },
+  });
 
-    if (id) {
-      fetchManufacture();
-    }
-  }, [id]);
+  const [name, setName] = useState("");
+
+  // Set name from fetched data when the query is successful
+  if (manufacture && !name) {
+    setName(manufacture?.data?.manufacture_name);
+  }
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    const request = { manufacture_name: name };
-
-    const result = await updateManufacture(id, request);
-
-    if (result?.success) {
-      navigate({ to: `/admin/manufacture/${id}` }); // Redirect to the manufacture detail page after update
-    } else {
-      alert(result?.message || "Failed to update manufacture");
-    }
+    updateMutation.mutate(name); // Trigger the mutation
   };
 
   if (isLoading) {
@@ -73,11 +69,11 @@ function EditManufacture() {
     );
   }
 
-  if (error) {
+  if (isError) {
     return (
       <Row className="mt-5">
         <Col className="text-center">
-          <h1>{error}</h1>
+          <h1>{error?.message || "Failed to load manufacture details"}</h1>
         </Col>
       </Row>
     );
@@ -100,8 +96,15 @@ function EditManufacture() {
                 />
               </Form.Group>
 
-              <Button variant="primary" type="submit" className="w-100 mt-3">
-                Update Manufacture Name
+              <Button
+                variant="primary"
+                type="submit"
+                className="w-100 mt-3"
+                disabled={updateMutation.isLoading} // Disable button when mutation is in progress
+              >
+                {updateMutation.isLoading
+                  ? "Updating..."
+                  : "Update Manufacture Name"}
               </Button>
             </Form>
           </Card.Body>
