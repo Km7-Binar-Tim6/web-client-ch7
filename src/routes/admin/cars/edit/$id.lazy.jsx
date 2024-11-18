@@ -13,6 +13,7 @@ import { getTransmission } from "../../../../service/transmission";
 import { getType } from "../../../../service/type";
 import { getModel } from "../../../../service/model";
 import { toast } from "react-toastify";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import ProtectedRoute from "../../../../redux/slices/ProtectedRoute.js";
 
 export const Route = createLazyFileRoute("/admin/cars/edit/$id")({
@@ -26,7 +27,6 @@ export const Route = createLazyFileRoute("/admin/cars/edit/$id")({
 function EditCar() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
-  const [isNotFound, setIsNotFound] = useState(false);
 
   const [plate, setPlate] = useState("");
   const [rentPerDay, setRentPerDay] = useState("");
@@ -35,105 +35,91 @@ function EditCar() {
   const [availableAt, setAvailableAt] = useState("");
   const [available, setAvailable] = useState("");
   const [year, setYear] = useState("");
-  const [image, setImage] = useState(null);
-  const [currentImage, setCurrentImage] = useState("");
+  const [image, setImage] = useState(undefined);
+  const [currentImage, setCurrentImage] = useState(undefined);
 
-  const [manufactureId, setManufactureId] = useState("");
-  const [manufactures, setManufactures] = useState([]);
+  const [manufactureId, setManufactureId] = useState(0);
+  const [transmissionId, setTransmissionId] = useState(0);
+  const [typeCarId, setTypeCarId] = useState(0); 
+  const [modelId, setModelId] = useState(0);
 
   const [carOptionId, setCarOptionId] = useState([]);
-  const [carOptions, setCarOptions] = useState([]);
 
   const [carSpecId, setCarSpecId] = useState([]);
-  const [carSpecs, setCarSpecs] = useState([]);
 
-  const [transmissionId, setTransmissionId] = useState("");
-  const [transmissions, setTransmissions] = useState([]);
+  const { data: manufactures } = useQuery({
+    queryKey: ["manufactures"],
+    queryFn: () => getManufacture(),
+    enabled: !!id,
+  });
 
-  const [typeCarId, setTypeCarId] = useState("");
-  const [typeCars, setTypeCars] = useState([]);
+  const { data: transmissions } = useQuery({
+    queryKey: ["transmissions"],
+    queryFn: () => getTransmission(),
+    enabled: !!id,
+  });
 
-  const [modelId, setModelId] = useState("");
-  const [models, setModels] = useState([]);
+  const { data: typeCars } = useQuery({
+    queryKey: ["typeCars"],
+    queryFn: () => getType(),
+    enabled: !!id,
+  });
 
-  useEffect(() => {
-    const getManufacturesData = async () => {
-      const result = await getManufacture();
-      if (result?.success) {
-        setManufactures(result?.data);
-      }
-    };
-    const getCarOptionsData = async () => {
-      const result = await getCarOptions();
-      if (result?.success) {
-        setCarOptions(result?.data);
-      }
-    };
-    const getCarSpecsData = async () => {
-      const result = await getCarSpecs();
-      if (result?.success) {
-        setCarSpecs(result?.data);
-      }
-    };
-    const getTransmissionsData = async () => {
-      const result = await getTransmission();
-      if (result?.success) {
-        setTransmissions(result?.data);
-      }
-    };
-    const getTypeCarsData = async () => {
-      const result = await getType();
-      if (result?.success) {
-        setTypeCars(result?.data);
-      }
-    };
-    const getModelsData = async () => {
-      const result = await getModel();
-      if (result?.success) {
-        setModels(result?.data);
-      }
-    };
+  const { data: models } = useQuery({
+    queryKey: ["models"],
+    queryFn: () => getModel(),
+    enabled: !!id,
+  });
 
-    getManufacturesData();
-    getCarOptionsData();
-    getCarSpecsData();
-    getTransmissionsData();
-    getTypeCarsData();
-    getModelsData();
-  }, []);
+  const { data: carOptions } = useQuery({
+    queryKey: ["carOptions"],
+    queryFn: () => getCarOptions(),
+    enabled: !!id,
+  });
+
+  const { data: carSpecs } = useQuery({
+    queryKey: ["carSpecs"],
+    queryFn: () => getCarSpecs(),
+    enabled: !!id,
+  });
+
+  const { data: car, isSuccess, isPending, isError } = useQuery({
+    queryKey: ["car", id],
+    queryFn: () => getDetailCar(id),
+    enabled: !!id,
+  });
+
+  const { mutate: updating, isPending: isUpdating } = useMutation({
+    mutationFn: (request) => updateCar(id, request),
+    onSuccess: () => {
+      navigate({ to: `/admin/cars/${id}` });
+    },
+    onError: (error) => {
+      toast.error(error?.message);
+    },
+  });
 
   useEffect(() => {
-    const getCarData = async (id) => {
-      const result = await getDetailCar(id);
-      if (result?.success) {
-        setPlate(result?.data?.plate);
-        setRentPerDay(result?.data?.rentperday);
-        setCapacity(result?.data?.capacity);
-        setDescription(result?.data?.description);
-        setAvailableAt(result?.data?.availableat);
-        setAvailable(result?.data?.available);
-        setYear(result?.data?.year);
-        setManufactureId(result?.data?.manufacture_id);
-        setTransmissionId(result?.data?.transmission_id);
-        setTypeCarId(result?.data?.type_id);
-        setModelId(result?.data?.model_id);
-        setCarOptionId(result?.data?.option_id || []);
-        setCarSpecId(result?.data?.spec_id || []);
-        setCurrentImage(result?.data?.image);
-        setIsNotFound(false);
-      } else {
-        setIsNotFound(true);
-        navigate({ to: "/admin/cars" });
-      }
-    };
-    if (id) {
-      getCarData(id);
+    if (isSuccess) {
+      setPlate(car?.plate);
+      setRentPerDay(car?.rentperday);
+      setCapacity(car?.capacity);
+      setDescription(car?.description);
+      setAvailableAt(car?.availableat);
+      setAvailable(car?.available);
+      setYear(car?.year);
+      setManufactureId(car?.manufacture_id);
+      setTransmissionId(car?.transmission_id);
+      setTypeCarId(car?.type_id);
+      setModelId(car?.model_id);
+      setCarOptionId(car?.option_id || []);
+      setCarSpecId(car?.spec_id || []);
+      setCurrentImage(car?.image);
     }
-  }, [id]);
+  }, [car, isSuccess]);
 
-  if (isNotFound) {
+  if (isError) {
     navigate({ to: "/admin/cars" });
-    return;
   }
 
   const handleCarOptionId = (e) => {
@@ -177,13 +163,7 @@ function EditCar() {
       toast.error("Option and Spec are required minimum 2");
       return;
     }
-
-    const result = await updateCar(id, request);
-    if (result?.success) {
-      navigate({ to: `/admin/cars/${id}` });
-      return;
-    }
-    toast.error(result.message);
+    updating(request);
   };
 
   return (
@@ -303,10 +283,10 @@ function EditCar() {
                   required
                 >
                   <option value="">Select Manufacture</option>
-                  {manufactures.length > 0 &&
-                    manufactures.map((manufacture) => (
-                      <option key={manufacture.id} value={manufacture.id}>
-                        {manufacture.manufacture_name}
+                  {manufactures && manufactures?.length > 0 &&
+                    manufactures?.map((manufacture) => (
+                      <option key={manufacture?.id} value={manufacture?.id}>
+                        {manufacture?.manufacture_name}
                       </option>
                     ))}
                 </Form.Control>
@@ -321,9 +301,10 @@ function EditCar() {
                   required
                 >
                   <option value="">Select Car Option</option>
-                  {transmissions.map((transmission) => (
-                    <option key={transmission.id} value={transmission.id}>
-                      {transmission.transmission_option}
+                  {transmissions && transmissions?.length > 0 &&
+                    transmissions?.map((transmission) => (
+                      <option key={transmission?.id} value={transmission?.id}>
+                        {transmission?.transmission_option}
                     </option>
                   ))}
                 </Form.Control>
@@ -338,10 +319,10 @@ function EditCar() {
                   required
                 >
                   <option value="">Select Type Car</option>
-                  {typeCars.length > 0 &&
-                    typeCars.map((typeCar) => (
-                      <option key={typeCar.id} value={typeCar.id}>
-                        {typeCar.type_option}
+                  {typeCars && typeCars?.length > 0 &&
+                    typeCars?.map((typeCar) => (
+                      <option key={typeCar?.id} value={typeCar?.id}>
+                        {typeCar?.type_option}
                       </option>
                     ))}
                 </Form.Control>
@@ -356,10 +337,10 @@ function EditCar() {
                   required
                 >
                   <option value="">Select Model</option>
-                  {models.length > 0 &&
-                    models.map((model) => (
-                      <option key={model.id} value={model.id}>
-                        {model.model_name}
+                  {models && models?.length > 0 &&
+                    models?.map((model) => (
+                      <option key={model?.id} value={model?.id}>
+                        {model?.model_name}
                       </option>
                     ))}
                 </Form.Control>
@@ -370,13 +351,14 @@ function EditCar() {
                   Option
                 </Form.Label>
                 <Col sm="9">
-                  {carOptions.map((option) => (
-                    <Form.Check
-                      type="checkbox"
-                      key={option.id}
-                      label={option.option_name}
-                      value={option.id}
-                      checked={carOptionId.includes(option.id)}
+                  {carOptions && carOptions?.length > 0 &&
+                    carOptions?.map((option) => (
+                      <Form.Check
+                        type="checkbox"
+                      key={option?.id}
+                      label={option?.option_name}
+                      value={option?.id}
+                      checked={carOptionId.includes(option?.id)}
                       onChange={handleCarOptionId}
                     />
                   ))}
@@ -388,20 +370,26 @@ function EditCar() {
                   Spec
                 </Form.Label>
                 <Col sm="9">
-                  {carSpecs.map((spec) => (
-                    <Form.Check
-                      type="checkbox"
-                      key={spec.id}
-                      label={spec.spec_name}
-                      value={spec.id}
-                      checked={carSpecId.includes(spec.id)}
-                      onChange={handleCarSpecId}
+                  {carSpecs && carSpecs?.length > 0 &&
+                    carSpecs?.map((spec) => (
+                      <Form.Check
+                        type="checkbox"
+                        key={spec?.id}
+                        label={spec?.spec_name}
+                        value={spec?.id}
+                        checked={carSpecId.includes(spec?.id)}
+                        onChange={handleCarSpecId}
                     />
                   ))}
                 </Col>
               </Form.Group>
 
-              <Button variant="primary" type="submit" className="mt-3">
+              <Button
+                variant="primary"
+                type="submit"
+                className="mt-3"
+                disabled={isUpdating}
+              >
                 Edit Car
               </Button>
             </Form>

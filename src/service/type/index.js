@@ -11,7 +11,10 @@ export const getType = async () => {
 
   // get data
   const result = await response.json();
-  return result;
+  if (!result?.success) {
+    throw new Error(result?.message);
+  }
+  return result?.data;
 };
 
 export const getDetailType = async (id) => {

@@ -13,6 +13,7 @@ import { getType } from "../../../service/type";
 import { getModel } from "../../../service/model";
 import { createCar } from "../../../service/car";
 import { toast } from "react-toastify";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import ProtectedRoute from "../../../redux/slices/ProtectedRoute.js";
 
 export const Route = createLazyFileRoute("/admin/cars/create")({
@@ -35,69 +36,60 @@ function CreateCar() {
   const [image, setImage] = useState(undefined);
   const [setCurrentImage] = useState(undefined);
 
-  const [manufactureId, setManufactureId] = useState("");
-  const [manufactures, setManufactures] = useState([]);
+  const [manufactureId, setManufactureId] = useState(0);
+  const [transmissionId, setTransmissionId] = useState(0);
+  const [typeCarId, setTypeCarId] = useState(0); 
+  const [modelId, setModelId] = useState(0);
 
-  const [carOptionId, setCarOptionId] = useState("");
-  const [carOptions, setCarOptions] = useState([]);
+  const [carOptionId, setCarOptionId] = useState([]);
 
-  const [carSpecId, setCarSpecId] = useState("");
-  const [carSpecs, setCarSpecs] = useState([]);
+  const [carSpecId, setCarSpecId] = useState([]);
 
-  const [transmissionId, setTransmissionId] = useState("");
-  const [transmissions, setTransmissions] = useState([]);
+  const { data: manufactures } = useQuery({
+    queryKey: ["manufactures"],
+    queryFn: () => getManufacture(),
+    enabled: true,
+  });
 
-  const [typeCarId, setTypeCarId] = useState("");
-  const [typeCars, setTypeCars] = useState([]);
+  const { data: transmissions } = useQuery({
+    queryKey: ["transmissions"],
+    queryFn: () => getTransmission(),
+    enabled: true,
+  });
 
-  const [modelId, setModelId] = useState("");
-  const [models, setModels] = useState([]);
+  const { data: typeCars } = useQuery({
+    queryKey: ["typeCars"],
+    queryFn: () => getType(),
+    enabled: true,
+  });
 
-  useEffect(() => {
-    const getManufacturesData = async () => {
-      const result = await getManufacture();
-      if (result?.success) {
-        setManufactures(result?.data);
-      }
-    };
-    const getCarOptionsData = async () => {
-      const result = await getCarOptions();
-      if (result?.success) {
-        setCarOptions(result?.data);
-      }
-    };
-    const getCarSpecsData = async () => {
-      const result = await getCarSpecs();
-      if (result?.success) {
-        setCarSpecs(result?.data);
-      }
-    };
-    const getTransmissionsData = async () => {
-      const result = await getTransmission();
-      if (result?.success) {
-        setTransmissions(result?.data);
-      }
-    };
-    const getTypeCarsData = async () => {
-      const result = await getType();
-      if (result?.success) {
-        setTypeCars(result?.data);
-      }
-    };
-    const getModelsData = async () => {
-      const result = await getModel();
-      if (result?.success) {
-        setModels(result?.data);
-      }
-    };
+  const { data: models } = useQuery({
+    queryKey: ["models"],
+    queryFn: () => getModel(),
+    enabled: true,
+  });
 
-    getManufacturesData();
-    getCarOptionsData();
-    getCarSpecsData();
-    getTransmissionsData();
-    getTypeCarsData();
-    getModelsData();
-  }, []);
+  const { data: carOptions } = useQuery({
+    queryKey: ["carOptions"],
+    queryFn: () => getCarOptions(),
+    enabled: true,
+  });
+
+  const { data: carSpecs } = useQuery({
+    queryKey: ["carSpecs"],
+    queryFn: () => getCarSpecs(),
+    enabled: true,
+  });
+
+  const { mutate: creating, isPending} = useMutation({
+    mutationFn: (request) => createCar(request),
+    onSuccess: () => {
+      navigate({ to: "/admin/cars" });
+    },
+    onError: (error) => {
+      toast.error(error?.message);
+    },
+  });
 
   const handleCarOptionId = (e) => {
     const optionId = parseInt(e.target.value, 10);
@@ -135,12 +127,7 @@ function CreateCar() {
       optionIds: carOptionId || [],
       specIds: carSpecId || [],
     };
-    const result = await createCar(request);
-    if (result?.success) {
-      navigate({ to: "/admin/cars" });
-      return;
-    }
-    toast.error(result.message);
+    creating(request);
   };
 
   return (
@@ -250,10 +237,10 @@ function CreateCar() {
                   required
                 >
                   <option value="">Select Manufacture</option>
-                  {manufactures.length > 0 &&
-                    manufactures.map((manufacture) => (
-                      <option key={manufacture.id} value={manufacture.id}>
-                        {manufacture.manufacture_name}
+                  {manufactures && manufactures?.length > 0 &&
+                    manufactures?.map((manufacture) => (
+                      <option key={manufacture?.id} value={manufacture?.id}>
+                        {manufacture?.manufacture_name}
                       </option>
                     ))}
                 </Form.Control>
@@ -268,9 +255,10 @@ function CreateCar() {
                   required
                 >
                   <option value="">Select Car Option</option>
-                  {transmissions.map((transmission) => (
-                    <option key={transmission.id} value={transmission.id}>
-                      {transmission.transmission_option}
+                  {transmissions && transmissions?.length > 0 &&
+                    transmissions?.map((transmission) => (
+                      <option key={transmission?.id} value={transmission?.id}>
+                        {transmission?.transmission_option}
                     </option>
                   ))}
                 </Form.Control>
@@ -285,10 +273,10 @@ function CreateCar() {
                   required
                 >
                   <option value="">Select Type Car</option>
-                  {typeCars.length > 0 &&
-                    typeCars.map((typeCar) => (
-                      <option key={typeCar.id} value={typeCar.id}>
-                        {typeCar.type_option}
+                  {typeCars && typeCars?.length > 0 &&
+                    typeCars?.map((typeCar) => (
+                      <option key={typeCar?.id} value={typeCar?.id}>
+                        {typeCar?.type_option}
                       </option>
                     ))}
                 </Form.Control>
@@ -296,17 +284,17 @@ function CreateCar() {
 
               <Form.Group controlId="modelid">
                 <Form.Label>Model</Form.Label>
-                <Form.Control
+                  <Form.Control
                   as="select"
                   value={modelId}
                   onChange={(e) => setModelId(e.target.value)}
                   required
                 >
                   <option value="">Select Model</option>
-                  {models.length > 0 &&
-                    models.map((model) => (
-                      <option key={model.id} value={model.id}>
-                        {model.model_name}
+                  {models && models?.length > 0 &&
+                    models?.map((model) => (
+                      <option key={model?.id} value={model?.id}>
+                        {model?.model_name}
                       </option>
                     ))}
                 </Form.Control>
@@ -317,16 +305,17 @@ function CreateCar() {
                   Option
                 </Form.Label>
                 <Col sm="9">
-                  {carOptions.map((option) => (
-                    <Form.Check
-                      type="checkbox"
-                      key={option.id}
-                      label={option.option_name}
-                      value={option.id}
-                      checked={carOptionId.includes(option.id)}
-                      onChange={handleCarOptionId}
-                    />
-                  ))}
+                  {carOptions && carOptions?.length > 0 &&
+                    carOptions?.map((option) => (
+                      <Form.Check
+                        type="checkbox"
+                        key={option?.id}
+                        label={option?.option_name}
+                        value={option?.id}
+                        checked={carOptionId.includes(option?.id)}
+                        onChange={handleCarOptionId}
+                      />
+                    ))}
                 </Col>
               </Form.Group>
 
@@ -335,16 +324,17 @@ function CreateCar() {
                   Spec
                 </Form.Label>
                 <Col sm="9">
-                  {carSpecs.map((spec) => (
-                    <Form.Check
-                      type="checkbox"
-                      key={spec.id}
-                      label={spec.spec_name}
-                      value={spec.id}
-                      checked={carSpecId.includes(spec.id)}
-                      onChange={handleCarSpecId}
-                    />
-                  ))}
+                  {carSpecs && carSpecs?.length > 0 &&
+                    carSpecs?.map((spec) => (
+                      <Form.Check
+                        type="checkbox"
+                        key={spec?.id}
+                        label={spec?.spec_name}
+                        value={spec?.id}
+                        checked={carSpecId.includes(spec?.id)}
+                        onChange={handleCarSpecId}
+                      />
+                    ))}
                 </Col>
               </Form.Group>
 
