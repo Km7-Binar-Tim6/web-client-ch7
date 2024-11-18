@@ -7,6 +7,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { toast } from "react-toastify";
 import { createCarSpecs } from "../../../service/carspecs";
+import { useMutation } from "@tanstack/react-query";
 
 export const Route = createLazyFileRoute("/admin/carspecs/create")({
   component: CreateCarSpecs,
@@ -17,17 +18,32 @@ function CreateCarSpecs() {
 
   const [specName, setSpecName] = useState("");
 
+  const { mutate: create, isPending } = useMutation({
+    mutationFn: (data) => {
+      if (specName === data?.spec_name) {
+        toast.error("Specification name already exists");
+        return;
+      }
+      return createCarSpecs(data);
+    },
+    onSuccess: () => {
+      navigate({ to: "/admin/carspecs" });
+    },
+    onError: (error) => {
+      toast.error(error?.message);
+    },
+  });
+
   const onSubmit = async (event) => {
     event.preventDefault();
     const request = {
       spec_name: specName,
     };
-    const result = await createCarSpecs(request);
-    if (result?.success) {
-      navigate({ to: "/admin/carspecs" });
+    if (!specName) {
+      toast.error("Spec name is required");
       return;
     }
-    toast.error(result?.message);
+    create(request);
   };
 
   return (
@@ -47,7 +63,6 @@ function CreateCarSpecs() {
                   <Form.Control
                     type="text"
                     placeholder="Specification Name"
-                    required
                     value={specName}
                     onChange={(event) => {
                       setSpecName(event.target.value);

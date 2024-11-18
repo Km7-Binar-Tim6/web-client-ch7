@@ -5,6 +5,7 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { getDetailCarSpecs } from "../../../service/carspecs";
+import { useQuery } from "@tanstack/react-query";
 
 export const Route = createLazyFileRoute("/admin/carspecs/$id")({
   component: CarSpecsDetail,
@@ -14,27 +15,20 @@ function CarSpecsDetail() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
   const [carSpecs, setCarSpecs] = useState(null);
-  const [isLoading, setIsLoading] = useState(null);
-  const [isNotFound, setIsNotFound] = useState(null);
+
+  const { data, isSuccess, isPending, isError } = useQuery({
+    queryKey: ["carSpecs", id],
+    queryFn: () => getDetailCarSpecs(id),
+    enabled: !!id,
+  });
 
   useEffect(() => {
-    const getDetailCarSpecsData = async (id) => {
-      setIsLoading(true);
-      const result = await getDetailCarSpecs(id);
-      if (result?.success) {
-        setCarSpecs(result.data);
-        setIsNotFound(false);
-      } else {
-        setIsNotFound(true);
-      }
-      setIsLoading(false);
-    };
-    if (id) {
-      getDetailCarSpecsData(id);
-    }
-  }, [id]);
+    if (isSuccess) {
+      setCarSpecs(data);
+    } 
+  }, [data, isSuccess]);
 
-  if (isLoading) {
+  if (isPending) {
     return (
       <Row className="mt-5">
         <Col>
@@ -44,7 +38,7 @@ function CarSpecsDetail() {
     );
   }
 
-  if (isNotFound) {
+  if (isError) {
     return (
       <Row className="mt-5">
         <Col>

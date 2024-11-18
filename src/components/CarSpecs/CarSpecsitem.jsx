@@ -1,13 +1,25 @@
 import PropTypes from "prop-types";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import Button from "react-bootstrap/Button";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { confirmAlert } from "react-confirm-alert";
 import { deleteCarSpecs } from "../../service/carspecs";
+import { useMutation } from "@tanstack/react-query";
 
 const CarSpecsItem = ({ carSpecs, refetchData }) => {
   const { user } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+
+  const { mutate: deleting, isPending: isDeleting } = useMutation({
+    mutationFn: (id) => deleteCarSpecs(id),
+    onSuccess: () => {
+      refetchData();
+    },
+    onError: (error) => {
+      toast.error(error?.message);
+    },
+  });
 
   const handleDelete = async (event) => {
     event.preventDefault();
@@ -19,13 +31,7 @@ const CarSpecsItem = ({ carSpecs, refetchData }) => {
         {
           label: "Yes",
           onClick: async () => {
-            const result = await deleteCarSpecs(carSpecs.id);
-            if (result.success) {
-              toast.success("Car specs deleted successfully.");
-              refetchData();
-            } else {
-              toast.error(result?.message || "Failed to delete.");
-            }
+            deleting(carSpecs.id);
           },
         },
         { label: "No" },
@@ -52,10 +58,16 @@ const CarSpecsItem = ({ carSpecs, refetchData }) => {
               variant="warning"
               size="sm"
               className="me-2"
+              disabled={isDeleting}
             >
               Edit
             </Button>
-            <Button onClick={handleDelete} variant="danger" size="sm">
+            <Button
+              onClick={handleDelete}
+              variant="danger"
+              size="sm"
+              disabled={isDeleting}
+            >
               Delete
             </Button>
           </>

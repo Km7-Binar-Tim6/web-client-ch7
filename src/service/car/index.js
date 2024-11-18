@@ -20,7 +20,8 @@ export const getCars = async (
     if (year) params.year = year;
     if (image) params.image = image;
 
-    let url = `${import.meta.env.VITE_API_URL}/cars?` + new URLSearchParams(params);
+    let url = `${import.meta.env.VITE_API_URL}/cars?` + 
+        new URLSearchParams(params);
 
     const response = await fetch(url, {
         method: "GET",
@@ -29,7 +30,10 @@ export const getCars = async (
         }
     });
     const result = await response.json();
-    return result;
+    if (!result?.success) {
+        throw new Error(result?.message);
+    }
+    return result?.data;
 }
 
 export const getDetailCar = async (id) => {
@@ -46,8 +50,11 @@ export const getDetailCar = async (id) => {
 
     // get data
     const result = await response.json();
-    return result;
-};
+    if (!result?.success) {
+        throw new Error(result?.message);
+    }
+    return result?.data;
+}
 
 export const deleteCar = async (id) => {
     const token = localStorage.getItem("token");
@@ -61,7 +68,10 @@ export const deleteCar = async (id) => {
     });
 
     const result = await response.json();
-    return result;
+    if (!result?.success) {
+        throw new Error(result?.message);
+    }
+    return result?.data;
 }
 
 export const createCar = async (request) => {
@@ -108,7 +118,10 @@ export const createCar = async (request) => {
     });
 
     const result = await response.json();
-    return result;
+    if (!result?.success) {
+        throw new Error(result?.message);
+    }
+    return result?.data;
 }
 
 export const updateCar = async (id, request) => {
@@ -157,4 +170,3 @@ export const updateCar = async (id, request) => {
     const result = await response.json();
     return result;
 }
-
