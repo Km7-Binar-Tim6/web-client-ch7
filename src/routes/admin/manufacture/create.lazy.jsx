@@ -8,6 +8,7 @@ import Button from "react-bootstrap/Button";
 import { createManufacture } from "../../../service/manufacture";
 import { toast } from "react-toastify";
 import ProtectedRoute from "../../../redux/slices/ProtectedRoute.js";
+import { useMutation } from "@tanstack/react-query";
 
 export const Route = createLazyFileRoute("/admin/manufacture/create")({
   component: () => (
@@ -19,23 +20,31 @@ export const Route = createLazyFileRoute("/admin/manufacture/create")({
 
 function CreateManufacture() {
   const navigate = useNavigate();
-
   const [name, setName] = useState("");
 
-  const onSubmit = async (event) => {
+  // Using useMutation to handle creation
+  const mutation = useMutation({
+    mutationFn: createManufacture,
+    onSuccess: (data) => {
+      if (data?.success) {
+        toast.success("Manufacture created successfully");
+        navigate({ to: "/admin/manufacture" });
+      } else {
+        toast.error(data?.message || "Failed to create manufacture");
+      }
+    },
+    onError: (error) => {
+      toast.error(
+        error?.message || "An error occurred while creating the manufacture"
+      );
+    },
+  });
+
+  const onSubmit = (event) => {
     event.preventDefault();
 
-    const request = {
-      manufacture_name: name,
-    };
-
-    const result = await createManufacture(request);
-    if (result?.success) {
-      navigate({ to: "/admin/manufacture" });
-      return;
-    }
-
-    toast.error(result?.message || "Failed to create manufacture");
+    // Use mutation to handle the API request
+    mutation.mutate({ manufacture_name: name });
   };
 
   return (
@@ -45,7 +54,7 @@ function CreateManufacture() {
           <Card.Body>
             <Card.Title>Create a new manufacture</Card.Title>
             <Form onSubmit={onSubmit}>
-              <Form.Group className="mb-3" controlId="email">
+              <Form.Group className="mb-3" controlId="name">
                 <Form.Label>Name</Form.Label>
                 <Form.Control
                   type="text"
@@ -55,8 +64,12 @@ function CreateManufacture() {
                 />
               </Form.Group>
 
-              <Button variant="primary" type="submit">
-                Submit
+              <Button
+                variant="primary"
+                type="submit"
+                disabled={mutation.isLoading}
+              >
+                {mutation.isLoading ? "Creating..." : "Submit"}
               </Button>
             </Form>
           </Card.Body>
