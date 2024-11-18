@@ -7,33 +7,29 @@ import Button from "react-bootstrap/Button";
 import { FaPlus } from "react-icons/fa";
 import { getCars } from "../../../service/car";
 import CarItem from "../../../components/Car/CarItem";
+import { useQuery } from "@tanstack/react-query";
 
 export const Route = createLazyFileRoute("/admin/cars/")({
   component: Index,
 });
+
 function Index() {
   const navigate = useNavigate();
   const { token, user } = useSelector((state) => state.auth);
 
   const [cars, setCars] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+
+  const { data, isSuccess, isPending } = useQuery({
+    queryKey: ["cars"],
+    queryFn: () => getCars(),
+    enabled: !!token,
+  })
 
   useEffect(() => {
-    const getCarData = async () => {
-      setIsLoading(true);
-      const result = await getCars();
-      if (result.success) {
-        setCars(result.data);
-      }
-      setIsLoading(false);
-    };
-
-    if (token) {
-      getCarData();
-    } else {
-      navigate({ to: "/login" });
+    if (isSuccess) {
+      setCars(data);
     }
-  }, [token, navigate]);
+  }, [data, isSuccess]);
 
   if (!token) {
     return (
@@ -46,7 +42,7 @@ function Index() {
       </Row>
     );
   }
-  if (isLoading) {
+  if (isPending) {
     return (
       <Row className="mt-4">
         <h1>Loading...</h1>

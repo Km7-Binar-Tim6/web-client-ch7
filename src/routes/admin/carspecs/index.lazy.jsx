@@ -24,7 +24,7 @@ function Index() {
 
   const { data, isSuccess, isPending } = useQuery({
     queryKey: ["carSpecs"],
-    queryFn: getCarSpecs,
+    queryFn: () => getCarSpecs(),
     enabled: !!token,
   });
 

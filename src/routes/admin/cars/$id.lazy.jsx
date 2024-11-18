@@ -8,7 +8,8 @@ import { toast } from "react-toastify";
 import { confirmAlert } from "react-confirm-alert";
 import { useSelector } from "react-redux";
 import { getDetailCar, deleteCar } from "../../../service/car";
-import { FaTrash, FaEdit, FaClock, FaArrowLeft } from "react-icons/fa"; // Untuk icon yang mirip
+import { FaTrash, FaEdit, FaClock, FaArrowLeft } from "react-icons/fa";
+import { useQuery, useMutation } from "@tanstack/react-query";
 
 export const Route = createLazyFileRoute("/admin/cars/$id")({
   component: CarDetail,
@@ -20,27 +21,30 @@ function CarDetail() {
   const { user } = useSelector((state) => state.auth);
 
   const [car, setCar] = useState(null);
-  const [isLoading, setIsLoading] = useState(null);
-  const [isNotFound, setIsNotFound] = useState(null);
+
+  const { data, isSuccess, isPending, isError } = useQuery({
+    queryKey: ["car", id],
+    queryFn: () => getDetailCar(id),
+    enabled: !!id,
+  });
+
+  const { mutate: deleting, isPending: isDeleting } = useMutation({
+    mutationFn: (id) => deleteCar(id),
+    onSuccess: () => {
+      navigate({ to: "/admin/cars" });
+    },
+    onError: (error) => {
+      toast.error(error?.message);
+    },
+  });
 
   useEffect(() => {
-    const getDetailCarData = async (id) => {
-      setIsLoading(true);
-      const result = await getDetailCar(id);
-      if (result?.success) {
-        setCar(result.data);
-        setIsNotFound(false);
-      } else {
-        setIsNotFound(true);
-      }
-      setIsLoading(false);
-    };
-    if (id) {
-      getDetailCarData(id);
+    if (isSuccess) {
+      setCar(data);
     }
-  }, [id]);
+  }, [data, isSuccess]);
 
-  if (isLoading) {
+  if (isPending) {
     return (
       <Row className="mt-5">
         <Col>
@@ -50,7 +54,7 @@ function CarDetail() {
     );
   }
 
-  if (isNotFound) {
+  if (isError) {
     return (
       <Row className="mt-5">
         <Col>
@@ -69,18 +73,11 @@ function CarDetail() {
         {
           label: "Yes",
           onClick: async () => {
-            const result = await deleteCar(id);
-            if (result?.success) {
-              navigate({ to: "/admin/cars" });
-              return;
-            }
-
-            toast.error(result?.message);
+            deleting(id);
           },
         },
         {
           label: "No",
-          onClick: () => {},
         },
       ],
     });
@@ -211,6 +208,7 @@ function CarDetail() {
                 <div className="d-flex justify-content-between mt-3">
                   <Button
                     onClick={onDelete}
+                    disabled={isDeleting}
                     variant="outline-danger"
                     style={{ display: "flex", alignItems: "center" }}
                   >
@@ -218,7 +216,7 @@ function CarDetail() {
                   </Button>
                   <Button
                     as={Link}
-                    to={"/cars/edit/$id"}
+                    to={`/admin/cars/edit/${id}`}
                     variant="outline-primary"
                     style={{ display: "flex", alignItems: "center" }}
                   >
