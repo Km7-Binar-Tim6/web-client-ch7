@@ -1,114 +1,112 @@
-import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Card from "react-bootstrap/Card";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-import {
-  getDetailTransmission,
-  updateTransmission,
-} from "../../../../service/transmission";
-import ProtectedRoute from "../../../../redux/slices/ProtectedRoute.js";
+import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
+import { useEffect, useState } from 'react';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Card from 'react-bootstrap/Card';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import { getDetailTransmission, updateTransmission } from '../../../../service/transmission';
+import ProtectedRoute from '../../../../redux/slices/ProtectedRoute.js';
+import { toast } from 'react-toastify';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { FaArrowLeft } from 'react-icons/fa';
 
-export const Route = createLazyFileRoute("/admin/transmission/edit/$id")({
-  component: () => (
-    <ProtectedRoute allowedRoles={[1]}>
-      <EditTransmission />
-    </ProtectedRoute>
-  ),
+export const Route = createLazyFileRoute('/admin/transmission/edit/$id')({
+	component: () => (
+		<ProtectedRoute allowedRoles={[1]}>
+			<EditTransmission />
+		</ProtectedRoute>
+	),
 });
 
 function EditTransmission() {
-  const { id } = Route.useParams();
-  const navigate = useNavigate();
+	const { id } = Route.useParams();
+	const navigate = useNavigate();
 
-  const [option, setOption] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+	const [transmissionName, setTransmissionName] = useState('');
 
-  useEffect(() => {
-    const fetchTransmission = async () => {
-      try {
-        const result = await getDetailTransmission(id);
-        if (result?.success && result.data) {
-          setOption(result.data.transmission_option);
-          setError(null);
-        } else {
-          setError("Failed to load transmission details.");
-        }
-      } catch (error) {
-        console.error("Error fetching transmission details:", error);
-        setError("An error occurred while fetching data.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
+	const { data: transmission, isSuccess } = useQuery({
+		queryKey: ['transmission', id],
+		queryFn: () => getDetailTransmission(id),
+		enabled: !!id,
+	});
 
-    if (id) {
-      fetchTransmission();
-    }
-  }, [id]);
+	const { mutate: updatingTransmission, isPending: isUpdatingTransmission } = useMutation({
+		mutationFn: data => updateTransmission(id, data),
+		onSuccess: () => {
+			toast.success('Transmission updated successfully');
+			navigate({ to: '/admin/transmission/$id' });
+		},
+		onError: error => {
+			toast.error(error?.message);
+		},
+	});
 
-  const onSubmit = async (event) => {
-    event.preventDefault();
-    const request = { transmission_option: option };
+	useEffect(() => {
+		if (isSuccess) {
+			setTransmissionName(transmission.transmission_option);
+		}
+	}, [transmission, isSuccess]);
 
-    const result = await updateTransmission(id, request);
+	const onSubmit = async event => {
+		event.preventDefault();
+		const request = { transmission_option: transmissionName };
 
-    if (result?.success) {
-      navigate({ to: `/admin/transmission/${id}` });
-    } else {
-      alert(result?.message || "Failed to update transmission");
-    }
-  };
+		if (!transmissionName || transmissionName === transmission.transmission_option) {
+			toast.error('Transmission name is required and cannot be the same as before');
+			return;
+		}
+		updatingTransmission(request);
+	};
 
-  if (isLoading) {
-    return (
-      <Row className="mt-5">
-        <Col className="text-center">
-          <h1>Loading...</h1>
-        </Col>
-      </Row>
-    );
-  }
-
-  if (error) {
-    return (
-      <Row className="mt-5">
-        <Col className="text-center">
-          <h1>{error}</h1>
-        </Col>
-      </Row>
-    );
-  }
-
-  return (
-    <Row className="justify-content-center mt-4">
-      <Col md={6}>
-        <Card className="shadow-sm border-0">
-          <Card.Body>
-            <Form onSubmit={onSubmit}>
-              <Form.Group className="mb-3" controlId="option">
-                <Form.Label>Current Transmission Option</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={option}
-                  onChange={(event) => setOption(event.target.value)}
-                  placeholder="Enter new transmission option"
-                  required
-                />
-              </Form.Group>
-
-              <Button variant="primary" type="submit" className="w-100 mt-3">
-                Update Transmission Option
-              </Button>
-            </Form>
-          </Card.Body>
-        </Card>
-      </Col>
-    </Row>
-  );
+	return (
+		<>
+			<Row className="mt-3 mb-3">
+				<Col>
+					<Button
+						variant="outline-secondary"
+						onClick={() => navigate({ to: '/admin/transmission' })}
+						style={{
+							display: 'flex',
+							alignItems: 'center',
+						}}
+					>
+						<FaArrowLeft style={{ marginRight: '8px' }} /> Back
+					</Button>
+				</Col>
+			</Row>
+			<Row className="mt-5">
+				<Col className="offset-md-4">
+					<Card
+						style={{
+							border: '1px solid #E0E0E0',
+							borderRadius: '8px',
+							padding: '16px',
+						}}
+					>
+						<Card.Body>
+							<Form onSubmit={onSubmit}>
+								<Form.Group className="mb-3">
+									<Form.Label>Transmission Name</Form.Label>
+									<Form.Control
+										type="text"
+										value={transmissionName}
+										onChange={event => {
+											setTransmissionName(event.target.value);
+										}}
+									/>
+								</Form.Group>
+								<Button type="submit" variant="primary" disabled={isUpdatingTransmission}>
+									Update
+								</Button>
+							</Form>
+						</Card.Body>
+					</Card>
+				</Col>
+				<Col md={3}></Col>
+			</Row>
+		</>
+	);
 }
 
 export default EditTransmission;

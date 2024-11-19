@@ -1,61 +1,63 @@
 import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import { FaPlus } from "react-icons/fa";
+import { useQuery } from "@tanstack/react-query";
 import { getModel } from "../../../service/model";
 import ModelItem from "../../../components/Model/ModelItem";
-
+import { useEffect } from "react";
+import ProtectedRoute from "../../../redux/slices/ProtectedRoute";
 export const Route = createLazyFileRoute("/admin/model/")({
-  component: Model,
+  component: () => (
+    <ProtectedRoute allowedRoles={[1]}>
+      <Model />
+    </ProtectedRoute>
+  ),
 });
 
 function Model() {
   const navigate = useNavigate();
   const { token, user } = useSelector((state) => state.auth);
 
-  const [models, setModel] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const getModelData = async () => {
-    setIsLoading(true);
-    const result = await getModel();
-    if (result.success) {
-      setModel(result.data);
-    }
-    setIsLoading(false);
-  };
-
-  const refetchData = async () => {
-    await getModelData();
-  };
-
-  useEffect(() => {
-    const getModelData = async () => {
-      setIsLoading(true);
+  // Fetch models using TanStack Query
+  const {
+    data: models,
+    isLoading,
+    isError,
+    refetch, // Function to manually refetch data if needed
+  } = useQuery({
+    queryKey: ["models"], // Unique query key
+    queryFn: async () => {
       const result = await getModel();
-      if (result.success) {
-        setModel(result.data);
-      }
-      setIsLoading(false);
-    };
+      return result; // result is already the data from getManufacture
+    },
+    enabled: !!token, // Fetch only if the token exists
+  });
 
-    if (token) {
-      getModelData();
-    } else {
-      navigate({ to: "/admin/login" });
+  // Redirect to login if no token
+  useEffect(() => {
+    if (!token) {
+      navigate({ to: "/login" });
     }
   }, [token, navigate]);
 
   if (!token) {
-    return null;
+    return null; // Prevent rendering until navigation completes
   }
 
   if (isLoading) {
     return (
       <div className="mt-4">
         <h1>Loading...</h1>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="mt-4">
+        <h1>Failed to load model data. Please try again later.</h1>
       </div>
     );
   }
@@ -92,7 +94,7 @@ function Model() {
               <ModelItem
                 model={model}
                 key={model?.id}
-                refetchData={refetchData}
+                refetchData={refetch} // Pass refetch to manually refresh data
               />
             ))}
           </tbody>

@@ -30,18 +30,16 @@ export const Route = createRootRoute({
         {isAdminPage && <Sidebar sidebarOpen={sidebarOpen} />}
         <div className="content-wrapper">
           {isAdminPage && <NavigationBar setSidebarOpen={setSidebarOpen} />}
-          <main className="content px-3 py-2">
-            <Container fluid>
-              {/* Protect all routes except login/register */}
-              {isAuthPage ? (
+          <Container fluid>
+            {/* Protect all routes except login/register */}
+            {isAuthPage ? (
+              <Outlet />
+            ) : (
+              <ProtectedRoute>
                 <Outlet />
-              ) : (
-                <ProtectedRoute>
-                  <Outlet />
-                </ProtectedRoute>
-              )}
-            </Container>
-          </main>
+              </ProtectedRoute>
+            )}
+          </Container>
         </div>
         <TanStackRouterDevtools />
         <ToastContainer theme="colored" />

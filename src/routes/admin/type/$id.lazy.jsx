@@ -1,45 +1,34 @@
 import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { getDetailType } from "../../../service/type";
-
+import ProtectedRoute from "../../../redux/slices/ProtectedRoute";
 export const Route = createLazyFileRoute("/admin/type/$id")({
-  component: TypeDetail,
+  component: () => (
+    <ProtectedRoute allowedRoles={[1]}>
+      <TypeDetail />
+    </ProtectedRoute>
+  ),
 });
 
 function TypeDetail() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
 
-  const [type, setType] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-  const [isNotFound, setIsNotFound] = useState(false);
-
-  useEffect(() => {
-    const getDetailManufacturesData = async () => {
-      if (!id) return;
-
-      setIsLoading(true);
-      try {
-        const result = await getDetailType(id);
-        if (result.success && result.data) {
-          setType(result.data);
-          setIsNotFound(false);
-        } else {
-          setIsNotFound(true);
-        }
-      } catch (error) {
-        console.error("Error fetching type details:", error);
-        setIsNotFound(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    getDetailManufacturesData();
-  }, [id]);
+  // Fetch type details using TanStack Query
+  const {
+    data: typeData,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["type", id], // Unique cache key for this query
+    queryFn: () => getDetailType(id), // Fetch function
+    enabled: !!id, // Only fetch if ID is available
+  });
 
   if (isLoading) {
     return (
@@ -51,24 +40,36 @@ function TypeDetail() {
     );
   }
 
-  if (isNotFound) {
+  if (isError) {
     return (
       <Row className="mt-5">
         <Col>
-          <h1 className="text-center">Manufacture not found!</h1>
+          <h1 className="text-center">
+            {error?.message || "Error fetching type details"}
+          </h1>
         </Col>
       </Row>
     );
   }
+
+  if (!typeData?.success || !typeData?.data) {
+    return (
+      <Row className="mt-5">
+        <Col>
+          <h1 className="text-center">Type not found!</h1>
+        </Col>
+      </Row>
+    );
+  }
+
+  const type = typeData.data;
 
   return (
     <Row className="mt-5">
       <Col md={{ span: 6, offset: 3 }}>
         <Card className="shadow-sm">
           <Card.Body>
-            <Card.Title className="text-center mb-4">
-              Manufacture Details
-            </Card.Title>
+            <Card.Title className="text-center mb-4">Type Details</Card.Title>
             <Card.Text>
               <strong>ID:</strong> {id}
             </Card.Text>
@@ -81,7 +82,7 @@ function TypeDetail() {
               className="d-block mt-4 justcfl"
               onClick={() => navigate({ to: "/admin/type" })}
             >
-              Back to Manufacture List
+              Back to Type List
             </Button>
           </Card.Body>
         </Card>

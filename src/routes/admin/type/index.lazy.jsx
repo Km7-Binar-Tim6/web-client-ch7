@@ -1,61 +1,63 @@
 import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import { FaPlus } from "react-icons/fa";
+import { useQuery } from "@tanstack/react-query";
 import { getType } from "../../../service/type";
 import TypeItem from "../../../components/Type/TypeItem";
-
+import { useEffect } from "react";
+import ProtectedRoute from "../../../redux/slices/ProtectedRoute";
 export const Route = createLazyFileRoute("/admin/type/")({
-  component: Type,
+  component: () => (
+    <ProtectedRoute allowedRoles={[1]}>
+      <Type />
+    </ProtectedRoute>
+  ),
 });
 
 function Type() {
   const navigate = useNavigate();
   const { token, user } = useSelector((state) => state.auth);
 
-  const [types, setTypes] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const getTypeData = async () => {
-    setIsLoading(true);
-    const result = await getType();
-    if (result.success) {
-      setTypes(result.data);
-    }
-    setIsLoading(false);
-  };
-
-  const refetchData = async () => {
-    await getTypeData();
-  };
-
-  useEffect(() => {
-    const getTypeData = async () => {
-      setIsLoading(true);
+  // Use TanStack Query to fetch types
+  const {
+    data: types,
+    isLoading,
+    isError,
+    refetch, // Function to manually refetch data if needed
+  } = useQuery({
+    queryKey: ["types"], // Unique query key
+    queryFn: async () => {
       const result = await getType();
-      if (result.success) {
-        setTypes(result.data);
-      }
-      setIsLoading(false);
-    };
+      return result; // result is already the data from getManufacture
+    },
+    enabled: !!token, // Fetch only if the token exists
+  });
 
-    if (token) {
-      getTypeData();
-    } else {
+  // Redirect to login if the user is not authenticated
+  useEffect(() => {
+    if (!token) {
       navigate({ to: "/login" });
     }
   }, [token, navigate]);
 
   if (!token) {
-    return null;
+    return null; // Prevent rendering until navigation completes
   }
 
   if (isLoading) {
     return (
       <div className="mt-4">
         <h1>Loading...</h1>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="mt-4">
+        <h1>Failed to load type data. Please try again later.</h1>
       </div>
     );
   }
@@ -89,7 +91,7 @@ function Type() {
           </thead>
           <tbody>
             {types.map((type) => (
-              <TypeItem type={type} key={type?.id} refetchData={refetchData} />
+              <TypeItem type={type} key={type?.id} refetchData={refetch} />
             ))}
           </tbody>
         </Table>

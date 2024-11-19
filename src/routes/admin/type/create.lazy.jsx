@@ -5,9 +5,11 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import { useMutation } from "@tanstack/react-query";
 import { createType } from "../../../service/type";
 import { toast } from "react-toastify";
 import ProtectedRoute from "../../../redux/slices/ProtectedRoute.js";
+
 export const Route = createLazyFileRoute("/admin/type/create")({
   component: () => (
     <ProtectedRoute allowedRoles={[1]}>
@@ -18,23 +20,29 @@ export const Route = createLazyFileRoute("/admin/type/create")({
 
 function CreateType() {
   const navigate = useNavigate();
-
   const [name, setName] = useState("");
 
-  const onSubmit = async (event) => {
-    event.preventDefault();
-
-    const request = {
-      type_option: name,
-    };
-
-    const result = await createType(request);
-    if (result?.success) {
+  // UseMutation to handle type creation
+  const { mutate, isLoading } = useMutation({
+    mutationFn: async (newType) => {
+      const result = await createType(newType);
+      if (!result?.success) {
+        throw new Error(result?.message || "Failed to create type");
+      }
+      return result;
+    },
+    onSuccess: () => {
+      toast.success("Type created successfully");
       navigate({ to: "/admin/type" });
-      return;
-    }
+    },
+    onError: (error) => {
+      toast.error(error.message || "An error occurred while creating type");
+    },
+  });
 
-    toast.error(result?.message || "Failed to create type");
+  const onSubmit = (event) => {
+    event.preventDefault();
+    mutate({ type_option: name }); // Trigger mutation with the form data
   };
 
   return (
@@ -44,18 +52,19 @@ function CreateType() {
           <Card.Body>
             <Card.Title>Create a new Type</Card.Title>
             <Form onSubmit={onSubmit}>
-              <Form.Group className="mb-3" controlId="email">
+              <Form.Group className="mb-3" controlId="typeName">
                 <Form.Label>Name</Form.Label>
                 <Form.Control
                   type="text"
                   value={name}
                   placeholder="Enter new type"
                   onChange={(event) => setName(event.target.value)}
+                  disabled={isLoading}
                 />
               </Form.Group>
 
-              <Button variant="primary" type="submit">
-                Submit
+              <Button variant="primary" type="submit" disabled={isLoading}>
+                {isLoading ? "Submitting..." : "Submit"}
               </Button>
             </Form>
           </Card.Body>
@@ -64,3 +73,5 @@ function CreateType() {
     </Row>
   );
 }
+
+export default CreateType;

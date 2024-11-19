@@ -1,45 +1,34 @@
 import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { getDetailModel } from "../../../service/model";
-
+import ProtectedRoute from "../../../redux/slices/ProtectedRoute";
 export const Route = createLazyFileRoute("/admin/model/$id")({
-  component: ModelDetail,
+  component: () => (
+    <ProtectedRoute allowedRoles={[1]}>
+      <ModelDetail />
+    </ProtectedRoute>
+  ),
 });
 
 function ModelDetail() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
 
-  const [model, setModel] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-  const [isNotFound, setIsNotFound] = useState(false);
-
-  useEffect(() => {
-    const getDetailModelData = async () => {
-      if (!id) return;
-
-      setIsLoading(true);
-      try {
-        const result = await getDetailModel(id);
-        if (result.success && result.data) {
-          setModel(result.data);
-          setIsNotFound(false);
-        } else {
-          setIsNotFound(true);
-        }
-      } catch (error) {
-        console.error("Error fetching model details:", error);
-        setIsNotFound(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    getDetailModelData();
-  }, [id]);
+  // TanStack Query to fetch model details based on id
+  const {
+    data: model,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["model", id], // Cache key based on model ID
+    queryFn: () => getDetailModel(id), // Fetch model details
+    enabled: !!id, // Only run query when id is available
+  });
 
   if (isLoading) {
     return (
@@ -51,7 +40,19 @@ function ModelDetail() {
     );
   }
 
-  if (isNotFound) {
+  if (isError) {
+    return (
+      <Row className="mt-5">
+        <Col>
+          <h1 className="text-center">
+            {error?.message || "Error fetching model details"}
+          </h1>
+        </Col>
+      </Row>
+    );
+  }
+
+  if (!model) {
     return (
       <Row className="mt-5">
         <Col>
@@ -71,7 +72,8 @@ function ModelDetail() {
               <strong>ID:</strong> {id}
             </Card.Text>
             <Card.Text>
-              <strong>Name:</strong> {model.model_name || "No name available"}
+              <strong>Name:</strong>{" "}
+              {model?.data?.model_name || "No name available"}
             </Card.Text>
             <Button
               variant="secondary"

@@ -4,11 +4,16 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import { getDetailCarOption } from '../../../service/caroption';
+import { getDetailCarOption } from '../../../service/carOption';
 import { useQuery } from '@tanstack/react-query';
+import ProtectedRoute from '../../../redux/slices/ProtectedRoute';
 
 export const Route = createLazyFileRoute('/admin/caroptions/$id')({
-	component: CarOptionDetail,
+	component: () => (
+		<ProtectedRoute allowedRoles={[1]}>
+			<CarOptionDetail />
+		</ProtectedRoute>
+	),
 });
 
 function CarOptionDetail() {
