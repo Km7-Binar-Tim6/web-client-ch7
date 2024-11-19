@@ -1,114 +1,110 @@
-import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Card from "react-bootstrap/Card";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-import {
-  getDetailCarOption,
-  updateCarOption,
-} from "../../../../service/carOption";
-import ProtectedRoute from "../../../../redux/slices/ProtectedRoute.js";
+import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
+import { useEffect, useState } from 'react';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Card from 'react-bootstrap/Card';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import { getDetailCarOption, updateCarOption } from '../../../../service/caroption';
+import ProtectedRoute from '../../../../redux/slices/ProtectedRoute.js';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { FaArrowLeft } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
-export const Route = createLazyFileRoute("/admin/caroptions/edit/$id")({
-  component: () => (
-    <ProtectedRoute allowedRoles={[1]}>
-      <EditCarOption />
-    </ProtectedRoute>
-  ),
+export const Route = createLazyFileRoute('/admin/caroptions/edit/$id')({
+	component: () => (
+		<ProtectedRoute allowedRoles={[1]}>
+			<EditCarOption />
+		</ProtectedRoute>
+	),
 });
 
 function EditCarOption() {
-  const { id } = Route.useParams();
-  const navigate = useNavigate();
+	const { id } = Route.useParams();
+	const navigate = useNavigate();
 
-  const [option, setOption] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+	const [optionName, setOptionName] = useState('');
 
-  useEffect(() => {
-    const fetchCarOption = async () => {
-      try {
-        const result = await getDetailCarOption(id);
-        if (result?.success && result.data) {
-          setOption(result.data.option_name);
-          setError(null);
-        } else {
-          setError("Failed to load car option details.");
-        }
-      } catch (error) {
-        console.error("Error fetching car option details:", error);
-        setError("An error occurred while fetching data.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
+	const { data: carOptions, isSuccess } = useQuery({
+		queryKey: ['carOptions', id],
+		queryFn: () => getDetailCarOption(id),
+		enabled: !!id,
+	});
 
-    if (id) {
-      fetchCarOption();
-    }
-  }, [id]);
+	const { mutate: updatingOption, isPending: isUpdatingOption } = useMutation({
+		mutationFn: data => updateCarOption(id, data),
+		onSuccess: () => {
+			toast.success('Option updated successfully');
+			navigate({ to: '/admin/caroptions/$id' });
+		},
+		onError: error => {
+			toast.error(error?.message);
+		},
+	});
 
-  const onSubmit = async (event) => {
-    event.preventDefault();
-    const request = { option_name: option };
+	useEffect(() => {
+		if (isSuccess) {
+			setOptionName(carOptions.option_name);
+		}
+	}, [carOptions, isSuccess]);
 
-    const result = await updateCarOption(id, request);
+	const onSubmit = async event => {
+		event.preventDefault();
+		const request = { option_name: optionName };
 
-    if (result?.success) {
-      navigate({ to: `/admin/caroptions/${id}` });
-    } else {
-      alert(result?.message || "Failed to update car option");
-    }
-  };
+		if (!optionName || optionName === carOptions.option_name) {
+			toast.error('Option name is required and cannot be the same as before');
+			return;
+		}
+		updatingOption(request);
+	};
 
-  if (isLoading) {
-    return (
-      <Row className="mt-5">
-        <Col className="text-center">
-          <h1>Loading...</h1>
-        </Col>
-      </Row>
-    );
-  }
-
-  if (error) {
-    return (
-      <Row className="mt-5">
-        <Col className="text-center">
-          <h1>{error}</h1>
-        </Col>
-      </Row>
-    );
-  }
-
-  return (
-    <Row className="justify-content-center mt-4">
-      <Col md={6}>
-        <Card className="shadow-sm border-0">
-          <Card.Body>
-            <Form onSubmit={onSubmit}>
-              <Form.Group className="mb-3" controlId="option">
-                <Form.Label>Current Car Option</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={option}
-                  onChange={(event) => setOption(event.target.value)}
-                  placeholder="Enter new car option"
-                  required
-                />
-              </Form.Group>
-
-              <Button variant="primary" type="submit" className="w-100 mt-3">
-                Update Car Option
-              </Button>
-            </Form>
-          </Card.Body>
-        </Card>
-      </Col>
-    </Row>
-  );
+	return (
+		<>
+			<Row className="mt-3 mb-3">
+				<Col>
+					<Button
+						variant="outline-secondary"
+						onClick={() => navigate({ to: '/admin/caroptions' })}
+						style={{
+							display: 'flex',
+							alignItems: 'center',
+						}}
+					>
+						<FaArrowLeft style={{ marginRight: '8px' }} /> Back
+					</Button>
+				</Col>
+			</Row>
+			<Row className="mt-5">
+				<Col className="offset-md-4">
+					<Card
+						style={{
+							border: '1px solid #E0E0E0',
+							borderRadius: '8px',
+							padding: '16px',
+						}}
+					>
+						<Card.Body>
+							<Form onSubmit={onSubmit}>
+								<Form.Group className="mb-3">
+									<Form.Label>Spec Name</Form.Label>
+									<Form.Control
+										type="text"
+										value={optionName}
+										onChange={event => {
+											setOptionName(event.target.value);
+										}}
+									/>
+								</Form.Group>
+								<Button type="submit" variant="primary" disabled={isUpdatingOption}>
+									Update
+								</Button>
+							</Form>
+						</Card.Body>
+					</Card>
+				</Col>
+				<Col md={3}></Col>
+			</Row>
+		</>
+	);
 }
-
-export default EditCarOption;
