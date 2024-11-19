@@ -9,9 +9,14 @@ import TransmissionItem from '../../../components/Transmission/TransmissionItem'
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
+import ProtectedRoute from '../../../redux/slices/ProtectedRoute';
 
 export const Route = createLazyFileRoute('/admin/transmission/')({
-	component: Transmission,
+	component: () => (
+		<ProtectedRoute allowedRoles={[1]}>
+			<Transmission />
+		</ProtectedRoute>
+	),
 });
 
 function Transmission() {
