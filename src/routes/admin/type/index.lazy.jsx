@@ -6,9 +6,14 @@ import { FaPlus } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { getType } from "../../../service/type";
 import TypeItem from "../../../components/Type/TypeItem";
-
+import { useEffect } from "react";
+import ProtectedRoute from "../../../redux/slices/ProtectedRoute";
 export const Route = createLazyFileRoute("/admin/type/")({
-  component: Type,
+  component: () => (
+    <ProtectedRoute allowedRoles={[1]}>
+      <Type />
+    </ProtectedRoute>
+  ),
 });
 
 function Type() {
@@ -31,9 +36,14 @@ function Type() {
   });
 
   // Redirect to login if the user is not authenticated
+  useEffect(() => {
+    if (!token) {
+      navigate({ to: "/login" });
+    }
+  }, [token, navigate]);
+
   if (!token) {
-    navigate({ to: "/login" });
-    return null;
+    return null; // Prevent rendering until navigation completes
   }
 
   if (isLoading) {
