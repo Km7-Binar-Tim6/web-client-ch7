@@ -7,9 +7,14 @@ import Button from 'react-bootstrap/Button';
 import { getDetailTransmission } from '../../../service/transmission';
 import { isPending } from '@reduxjs/toolkit';
 import { useQuery } from '@tanstack/react-query';
+import ProtectedRoute from '../../../redux/slices/ProtectedRoute';
 
 export const Route = createLazyFileRoute('/admin/transmission/$id')({
-	component: TransmissionDetail,
+	component: () => (
+		<ProtectedRoute allowedRoles={[1]}>
+			<TransmissionDetail />
+		</ProtectedRoute>
+	),
 });
 
 function TransmissionDetail() {

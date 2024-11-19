@@ -9,9 +9,14 @@ import { FaPlus } from 'react-icons/fa';
 import { getCarOptions } from '../../../service/caroption';
 import CarOptionItem from '../../../components/CarOptions/CarOptionItem';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import ProtectedRoute from '../../../redux/slices/ProtectedRoute';
 
 export const Route = createLazyFileRoute('/admin/caroptions/')({
-	component: CarOption,
+	component: () => (
+		<ProtectedRoute allowedRoles={[1]}>
+			<CarOption />
+		</ProtectedRoute>
+	),
 });
 
 function CarOption() {
