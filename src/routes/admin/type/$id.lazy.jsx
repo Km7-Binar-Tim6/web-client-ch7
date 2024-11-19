@@ -5,9 +5,13 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { getDetailType } from "../../../service/type";
-
+import ProtectedRoute from "../../../redux/slices/ProtectedRoute";
 export const Route = createLazyFileRoute("/admin/type/$id")({
-  component: TypeDetail,
+  component: () => (
+    <ProtectedRoute allowedRoles={[1]}>
+      <TypeDetail />
+    </ProtectedRoute>
+  ),
 });
 
 function TypeDetail() {

@@ -6,9 +6,14 @@ import { FaPlus } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { getManufacture } from "../../../service/manufacture";
 import ManufactureItem from "../../../components/Manufacture/ManufactureItem";
-
+import { useEffect } from "react";
+import ProtectedRoute from "../../../redux/slices/ProtectedRoute";
 export const Route = createLazyFileRoute("/admin/manufacture/")({
-  component: Manufacture,
+  component: () => (
+    <ProtectedRoute allowedRoles={[1]}>
+      <Manufacture />
+    </ProtectedRoute>
+  ),
 });
 
 function Manufacture() {
@@ -34,9 +39,14 @@ function Manufacture() {
   });
 
   // Redirect to login if no token
+  useEffect(() => {
+    if (!token) {
+      navigate({ to: "/login" });
+    }
+  }, [token, navigate]);
+
   if (!token) {
-    navigate({ to: "/login" });
-    return null;
+    return null; // Prevent rendering until navigation completes
   }
 
   if (isLoading) {

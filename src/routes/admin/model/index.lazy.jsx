@@ -6,9 +6,14 @@ import { FaPlus } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { getModel } from "../../../service/model";
 import ModelItem from "../../../components/Model/ModelItem";
-
+import { useEffect } from "react";
+import ProtectedRoute from "../../../redux/slices/ProtectedRoute";
 export const Route = createLazyFileRoute("/admin/model/")({
-  component: Model,
+  component: () => (
+    <ProtectedRoute allowedRoles={[1]}>
+      <Model />
+    </ProtectedRoute>
+  ),
 });
 
 function Model() {
@@ -34,9 +39,14 @@ function Model() {
   });
 
   // Redirect to login if no token
+  useEffect(() => {
+    if (!token) {
+      navigate({ to: "/login" });
+    }
+  }, [token, navigate]);
+
   if (!token) {
-    navigate({ to: "/admin/login" });
-    return null;
+    return null; // Prevent rendering until navigation completes
   }
 
   if (isLoading) {
