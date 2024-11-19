@@ -7,34 +7,36 @@ import Container from "react-bootstrap/Container";
 import Image from "react-bootstrap/Image";
 import Dropdown from "react-bootstrap/Dropdown";
 import { useDispatch, useSelector } from "react-redux";
+import { useQuery } from "@tanstack/react-query";
 import { setToken, setUser } from "../../redux/slices/auth";
 import { profile } from "../../service/auth";
 import { FaBars } from "react-icons/fa";
-import ThemeToggle from "./ThemeToggle"; // Import ThemeToggle component
+import ThemeToggle from "./ThemeToggle";
 
 const NavigationBar = ({ setSidebarOpen }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user, token } = useSelector((state) => state.auth);
+  const { token } = useSelector((state) => state.auth);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
-  useEffect(() => {
-    const getProfile = async () => {
-      const result = await profile();
-      if (result.success) {
-        dispatch(setUser(result.data));
-        return;
-      }
+  // Fetch profile data using TanStack Query
+  const {
+    data: user,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["profile"],
+    queryFn: profile,
+    enabled: !!token, // Only fetch if token exists
+    onSuccess: (data) => dispatch(setUser(data.data)),
+    onError: () => {
       dispatch(setUser(null));
       dispatch(setToken(null));
-      navigate({ to: "/" });
-    };
+      navigate({ to: "/login" });
+    },
+  });
 
-    if (token) {
-      getProfile();
-    }
-  }, [dispatch, navigate, token]);
-
+  // Handle screen resizing
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener("resize", handleResize);
@@ -45,9 +47,11 @@ const NavigationBar = ({ setSidebarOpen }) => {
     event.preventDefault();
     dispatch(setUser(null));
     dispatch(setToken(null));
-    
+
     navigate({ to: "/" });
   };
+
+  if (!token) return null;
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
@@ -60,7 +64,11 @@ const NavigationBar = ({ setSidebarOpen }) => {
         </Navbar.Brand>
         <Nav className="me-auto"></Nav>
         <Nav className="d-flex align-items-center">
-          {user ? (
+          {isLoading ? (
+            <Nav.Link>Loading...</Nav.Link>
+          ) : isError ? (
+            <Nav.Link>Error fetching profile</Nav.Link>
+          ) : user ? (
             <Dropdown align="end">
               <Dropdown.Toggle
                 as="a"
@@ -68,7 +76,7 @@ const NavigationBar = ({ setSidebarOpen }) => {
                 style={{ cursor: "pointer" }}
               >
                 <Image
-                  src={user.profile_picture}
+                  src={user.data?.profile_picture}
                   fluid
                   style={{
                     marginRight: "10px",
@@ -77,19 +85,12 @@ const NavigationBar = ({ setSidebarOpen }) => {
                     borderRadius: "50%",
                   }}
                 />
-                {user.name}
+                {user.data?.name}
               </Dropdown.Toggle>
-              <Dropdown.Menu
-                style={{
-                  position: "absolute",
-                  top: "100%",
-                  right: "0",
-                  zIndex: 1050, // Ensures it overlays other elements
-                }}
-              >
+              <Dropdown.Menu>
                 {isMobile && (
                   <Dropdown.Item as="div">
-                    <ThemeToggle /> {/* Theme toggle in dropdown on mobile */}
+                    <ThemeToggle />
                   </Dropdown.Item>
                 )}
                 <Dropdown.Item as={Link} to="/profile">
@@ -111,8 +112,7 @@ const NavigationBar = ({ setSidebarOpen }) => {
               </Nav.Link>
             </>
           )}
-          {!isMobile && <ThemeToggle />}{" "}
-          {/* Theme toggle outside dropdown on larger screens */}
+          {!isMobile && <ThemeToggle />}
         </Nav>
       </Container>
     </Navbar>

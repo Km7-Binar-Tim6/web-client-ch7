@@ -1,9 +1,9 @@
 import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import { FaPlus } from "react-icons/fa";
+import { useQuery } from "@tanstack/react-query";
 import { getManufacture } from "../../../service/manufacture";
 import ManufactureItem from "../../../components/Manufacture/ManufactureItem";
 
@@ -15,40 +15,24 @@ function Manufacture() {
   const navigate = useNavigate();
   const { token, user } = useSelector((state) => state.auth);
 
-  const [manufactures, setManufactures] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const getManufactureData = async () => {
-    setIsLoading(true);
-    const result = await getManufacture();
-    if (result.success) {
-      setManufactures(result.data);
-    }
-    setIsLoading(false);
-  };
-
-  const refetchData = async () => {
-    await getManufactureData();
-  };
-
-  useEffect(() => {
-    const getManufactureData = async () => {
-      setIsLoading(true);
+  // Fetch data using TanStack Query
+  const {
+    data: manufactures,
+    isLoading,
+    isError,
+    refetch, // Function to manually refetch data if needed
+  } = useQuery({
+    queryKey: ["manufactures"], // Unique query key
+    queryFn: async () => {
       const result = await getManufacture();
-      if (result.success) {
-        setManufactures(result.data);
-      }
-      setIsLoading(false);
-    };
+      return result; // result is already the data from getManufacture
+    },
+    enabled: !!token, // Fetch only if the token exists
+  });
 
-    if (token) {
-      getManufactureData();
-    } else {
-      navigate({ to: "/login" });
-    }
-  }, [token, navigate]);
-
+  // Redirect to login if no token
   if (!token) {
+    navigate({ to: "/login" });
     return null;
   }
 
@@ -56,6 +40,14 @@ function Manufacture() {
     return (
       <div className="mt-4">
         <h1>Loading...</h1>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="mt-4">
+        <h1>Failed to load manufacture data. Please try again later.</h1>
       </div>
     );
   }
@@ -92,7 +84,7 @@ function Manufacture() {
               <ManufactureItem
                 manufacture={manufacture}
                 key={manufacture?.id}
-                refetchData={refetchData} // Pass refetchData to each ManufactureItem
+                refetchData={refetch} // Pass refetch from useQuery
               />
             ))}
           </tbody>

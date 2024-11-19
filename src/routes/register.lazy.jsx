@@ -5,9 +5,11 @@ import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useMutation } from "@tanstack/react-query";
 import { register } from "../service/auth";
 import { toast } from "react-toastify";
+import { setToken, setUser } from "../redux/slices/auth";
 
 export const Route = createLazyFileRoute("/register")({
   component: Register,
@@ -15,7 +17,7 @@ export const Route = createLazyFileRoute("/register")({
 
 function Register() {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
 
   const [name, setName] = useState("");
@@ -25,38 +27,48 @@ function Register() {
   const [profilePicture, setProfilePicture] = useState(undefined);
 
   useEffect(() => {
-    // get token from local storage
     if (token) {
       navigate({ to: "/" });
     }
   }, [token, navigate]);
 
-  const onSubmit = async (event) => {
+  // Mutation to handle registration
+  const mutation = useMutation({
+    mutationFn: async () => {
+      if (password !== confirmPassword) {
+        throw new Error("Password and password confirmation must be the same!");
+      }
+
+      const request = {
+        name,
+        email,
+        password,
+        profilePicture,
+      };
+
+      const result = await register(request);
+
+      if (result.success) {
+        localStorage.setItem("token", result.data.token);
+        dispatch(setToken(result.data.token)); // Set token in Redux store
+        dispatch(setUser(result.data.user)); // Set user in Redux store
+        return result.data;
+      } else {
+        throw new Error(result.message);
+      }
+    },
+    onSuccess: () => {
+      // Redirect to home page after successful registration
+      navigate({ to: "/" });
+    },
+    onError: (error) => {
+      toast.error(error.message); // Display error toast
+    },
+  });
+
+  const onSubmit = (event) => {
     event.preventDefault();
-
-    if (password != confirmPassword) {
-      toast.error("Password and password confirmation must be same!");
-    }
-
-    // hit API here
-    const request = {
-      name,
-      email,
-      password,
-      profilePicture,
-    };
-    const result = await register(request);
-    if (result.success) {
-      // save token to local storage
-      localStorage.setItem("token", result.data.token);
-
-      // redirect to home
-      window.location = "/";
-
-      return;
-    }
-
-    toast.error(result.message);
+    mutation.mutate();
   };
 
   return (
@@ -76,9 +88,7 @@ function Register() {
                     placeholder="Name"
                     required
                     value={name}
-                    onChange={(event) => {
-                      setName(event.target.value);
-                    }}
+                    onChange={(event) => setName(event.target.value)}
                   />
                 </Col>
               </Form.Group>
@@ -93,9 +103,7 @@ function Register() {
                     placeholder="Email"
                     required
                     value={email}
-                    onChange={(event) => {
-                      setEmail(event.target.value);
-                    }}
+                    onChange={(event) => setEmail(event.target.value)}
                   />
                 </Col>
               </Form.Group>
@@ -110,9 +118,7 @@ function Register() {
                     placeholder="Password"
                     required
                     value={password}
-                    onChange={(event) => {
-                      setPassword(event.target.value);
-                    }}
+                    onChange={(event) => setPassword(event.target.value)}
                   />
                 </Col>
               </Form.Group>
@@ -127,9 +133,7 @@ function Register() {
                     placeholder="Confirm Password"
                     required
                     value={confirmPassword}
-                    onChange={(event) => {
-                      setConfirmPassword(event.target.value);
-                    }}
+                    onChange={(event) => setConfirmPassword(event.target.value)}
                   />
                 </Col>
               </Form.Group>
@@ -143,19 +147,25 @@ function Register() {
                     type="file"
                     placeholder="Choose File"
                     required
-                    onChange={(event) => {
-                      setProfilePicture(event.target.files[0]);
-                    }}
+                    onChange={(event) =>
+                      setProfilePicture(event.target.files[0])
+                    }
                     accept=".jpg,.png"
                   />
                 </Col>
               </Form.Group>
+
               <div className="d-grid gap-2">
-                <Button type="submit" variant="primary">
-                  Register
+                <Button
+                  type="submit"
+                  variant="primary"
+                  disabled={mutation.isLoading}
+                >
+                  {mutation.isLoading ? "Registering..." : "Register"}
                 </Button>
               </div>
             </Form>
+
             <div className="text-center mt-3">
               <small>
                 Sudah punya akun? <Link to="/login">Masuk</Link>
@@ -168,3 +178,5 @@ function Register() {
     </Row>
   );
 }
+
+export default Register;

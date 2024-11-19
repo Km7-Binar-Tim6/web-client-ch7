@@ -6,6 +6,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import { useDispatch, useSelector } from "react-redux";
 import { setToken, setUser } from "../../redux/slices/auth";
 import { profile } from "../../service/auth";
+import { useQuery } from "@tanstack/react-query";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,6 +18,23 @@ const Navbar = () => {
   const dispatch = useDispatch();
 
   const { user, token } = useSelector((state) => state.auth);
+
+  // Fetch user profile using TanStack Query
+  const {
+    data: userData,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["profile"],
+    queryFn: profile,
+    enabled: !!token, // Only fetch if token exists
+    onSuccess: (data) => dispatch(setUser(data.data)),
+    onError: () => {
+      dispatch(setUser(null));
+      dispatch(setToken(null));
+      navigate("/login");
+    },
+  });
 
   // Toggle menu
   const toggleMenu = () => {
@@ -47,22 +65,6 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Fetch user profile if token exists
-  useEffect(() => {
-    const fetchProfile = async () => {
-      const result = await profile();
-      if (result.success) {
-        dispatch(setUser(result.data));
-      } else {
-        dispatch(setUser(null));
-        dispatch(setToken(null));
-        navigate({ to: "/login" });
-      }
-    };
-
-    if (token) fetchProfile();
-  }, [dispatch, navigate, token]);
-
   // Handle window resize
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -75,8 +77,11 @@ const Navbar = () => {
     event.preventDefault();
     dispatch(setUser(null));
     dispatch(setToken(null));
-    navigate({ to: "/" });
+    navigate("/login");
   };
+
+  if (isLoading) return <nav>Loading...</nav>;
+  if (isError) return <nav>Error fetching profile</nav>;
 
   return (
     <nav
@@ -187,7 +192,7 @@ const Navbar = () => {
                       style={{ cursor: "pointer" }}
                     >
                       <Image
-                        src={user.profile_picture}
+                        src={userData.data?.profile_picture}
                         fluid
                         style={{
                           marginRight: "10px",
@@ -196,7 +201,7 @@ const Navbar = () => {
                           borderRadius: "50%",
                         }}
                       />
-                      {user.name}
+                      {userData.data?.name}
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
                       <Dropdown.Item as={Link} to="/profile">

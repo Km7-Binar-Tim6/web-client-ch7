@@ -1,20 +1,40 @@
-//src/redux/slices/auth
+// src/redux/slices/auth.js
 
 import { createSlice } from "@reduxjs/toolkit";
 
-// Default (initial) state
-const initialState = {
-  user: null,
-  token: localStorage.getItem("token") || null,
+// Base64 encoding function
+const encodeBase64 = (str) => {
+  return btoa(unescape(encodeURIComponent(str)));
 };
 
-// Slice action and reducer
+// Base64 decoding function
+const decodeBase64 = (str) => {
+  return decodeURIComponent(escape(atob(str)));
+};
+
+// Default (initial) state
+const initialState = {
+  user: localStorage.getItem("user")
+    ? JSON.parse(decodeBase64(localStorage.getItem("user")))
+    : null,
+  token: localStorage.getItem("token") || null, // Retrieve token from localStorage
+};
+
 export const authSlice = createSlice({
-  initialState,
   name: "auth",
+  initialState,
   reducers: {
     setUser: (state, action) => {
       state.user = action.payload;
+      // Persist user data in localStorage
+      if (action.payload) {
+        localStorage.setItem(
+          "user",
+          encodeBase64(JSON.stringify(action.payload))
+        );
+      } else {
+        localStorage.removeItem("user");
+      }
     },
     setToken: (state, action) => {
       if (action.payload) {
@@ -27,14 +47,8 @@ export const authSlice = createSlice({
   },
 });
 
-// Export the action
+// Export the actions
 export const { setToken, setUser } = authSlice.actions;
 
-// Export the state/reducers
+// Export the reducer
 export default authSlice.reducer;
-
-/* 
-    Analogy in useState code
-*/
-// const [user, setUser] = useState(null);
-// const [token, setToken] = useState(localStorage.getItem("token") || null);
