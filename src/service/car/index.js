@@ -20,21 +20,21 @@ export const getCars = async (
   if (year) params.year = year;
   if (image) params.image = image;
 
-  let url =
-    `${import.meta.env.VITE_API_URL}/cars?` + new URLSearchParams(params);
+    let url = `${import.meta.env.VITE_API_URL}/cars?` + 
+        new URLSearchParams(params);
 
-  const response = await fetch(url, {
-    method: "GET",
-    headers: {
-      authorization: `Bearer ${token}`,
-    },
-  });
-  const result = await response.json();
-  if (!result?.success) {
-    throw new Error(result?.message);
-  }
-  return result?.data;
-};
+    const response = await fetch(url, {
+        method: "GET",
+        headers: {
+            authorization: `Bearer ${token}`
+        }
+    });
+    const result = await response.json();
+    if (!result?.success) {
+        throw new Error(result?.message);
+    }
+    return result?.data;
+}
 
 export const getDetailCar = async (id) => {
   const token = localStorage.getItem("token");
@@ -48,13 +48,13 @@ export const getDetailCar = async (id) => {
     method: "GET",
   });
 
-  // get data
-  const result = await response.json();
-  if (!result?.success) {
-    throw new Error(result?.message);
-  }
-  return result?.data;
-};
+    // get data
+    const result = await response.json();
+    if (!result?.success) {
+        throw new Error(result?.message);
+    }
+    return result?.data;
+}
 
 export const deleteCar = async (id) => {
   const token = localStorage.getItem("token");
@@ -67,12 +67,12 @@ export const deleteCar = async (id) => {
     },
   });
 
-  const result = await response.json();
-  if (!result?.success) {
-    throw new Error(result?.message);
-  }
-  return result?.data;
-};
+    const result = await response.json();
+    if (!result?.success) {
+        throw new Error(result?.message);
+    }
+    return result?.data;
+}
 
 export const createCar = async (request) => {
   const token = localStorage.getItem("token");

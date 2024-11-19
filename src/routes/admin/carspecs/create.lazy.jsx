@@ -20,10 +20,6 @@ function CreateCarSpecs() {
 
   const { mutate: create, isPending } = useMutation({
     mutationFn: (data) => {
-      if (specName === data?.spec_name) {
-        toast.error("Specification name already exists");
-        return;
-      }
       return createCarSpecs(data);
     },
     onSuccess: () => {
