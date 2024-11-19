@@ -5,9 +5,13 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { getDetailModel } from "../../../service/model";
-
+import ProtectedRoute from "../../../redux/slices/ProtectedRoute";
 export const Route = createLazyFileRoute("/admin/model/$id")({
-  component: ModelDetail,
+  component: () => (
+    <ProtectedRoute allowedRoles={[1]}>
+      <ModelDetail />
+    </ProtectedRoute>
+  ),
 });
 
 function ModelDetail() {
