@@ -1,3 +1,14 @@
+<<<<<<< HEAD
+import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
+import { useEffect, useState } from 'react';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
+import { getDetailCarOption } from '../../../service/carOption';
+import { useQuery } from '@tanstack/react-query';
+import ProtectedRoute from '../../../redux/slices/ProtectedRoute';
+=======
 import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import Row from "react-bootstrap/Row";
@@ -7,6 +18,7 @@ import Button from "react-bootstrap/Button";
 import { getDetailCarOption } from "../../../service/carOption";
 import { useQuery } from "@tanstack/react-query";
 import ProtectedRoute from "../../../redux/slices/ProtectedRoute";
+>>>>>>> 3343cb09114fd2288303077b1d753db6a2610d41
 
 export const Route = createLazyFileRoute("/admin/caroptions/$id")({
   component: () => (
