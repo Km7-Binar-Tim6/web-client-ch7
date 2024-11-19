@@ -32,13 +32,13 @@ function UserFilterCars() {
   }, [filters, allCars]);
 
   const handleSearch = async () => {
-    const result = await getCars(); // Ambil semua data mobil dari API
-
-    if (result.success) {
-      setAllCars(result.data); // Simpan semua data mobil
-    } else {
-      setAllCars([]);
-      setFilteredCars([]);
+    try {
+      const cars = await getCars(); // Ambil semua data mobil
+      setAllCars(cars); // Simpan ke state allCars
+    } catch (error) {
+      console.error("Error fetching cars:", error);
+      setAllCars([]); // Reset allCars jika terjadi error
+      setFilteredCars([]); // Reset filteredCars
     }
   };
 

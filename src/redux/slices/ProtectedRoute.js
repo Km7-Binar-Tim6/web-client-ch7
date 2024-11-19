@@ -8,9 +8,11 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const isLoading = !user && !!token; // Add a loading condition
+
   useEffect(() => {
-    // Redirect to login if not authenticated
     if (!token) {
+      // Redirect to login if not authenticated
       if (
         location.pathname !== "/login" &&
         location.pathname !== "/register" &&
@@ -19,21 +21,32 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
       ) {
         navigate({ to: "/" });
       }
-    } else if (allowedRoles && !allowedRoles.includes(user?.role_id)) {
+    } else if (
+      !isLoading &&
+      allowedRoles &&
+      !allowedRoles.includes(user?.role_id)
+    ) {
       // Redirect to home or a 403 page if user role is not allowed
       navigate({ to: "/" });
     }
-  }, [token, user?.role_id, allowedRoles, navigate, location.pathname]);
+  }, [
+    token,
+    user?.role_id,
+    allowedRoles,
+    navigate,
+    location.pathname,
+    isLoading,
+  ]);
 
-  // Prevent rendering if redirecting
-  if (!token) {
+  // Prevent rendering if redirecting or loading
+  if (!token || isLoading) {
     if (
       location.pathname !== "/login" &&
       location.pathname !== "/register" &&
       location.pathname !== "/" &&
       location.pathname !== "/cars"
     ) {
-      return null; // Render nothing during redirect
+      return null; // Render nothing during redirect or loading
     }
   }
 

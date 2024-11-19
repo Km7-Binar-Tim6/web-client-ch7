@@ -1,12 +1,13 @@
 export const getCarOptions = async () => {
 	const token = localStorage.getItem('token');
-	let url = `${import.meta.env.VITE_API_URL}/caroptions`;
+	if (!token) throw new Error('Authentication token is missing.');
 
+	let url = `${import.meta.env.VITE_API_URL}/caroptions`;
 	const response = await fetch(url, {
+		method: 'GET',
 		headers: {
 			authorization: `Bearer ${token}`,
 		},
-		method: 'GET',
 	});
 
 	const result = await response.json();
@@ -18,67 +19,82 @@ export const getCarOptions = async () => {
 
 export const getDetailCarOption = async id => {
 	const token = localStorage.getItem('token');
-	let url = `${import.meta.env.VITE_API_URL}/caroptions/${id}`;
-
-	const response = await fetch(url, {
-		headers: {
-			authorization: `Bearer ${token}`,
-		},
-		method: 'GET',
-	});
-
-	const result = await response.json();
-	return result;
-};
-
-export const createCarOption = async request => {
-	const token = localStorage.getItem('token');
 	if (!token) throw new Error('Authentication token is missing.');
 
-	const formData = new FormData();
-	formData.append('option_name', request.option_name);
-
-	const response = await fetch(`${import.meta.env.VITE_API_URL}/caroptions`, {
+	let url = `${import.meta.env.VITE_API_URL}/caroptions/${id}`;
+	const response = await fetch(url, {
+		method: 'GET',
 		headers: {
 			authorization: `Bearer ${token}`,
 		},
-		method: 'POST',
-		body: formData,
 	});
 
 	const result = await response.json();
-	return result;
+	if (!result?.success) {
+		throw new Error(result?.message);
+	}
+	return result?.data;
+};
+
+export const createCarOption = async data => {
+	const token = localStorage.getItem('token');
+	if (!token) throw new Error('Authentication token is missing.');
+	const formData = new FormData();
+	formData.append('option_name', data.option_name);
+
+	let url = `${import.meta.env.VITE_API_URL}/caroptions`;
+	const response = await fetch(url, {
+		method: 'POST',
+		body: formData,
+		headers: {
+			authorization: `Bearer ${token}`,
+		},
+	});
+
+	const result = await response.json();
+	if (!result?.success) {
+		throw new Error(result?.message);
+	}
+	return result?.data;
 };
 
 export const deleteCarOptionById = async id => {
 	const token = localStorage.getItem('token');
+	if (!token) throw new Error('Authentication token is missing.');
 
 	let url = `${import.meta.env.VITE_API_URL}/caroptions/${id}`;
-
 	const response = await fetch(url, {
+		method: 'DELETE',
 		headers: {
 			authorization: `Bearer ${token}`,
 		},
-		method: 'DELETE',
 	});
 
 	const result = await response.json();
-	return result;
+	if (!result?.success) {
+		throw new Error(result?.message);
+	}
+	return result?.data;
 };
 
-export const updateCarOption = async (id, request) => {
+export const updateCarOption = async (id, data) => {
 	const token = localStorage.getItem('token');
+	if (!token) throw new Error('Authentication token is missing.');
 	const formData = new FormData();
-	formData.append('option_name', request.option_name);
+	formData.append('option_name', data.option_name);
 
-	const response = await fetch(`${import.meta.env.VITE_API_URL}/caroptions/${id}`, {
+	let url = `${import.meta.env.VITE_API_URL}/caroptions/${id}`;
+	const response = await fetch(url, {
+		method: 'PUT',
+		body: formData,
 		headers: {
 			authorization: `Bearer ${token}`,
 		},
-		method: 'PUT',
-		body: formData,
 	});
 
 	const result = await response.json();
-	return result;
+	if (!result?.success) {
+		throw new Error(result?.message);
+	}
+	return result?.data;
 };

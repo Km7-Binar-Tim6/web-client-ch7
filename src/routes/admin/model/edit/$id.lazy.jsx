@@ -1,10 +1,11 @@
 import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { getDetailModel, updateModel } from "../../../../service/model";
 import ProtectedRoute from "../../../../redux/slices/ProtectedRoute.js";
 
@@ -20,44 +21,39 @@ function EditModel() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
 
-  const [name, setName] = useState(""); // To store the model name
-  const [isLoading, setIsLoading] = useState(true); // For loading state
-  const [error, setError] = useState(null); // For handling errors
+  // TanStack Query to fetch model details
+  const {
+    data: model,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["model", id], // Cache the query based on model ID
+    queryFn: () => getDetailModel(id), // Fetch model details function
+    enabled: !!id, // Only fetch when ID is available
+  });
 
-  useEffect(() => {
-    const fetchModel = async () => {
-      try {
-        const result = await getDetailModel(id);
-        if (result?.success && result.data) {
-          setName(result.data.model_name); // Set the correct field name (model_name)
-          setError(null); // Reset error if data is fetched successfully
-        } else {
-          setError("Failed to load model details.");
-        }
-      } catch (error) {
-        console.error("Error fetching model details:", error);
-        setError("An error occurred while fetching data.");
-      } finally {
-        setIsLoading(false); // End loading state
-      }
-    };
+  // Mutation for updating model
+  const updateMutation = useMutation({
+    mutationFn: (name) => updateModel(id, { model_name: name }), // Function to update model
+    onSuccess: () => {
+      navigate({ to: `/admin/model/${id}` }); // Redirect after success
+    },
+    onError: (error) => {
+      alert(error?.message || "Failed to update model");
+    },
+  });
 
-    if (id) {
-      fetchModel();
-    }
-  }, [id]);
+  const [name, setName] = useState("");
+
+  // Set name from fetched data when the query is successful
+  if (model && !name) {
+    setName(model?.data?.model_name); // Set model name from fetched data
+  }
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    const request = { model_name: name };
-
-    const result = await updateModel(id, request);
-
-    if (result?.success) {
-      navigate({ to: `/admin/model/${id}` }); // Redirect to the model detail page after update
-    } else {
-      alert(result?.message || "Failed to update model");
-    }
+    updateMutation.mutate(name); // Trigger the mutation to update the model
   };
 
   if (isLoading) {
@@ -70,11 +66,11 @@ function EditModel() {
     );
   }
 
-  if (error) {
+  if (isError) {
     return (
       <Row className="mt-5">
         <Col className="text-center">
-          <h1>{error}</h1>
+          <h1>{error?.message || "Failed to load model details"}</h1>
         </Col>
       </Row>
     );
@@ -97,8 +93,13 @@ function EditModel() {
                 />
               </Form.Group>
 
-              <Button variant="primary" type="submit" className="w-100 mt-3">
-                Update Model Name
+              <Button
+                variant="primary"
+                type="submit"
+                className="w-100 mt-3"
+                disabled={updateMutation.isLoading} // Disable button when mutation is in progress
+              >
+                {updateMutation.isLoading ? "Updating..." : "Update Model Name"}
               </Button>
             </Form>
           </Card.Body>

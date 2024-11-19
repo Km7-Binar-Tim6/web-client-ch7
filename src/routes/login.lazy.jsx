@@ -7,6 +7,7 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { useDispatch, useSelector } from "react-redux";
 import { setToken, setUser } from "../redux/slices/auth"; // pastikan Anda memiliki setUser
+import { useMutation } from "@tanstack/react-query";
 import { login } from "../service/auth";
 import { toast } from "react-toastify";
 
@@ -18,14 +19,29 @@ function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { token, user } = useSelector((state) => state.auth); // Mengambil user dari Redux
+  const { token, user } = useSelector((state) => state.auth);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // Use TanStack Query's useMutation for login
+  const mutation = useMutation({
+    mutationFn: login, // The login function from service/auth
+    onSuccess: (data) => {
+      // Dispatch token and user data to Redux store
+      dispatch(setToken(data.data.token));
+      dispatch(setUser(data.data.user));
+
+      // Navigate based on the role
+      navigate({ to: data.data.user.role_id === 1 ? "/admin" : "/" });
+    },
+    onError: (error) => {
+      toast.error(error.message || "Login failed");
+    },
+  });
+
   useEffect(() => {
     if (token && user) {
-      // Redirect berdasarkan role_id
       if (user.role_id === 1) {
         navigate({ to: "/admin" });
       } else if (user.role_id === 2) {
@@ -36,17 +52,7 @@ function Login() {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-
-    const body = { email, password };
-    const result = await login(body);
-    if (result.success) {
-      dispatch(setToken(result.data.token));
-      dispatch(setUser(result.data.user)); // Simpan data user ke Redux
-      navigate({ to: result.data.user.role_id === 1 ? "/admin" : "/" }); // Arahkan sesuai role_id
-      return;
-    }
-
-    toast.error(result?.message);
+    mutation.mutate({ email, password }); // Trigger mutation
   };
 
   return (
@@ -85,8 +91,12 @@ function Login() {
                 </Col>
               </Form.Group>
               <div className="d-grid gap-2">
-                <Button type="submit" variant="primary">
-                  Login
+                <Button
+                  type="submit"
+                  variant="primary"
+                  disabled={mutation.isLoading}
+                >
+                  {mutation.isLoading ? "Logging in..." : "Login"}
                 </Button>
               </div>
             </Form>
